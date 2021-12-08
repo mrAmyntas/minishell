@@ -11,7 +11,7 @@ LIBFT_DIR =	libft/
 
 OBJ_DIR =	obj/
 
-SRC =	src/minishell.c
+SRC =	src/minishell.c src/exec.c
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
