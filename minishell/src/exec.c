@@ -28,12 +28,12 @@ char	*get_path(char *cmd, char **env)
 	return (cmd);
 }
 
-void exec(char **argv, char **env)
+int exec(char *av, char **env)
 {
     char    **command;
     char    *path;
 
-    command = ft_split(argv[1], ' ');
+    command = ft_split(av, ' ');
     path = get_path(command[0], env);
     execve(path, command, env);
     perror("error");

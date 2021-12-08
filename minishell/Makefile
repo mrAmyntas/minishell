@@ -15,7 +15,7 @@ SRC =	src/minishell.c src/exec.c
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = #-Wall -Werror -Wextra
 
 all: $(LIBFT_NAME) $(OBJ_DIR) $(NAME)
 
