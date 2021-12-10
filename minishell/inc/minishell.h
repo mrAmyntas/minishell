@@ -16,7 +16,6 @@ typedef	struct	s_info
 	int			redirect;
 	char		**lines;
 	char		**av;
-	int			ac;
 	char		**env;
 }				t_info;
 
@@ -40,12 +39,11 @@ enum	e_directions
 	command_not_found
 };
 
-void			ft_echo(t_info *info);
-void			ft_pwd(t_info *info);
-void			ft_cd(t_info *info);
-int				ft_find_command(t_info *info, char **env);
-int				ft_find_redirect(t_info *info);
-int				exec(char *av, char **env);
+int		ft_find_command(t_info *info);
+int		ft_find_redirect(t_info *info);
+int		exec(t_info *info);
+void	parseline(t_info *info);
+void	ft_init_struct(t_info *info, char **av, char **env);
 
 
 #endif
