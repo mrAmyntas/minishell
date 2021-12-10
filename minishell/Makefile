@@ -13,7 +13,9 @@ OBJ_DIR =	obj/
 
 SRC =	src/minishell.c\
 		src/exec.c\
-		src/parsing.c
+		src/parsing.c\
+		src/error.c\
+		src/lexer.c
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 

@@ -6,21 +6,47 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/10 12:14:39 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/10 19:04:33 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	ft_redirect_in(t_info *info, int i)
+int	check_char(t_info *info, int i)
 {
-	return (i);
+	if (info->line_read[i] == '<')
+	{
+		if (info->line_read[i + 1] == '<')
+			return (CHAR_DLESSER);
+		return (CHAR_LESSER);
+	}
+	if (info->line_read[i] == '>')
+	{
+		if (info->line_read[i + 1] == '>')
+			return (CHAR_DGREATER);
+		return (CHAR_GREATER);
+	}
+	if (info->line_read[i] == '|')
+		return (CHAR_PIPE);
+	if (info->line_read[i] == '$')
+		return (CHAR_DOLLAR);
+	if (info->line_read[i] == ';')
+		return (CHAR_SEMICOLON);
+	if (info->line_read[i] == '\\')
+		return (CHAR_BACKSLASH);
+	if (info->line_read[i] == '\'')
+		return (CHAR_QUOTE);
+	if (info->line_read[i] == '\"')
+		return (CHAR_DQUOTE);
+	if (info->line_read[i] == '\n')
+		return (CHAR_NEWLINE);
+	if (info->line_read[i] == ' ')
+		return (CHAR_SPACE);
+	if (info->line_read[i] == '\0')
+		return (CHAR_EOF);
+	return (CHAR_NORMAL);
 }
 
-int	ft_find_redirect(t_info *info)
-{
-	return (15);
-}
 
 int	ft_find_command(t_info *info)
 {
@@ -69,8 +95,19 @@ char	*ft_remove_spaces(t_info *info)
 
 void	parseline(t_info *info)
 {
+	int	i;
+
 	info->line_read = ft_remove_spaces(info);
-	info->redirect = ft_find_redirect(info);
+	i = ft_strlen(info->line_read);
+	info->tokens = (char **)malloc(sizeof(char *) * (i + 1));
+	if (info->tokens == NULL)
+		ft_error(1);
+	while (i >= 0)
+	{
+		info->tokens[i] = NULL;
+		i--;
+	}
+	ft_lexer(info);
 	info->cmd = ft_find_command(info);
 	if (info->cmd == 15)
 	{

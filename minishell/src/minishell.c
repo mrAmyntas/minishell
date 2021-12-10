@@ -6,13 +6,28 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/10 11:41:33 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/10 18:16:25 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 // input goed verwerken, combinaties uitproberen
 
 #include "../inc/minishell.h"
+
+void	ft_free(t_info *info)
+{
+	int	i;
+
+	free(info->line_read);
+	i = 0;
+	while (info->tokens[i] != NULL)
+	{
+		free(info->tokens[i]);
+		info->tokens[i] = NULL;
+		i++;
+	}
+	free(info->tokens);
+}
 
 void	ft_init_struct(t_info *info, char **av, char **env)
 {
@@ -22,6 +37,8 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	info->cmd = 0;
 	info->redirect = 0;
 	info->ret = 0;
+	info->t_pos = 0;
+	info->p_pos = 0;
 }
 
 int main(int ac, char **av, char **env)
@@ -38,9 +55,11 @@ int main(int ac, char **av, char **env)
 		parseline(&info);
 		if (info.line_read && *info.line_read)
     		add_history(info.line_read);
-		free(info.line_read);
+		ft_free(&info);
+		info.p_pos = 0;
+		info.t_pos = 0;
 	}
 	return (0);
 }
-
 // echo cd pwd export unset env exit
+// tokens: < > << >> | $
