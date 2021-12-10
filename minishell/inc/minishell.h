@@ -20,6 +20,7 @@ typedef	struct	s_info
 	char		**env;
 	int			char_type;
 	int			p_pos;
+	char		**export;
 }				t_info;
 
 enum	e_tokentype
@@ -48,7 +49,7 @@ void	ft_init_struct(t_info *info, char **av, char **env);
 void	ft_error(int error_type);
 int		ft_lexer(t_info *info);
 int		check_char(t_info *info, int i);
-
-
+void    add_export(t_info *info, char *new_var);
+void    sort_export(t_info *info);
 
 #endif

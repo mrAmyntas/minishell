@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/10 18:16:25 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/10 19:35:21 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	info->ret = 0;
 	info->t_pos = 0;
 	info->p_pos = 0;
+	sort_export(info);
 }
 
 int main(int ac, char **av, char **env)
