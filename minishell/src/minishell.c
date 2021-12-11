@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/11 17:55:43 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/11 19:16:13 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,17 @@ int main(int ac, char **av, char **env)
 		if (!info.line_read[0])
 			continue ;
 		lexer(&info);
-		parser(&info);
+		info.ret = parser(&info);
+		if (info.ret == -1)
+		{
+			ft_free(&info);
+			info.p_pos = 0;
+			info.t_pos = 0;
+			continue ;
+		}
+		info.cmd = ft_find_command(&info); //some temp bullshit to help check if milans work is working
+		if (info.cmd == 15)
+			printf("minishell: command not found: %s\n", info.line_read);
 		if (info.line_read && *info.line_read)
     		add_history(info.line_read);
 		ft_free(&info);

@@ -25,20 +25,20 @@ typedef	struct	s_info
 
 enum	e_tokentype
 {
-	CHAR_NORMAL,
-	CHAR_LESSER = '<',
-	CHAR_GREATER = '>',
-	CHAR_PIPE = '|',
-	CHAR_DOLLAR = '$',
-//	CHAR_SEMICOLON = ';',
-//	CHAR_BACKSLASH = '\\',
-	CHAR_SPACE = ' ',
-	CHAR_QUOTE = '\'',
-	CHAR_DQUOTE = '\"',
-	CHAR_NEWLINE = '\n',
-	CHAR_EOF = '\0',
-	CHAR_DLESSER = 129,
-	CHAR_DGREATER = 130
+	C_NORMAL,
+	C_LESSER = '<',
+	C_GREATER = '>',
+	C_PIPE = '|',
+	C_DOLLAR = '$',
+//	C_SEMICOLON = ';',
+//	C_BACKSLASH = '\\',
+	C_SPACE = ' ',
+	C_QUOTE = '\'',
+	C_DQUOTE = '\"',
+	C_NEWLINE = '\n',
+	C_EOF = '\0',
+	C_DLESSER = 129,
+	C_DGREATER = 130
 };
 
 int		ft_find_command(t_info *info);
@@ -51,6 +51,6 @@ int		store_input(t_info *info);
 int		check_char(t_info *info, int i);
 void    add_export(t_info *info, char *new_var);
 void    sort_export(t_info *info);
-void	parser(t_info *info);
+int		parser(t_info *info);
 
 #endif

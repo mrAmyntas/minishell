@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/11 18:01:01 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/11 18:57:49 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,34 +43,34 @@ int	check_char(t_info *info, int i)
 	if (info->line_read[i] == '<')
 	{
 		if (info->line_read[i + 1] == '<')
-			return (CHAR_DLESSER);
-		return (CHAR_LESSER);
+			return (C_DLESSER);
+		return (C_LESSER);
 	}
 	if (info->line_read[i] == '>')
 	{
 		if (info->line_read[i + 1] == '>')
-			return (CHAR_DGREATER);
-		return (CHAR_GREATER);
+			return (C_DGREATER);
+		return (C_GREATER);
 	}
 	if (info->line_read[i] == '|')
-		return (CHAR_PIPE);
+		return (C_PIPE);
 	if (info->line_read[i] == '$')
-		return (CHAR_DOLLAR);
+		return (C_DOLLAR);
 //	if (info->line_read[i] == ';')
-//		return (CHAR_SEMICOLON);
+//		return (C_SEMICOLON);
 //	if (info->line_read[i] == '\\')
-//		return (CHAR_BACKSLASH);
+//		return (C_BACKSLASH);
 	if (info->line_read[i] == '\'')
-		return (CHAR_QUOTE);
+		return (C_QUOTE);
 	if (info->line_read[i] == '\"')
-		return (CHAR_DQUOTE);
+		return (C_DQUOTE);
 	if (info->line_read[i] == '\n')
-		return (CHAR_NEWLINE);
+		return (C_NEWLINE);
 	if (info->line_read[i] == ' ')
-		return (CHAR_SPACE);
+		return (C_SPACE);
 	if (info->line_read[i] == '\0')
-		return (CHAR_EOF);
-	return (CHAR_NORMAL);
+		return (C_EOF);
+	return (C_NORMAL);
 }
 
 void	store_char(t_info *info, int i)
@@ -78,7 +78,7 @@ void	store_char(t_info *info, int i)
 	int j;
 
 	j = check_char(info, i);
-	if (j == CHAR_SPACE)
+	if (j == C_SPACE)
 	{
 		info->p_pos++;
 		return ;
@@ -155,12 +155,6 @@ void	lexer(t_info *info)
 		i--;
 	}
 	store_input(info); // interpret line_read
-	info->cmd = ft_find_command(info); //some temp bullshit to help check if milans work is working
-	if (info->cmd == 15)
-	{
-		printf("minishell: command not found: %s\n", info->line_read);
-		return ;
-	}
 }
 
 /* 
@@ -216,10 +210,10 @@ int	store_string_quote(t_info *info, int i, int store_pos)
 
 int	iter_quotes(t_info *info, int i, int char_type, int store_pos)
 {
-	if (char_type == CHAR_QUOTE)
+	if (char_type == C_QUOTE)
 	{
 		i++;
-		while (check_char(info, i) != CHAR_QUOTE && info->line_read[i] != '\0')
+		while (check_char(info, i) != C_QUOTE && info->line_read[i] != '\0')
 			i++;
 		if (info->line_read[i] == '\0')
 			ft_error(2);
@@ -228,9 +222,9 @@ int	iter_quotes(t_info *info, int i, int char_type, int store_pos)
 	else
 	{
 		i++;
-		while (check_char(info, i) != CHAR_DQUOTE && info->line_read[i] != '\0')
+		while (check_char(info, i) != C_DQUOTE && info->line_read[i] != '\0')
 		{
-			if (check_char(info, i) == CHAR_DOLLAR)
+			if (check_char(info, i) == C_DOLLAR)
 				expand_dollar(info, i);
 			i++;
 		}
