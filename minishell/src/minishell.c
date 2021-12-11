@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/10 19:35:21 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/11 17:55:43 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int main(int ac, char **av, char **env)
 		info.line_read = readline("\033[0;33mminishell: \033[0m");
 		if (!info.line_read[0])
 			continue ;
-		parseline(&info);
+		lexer(&info);
+		parser(&info);
 		if (info.line_read && *info.line_read)
     		add_history(info.line_read);
 		ft_free(&info);

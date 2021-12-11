@@ -110,3 +110,22 @@ void    sort_export(t_info *info)
     }
     info->export[i] = NULL;
 }
+
+int	ft_find_command(t_info *info)
+{
+	if (ft_strncmp(info->line_read, "echo", 4) == 0)
+		return (exec(info));
+	if (ft_strncmp(info->line_read, "cd", 2) == 0)
+		return (exec(info));
+	if (ft_strncmp(info->line_read, "pwd", 3) == 0)
+		return (exec(info));
+	if (ft_strncmp(info->line_read, "export", 6) == 0)
+		return (exec(info));
+	if (ft_strncmp(info->line_read, "unset", 5) == 0)
+		return (exec(info));
+	if (ft_strncmp(info->line_read, "env", 3) == 0)
+		return (exec(info));
+	if (ft_strncmp(info->line_read, "exit", 4) == 0)
+		exit(0);
+	return (15);
+}
