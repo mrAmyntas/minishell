@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/11 19:16:13 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/13 20:09:51 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,20 @@ void	ft_free(t_info *info)
 {
 	int	i;
 
-	free(info->line_read);
 	i = 0;
+	free(info->line_read);
 	while (info->tokens[i] != NULL)
 	{
 		free(info->tokens[i]);
 		info->tokens[i] = NULL;
-		i++;
+		i--;
 	}
+	//{
+	//	printf("i:%d\n", i);
+	//	free(info->tokens[i]);
+	//	info->tokens[i] = NULL;
+	//	i++;
+	//}
 	free(info->tokens);
 }
 

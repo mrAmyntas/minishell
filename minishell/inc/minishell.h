@@ -52,5 +52,7 @@ int		check_char(t_info *info, int i);
 void    add_export(t_info *info, char *new_var);
 void    sort_export(t_info *info);
 int		parser(t_info *info);
+int		check_char_token(t_info *info, int i);
+
 
 #endif

@@ -6,9 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/11 18:57:49 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/13 19:20:07 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+// str join leaks
 
 #include "../inc/minishell.h"
 
@@ -73,16 +75,51 @@ int	check_char(t_info *info, int i)
 	return (C_NORMAL);
 }
 
+int	check_char_token(t_info *info, int i)
+{
+	if (info->tokens[i][0] == '<')
+	{
+		if (info->tokens[i][0 + 1] == '<')
+			return (C_DLESSER);
+		return (C_LESSER);
+	}
+	if (info->tokens[i][0] == '>')
+	{
+		if (info->tokens[i][0 + 1] == '>')
+			return (C_DGREATER);
+		return (C_GREATER);
+	}
+	if (info->tokens[i][0] == '|')
+		return (C_PIPE);
+	if (info->tokens[i][0] == '$')
+		return (C_DOLLAR);
+//	if (info->tokens[i][0] == ';')
+//		return (C_SEMICOLON);
+//	if (info->tokens[i][0] == '\\')
+//		return (C_BACKSLASH);
+	if (info->tokens[i][0] == '\'')
+		return (C_QUOTE);
+	if (info->tokens[i][0] == '\"')
+		return (C_DQUOTE);
+	if (info->tokens[i][0] == '\n')
+		return (C_NEWLINE);
+	if (info->tokens[i][0] == ' ')
+		return (C_SPACE);
+	if (info->tokens[i][0] == '\0')
+		return (C_EOF);
+	return (C_NORMAL);
+}
+
 void	store_char(t_info *info, int i)
 {
 	int j;
 
-	j = check_char(info, i);
-	if (j == C_SPACE)
-	{
-		info->p_pos++;
-		return ;
-	}
+	//j = check_char(info, i);
+	//if (j == C_SPACE)
+	//{
+	//	info->p_pos++;
+	//	return ;
+	//}
 	info->tokens[info->t_pos] = (char *)malloc(sizeof(char) * 2);
 	if (info->tokens[info->t_pos] == NULL)
 		ft_error(1);
@@ -146,12 +183,12 @@ void	lexer(t_info *info)
 
 	info->line_read = ft_remove_spaces(info); // leading spaces are ignored
 	i = ft_strlen(info->line_read);
-	info->tokens = (char **)malloc(sizeof(char *) * (i + 1)); // could pre-scan inputline to malloc precise amount required
-	if (info->tokens == NULL)
+	info->tokens = (char **)malloc(sizeof(char *) * (i + 2)); // could pre-scan inputline to malloc precise amount required
+	if (info->tokens == NULL)									//require +2 for the empty quote removal that jumps 2 in front to not go out of bound
 		ft_error(1);
-	while (i >= 0)
+	while (i + 2 >= 0)
 	{
-		info->tokens[i] = NULL;
+		info->tokens[i + 2] = NULL;
 		i--;
 	}
 	store_input(info); // interpret line_read
