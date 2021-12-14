@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/10 20:09:58 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/14 21:57:05 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,77 @@ char	*get_path(char *cmd, char **env)
 
 int	exec_export(t_info *info)
 {
-	int	i;
+	int		i;
+	char	**command;
 
+	i = 1;
+	command = ft_split(info->line_read, ' ');
+	while (command[i])
+	{
+		add_env(info, command[i]);
+		i++;
+	}
 	i = 0;
-	//if (...)
-	//	add_export(info, "HOI=appel");
-	while (info->export[i])
+	while (info->export[i] && !command[1])
     {
+		write(1, "declare -x ", 11);
         write(1, info->export[i], ft_strlen(info->export[i]));
 		write(1, "\n", 1);
         i++;
     }
+	i = 0;
+	while (command[i])
+	{
+		free(command[i]);
+		i++;
+	}
+	free (command);
 	return (0);
 }
 
 int	exec_unset(t_info *info)
 {
-	printf("unset\n");
+	char	**command;
+	int		i;
+
+	i = 1;
+	command = ft_split(info->line_read, ' ');
+	while (command[i])
+	{
+		unset_var(info, command[i]);
+		i++;
+	}
+	i = 0;
+	while (command[i])
+	{
+		free(command[i]);
+		i++;
+	}
+	free (command);
+	sort_export(info);
+	return (0);
+}
+
+int	exec_pwd(t_info *info)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (info->env[i] && strncmp(info->env[i], "PWD", 3))
+		i++;
+	if (!info->env[i])
+		add_env(info, ft_strjoin("PWD=", getenv("PWD")));
+	while (info->env[i][j] != '=' && info->env[i][j])
+		j++;
+	j++;
+	while (info->env[i][j])
+	{
+		write(1, &info->env[i][j], 1);
+		j++;
+	}
+	write(1, "\n", 1);
 	return (0);
 }
 
@@ -66,10 +120,6 @@ int exec(t_info *info)
     char    *path;
 	int		id;
 
-	if (ft_strncmp(info->line_read, "export", 6) == 0)
-		return (exec_export(info));
-	if (ft_strncmp(info->line_read, "unset", 6) == 0)
-		return (exec_unset(info));
 	id = fork();
 	if (id == -1)
 		perror("fork error");
@@ -82,5 +132,5 @@ int exec(t_info *info)
     path = get_path(command[0], info->env);
 	execve(path, command, info->env);
     perror("command error");
-	return (1);
+	exit (1);
 }

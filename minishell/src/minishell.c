@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/13 20:09:51 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/14 21:05:16 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,38 @@ void	ft_free(t_info *info)
 	free(info->tokens);
 }
 
+void	free_info(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (info->export[i])
+	{
+		free (info->export[i]);
+		i++;
+	}
+	free (info->export);
+	i = 0;
+	while (info->env[i])
+	{
+		free (info->env[i]);
+		i++;
+	}
+	free (info->env);
+	free (info->pwd);
+}
+
 void	ft_init_struct(t_info *info, char **av, char **env)
 {
 	info->av = av;
-	info->env = env;
+	get_env(info, env);
 	info->line_read = NULL;
 	info->cmd = 0;
 	info->redirect = 0;
 	info->ret = 0;
 	info->t_pos = 0;
 	info->p_pos = 0;
+	info->pwd = NULL;
 	sort_export(info);
 }
 
@@ -73,10 +95,11 @@ int main(int ac, char **av, char **env)
 			printf("minishell: command not found: %s\n", info.line_read);
 		if (info.line_read && *info.line_read)
     		add_history(info.line_read);
-		ft_free(&info);
+		//ft_free(&info);
 		info.p_pos = 0;
 		info.t_pos = 0;
 	}
+	free_info(&info);
 	return (0);
 }
 // echo cd pwd export unset env exit

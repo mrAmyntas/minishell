@@ -21,6 +21,7 @@ typedef	struct	s_info
 	int			char_type;
 	int			p_pos;
 	char		**export;
+	char		*pwd;
 }				t_info;
 
 enum	e_tokentype
@@ -49,10 +50,17 @@ void	ft_init_struct(t_info *info, char **av, char **env);
 void	ft_error(int error_type);
 int		store_input(t_info *info);
 int		check_char(t_info *info, int i);
-void    add_export(t_info *info, char *new_var);
+void    add_env(t_info *info, char *new_var);
 void    sort_export(t_info *info);
 int		parser(t_info *info);
 int		check_char_token(t_info *info, int i);
-
+void    get_env(t_info *info, char **env);
+int		exec_cd(t_info *info);
+int		exec_unset(t_info *info);
+int		exec_export(t_info *info);
+void    unset_var(t_info *info, char *var);
+int		exec_pwd(t_info *info);
+void    make_dir(t_info *info, char **command);
+char	*get_path(char *cmd, char **env);
 
 #endif
