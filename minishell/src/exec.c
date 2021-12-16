@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/16 14:56:09 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/16 15:14:56 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,18 @@ char	*get_path(char *cmd, char **env)
 int	exec_export(t_info *info)
 {
 	int		i;
+	int		j;
 
 	i = 1;
+	j = 0;
 	while (info->tokens[i])
 	{
-		add_env(info, info->tokens[i]);
+		if (info->tokens[i][j] == '\\' || info->tokens[i][j] == '|')
+			j++;
+		if (info->tokens[i][j] < 65 || (info->tokens[i][j] > 90 && info->tokens[i][j] < 95) || info->tokens[i][j] > 122 || info->tokens[i][j] == 96)
+			perror(ft_strjoin(info->tokens[i], ": not a valid identifier"));
+		else
+			add_env(info, info->tokens[i]);
 		i++;
 	}
 	i = 0;
