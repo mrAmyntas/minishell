@@ -6,6 +6,7 @@
 # include <readline/history.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <fcntl.h>
 # include "../libft/libft.h"
 
 typedef	struct	s_info
@@ -23,6 +24,7 @@ typedef	struct	s_info
 	char		**export;
 	char		*home;
 	char		*pwd;
+	int			fd_std[2];
 }				t_info;
 
 enum	e_tokentype

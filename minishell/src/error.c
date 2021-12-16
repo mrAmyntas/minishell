@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/15 19:04:55 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/16 15:55:13 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	ft_error(int error_type)
 	if (error_type == 2)
 		perror("unclosed quote:");
 	if (error_type == 3)
-		perror("No such file or directory.");
+		perror("no such file or directory.");
+	if (error_type == 4)
+		perror("fork error.");
 	exit(1);
 }

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/16 14:56:26 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/16 16:36:38 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,50 @@ void	get_env(t_info *info, char **env)
 	info->env[i] = NULL;
 }
 
+void	redirect(t_info *info, int type, char *files[2])
+{
+	int	fd[2];
+	
+	if (type == 1 || type == 5 || type == 7 || type == 3)
+	{
+		fd[0] = open(files[0], O_RDONLY);
+		dup2(fd[0], 0);
+	}
+	if (type >= 4)
+	{
+		fd[1] = open(files[1], O_RDWR | O_TRUNC | O_CREAT, 0644);
+		dup2(fd[1], 1);
+	}
+	if (fd[0] < 0 || fd[1] < 0)
+		ft_error(3);
+}
+
 int	ft_find_command(t_info *info)
 {
+	int		i;
+	int		type;
+	char	*files[2];
+
+	i = 0;
+	type = 0;
+	while (info->tokens[i])
+	{
+		if (info->tokens[i][0] == '<')
+		{
+			files[0] = ft_strdup(info->tokens[i + 1]);
+			type += 1;
+		}
+		if (info->tokens[i][0] == '|')
+			type += 2;
+		if (info->tokens[i][0] == '>')
+		{
+			files[1] = ft_strdup(info->tokens[i + 1]);
+			type += 4;
+		}
+		i++;
+	}
+	if (type != 2 && type != 0)
+		redirect(info, type, files);
 	if (ft_strncmp(info->tokens[0], "echo", 4) == 0)
 		return (exec(info));
 	if (ft_strncmp(info->tokens[0], "cd", 2) == 0)
