@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/16 16:39:43 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/16 18:33:08 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,12 +213,58 @@ void	merge_cut_quotes(t_info *info, int first_q, int last_q, int n)
 	trim_quotes(info, first_q, ft_strlen(info->tokens[first_q]));
 }
 
+void	ft_checkthosequotes(t_info *info, int pos)
+{
+	int	i;
+	int	n;
+	int	store;
+	int	ret;
+
+	printf("??\n");
+	i = pos;
+	while (info->tokens[i] != NULL)
+	{
+		ret = -1;
+		if (info->tokens[i][0] == C_QUOTE || info->tokens[i][0] == C_DQUOTE)
+		{
+			ret = check_unclosed(info, i, i + 1); // i is pos quote 1, ret is pos quote 2
+			if (ret == -1)
+				ft_error(2);
+			if (check_empty_quotes(info, i, ret) == 1)
+				continue ;
+			check_dollar(info, i, &ret, 0);
+			n = check_before_after(info, i, ret); //n == 0: no normal chars before or after quotes  n == 1, only before, n = 2, after & before n = 3 only after
+			merge_cut_quotes(info, i, ret, n);
+			store = i;
+			if (n == 1 || n == 2)
+				continue ;
+		}
+		else
+			check_dollar(info, i, &ret, 1);
+		i++;
+	}
+	return ;
+}
+
 int	check_before_after(t_info *info, int first_q, int last_q)
 {
 	int	ret;
 	int	i;
 
 	i = ft_strlen(info->line_read) + 1;
+	if (last_q != i && info->tokens[last_q + 1] != NULL)
+	{
+		while (check_char_token(info, last_q + 1) == C_QUOTE || check_char_token(info, last_q + 1) == C_DQUOTE)
+		{
+			ft_checkthosequotes(info, last_q + 1);
+			if (first_q != 0)
+			{
+				if (info->tokens[first_q - 1] != NULL && check_char_token(info, first_q - 1) == C_NORMAL)
+					return (2);
+			}
+			return (3);
+		}
+	}
 	ret = 0;
 	if (first_q != 0)
 	{
@@ -292,8 +338,10 @@ int	parse_quotes(t_info *info, int ret)
 {
 	int	i;
 	int	n;
+	int	store;
 
 	i = 0;
+	store = 0;
 	while (info->tokens[i] != NULL)
 	{
 		ret = -1;
@@ -307,6 +355,7 @@ int	parse_quotes(t_info *info, int ret)
 			check_dollar(info, i, &ret, 0);
 			n = check_before_after(info, i, ret); //n == 0: no normal chars before or after quotes  n == 1, only before, n = 2, after & before n = 3 only after
 			merge_cut_quotes(info, i, ret, n);
+			store = i;
 			if (n == 1 || n == 2)
 				continue ;
 		}
@@ -326,8 +375,11 @@ void	remove_spaces(t_info *info)
 	{
 		if (info->tokens[i][0] == ' ' && info->tokens[i][1] == '\0')
 		{
-			realloc_copy(info, i, 1);
-			continue ;
+			if (info->tokens[i + 1] != NULL)
+			{
+				realloc_copy(info, i, 1);
+				continue ;
+			}
 		}
 		i++;
 	}
@@ -354,6 +406,7 @@ int	parser(t_info *info)
 	return (0);
 }
 
+// fix empty quotes after a chain of recurse quotes
 
 /*
 void	reorder_lines(t_info *info, int first_q, int last_q, int n_cut)
