@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/16 14:32:58 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/16 16:39:43 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,26 +56,48 @@ int	checkquotes(t_info *info, int i, int store_pos)
 	return (0);
 }
 
-void	expand_dollar(t_info *info, int pos_dollar)
+void	expand_dollar(t_info *info, int pos_dollar, int *ret)
 {
-	char *name;
+	char	*name;
+	int		i;
 
-	name = getenv(info->tokens[pos_dollar + 1]);
+	name = get_val(info, info->tokens[pos_dollar + 1]);
 	if (name == NULL)
 	{
-		//free(info->tokens[pos_dollar]);
-		//info->tokens[pos_dollar] = malloc(1);
-		//free(info->tokens[pos_dollar + 1]);
-		//info->tokens[pos_dollar + 1] = malloc(1);
+		free (info->tokens[pos_dollar]);
+		info->tokens[pos_dollar] = NULL;
+		realloc_copy(info, pos_dollar, 1);
+		free (info->tokens[pos_dollar]);
+		info->tokens[pos_dollar] = NULL;
+		realloc_copy(info, pos_dollar, 1);
+		ret[0] = ret[0] - 1;
 	}
 	else
 	{
-		//free(info->tokens[pos_dollar]);
-		//info->tokens[pos_dollar] = NULL;
-		//free(info->tokens[pos_dollar + 1]);
-		//info->tokens[pos_dollar + 1] = NULL;
+		i = check_before_after(info, pos_dollar, pos_dollar);
+		if (i == 2 || i == 1)
+		{
+			info->tokens[pos_dollar - 1] = ft_strjoinbas(info->tokens[pos_dollar - 1], name);
+			free (info->tokens[pos_dollar]);
+			info->tokens[pos_dollar] = NULL;
+			realloc_copy(info, pos_dollar, 1);
+			free (info->tokens[pos_dollar]);
+			info->tokens[pos_dollar] = NULL;
+			realloc_copy(info, pos_dollar, 1);
+			ret[0] = ret[0] - 2;
+		}
+		else
+		{
+			i = ft_strlen(name);
+			free (info->tokens[pos_dollar]);
+			info->tokens[pos_dollar] = (char *)malloc(i + 1);
+			ft_strlcpy(info->tokens[pos_dollar], name, i + 1);
+			free (info->tokens[pos_dollar + 1]);
+			info->tokens[pos_dollar + 1] = NULL;
+			realloc_copy(info, pos_dollar + 1, 1);
+			ret[0]--;
+		}
 	}
-
 }
 
 //3.230 Name
@@ -84,17 +106,22 @@ void	expand_dollar(t_info *info, int pos_dollar)
 // https://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap03.html#tag_03_230
 // https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html#tag_02_06_02
 
-void	check_dollar(t_info *info, int first_q, int last_q)
+void	check_dollar(t_info *info, int first_q, int *ret, int out)
 {
 	int	i;
 
-	if (check_char_token(info, first_q) == C_DQUOTE)
+	if (ret[0] == -1)
+	{
+		if (check_char_token(info, first_q) == C_DOLLAR)
+			expand_dollar(info, first_q, ret);
+	}
+	else if (check_char_token(info, first_q) == C_DQUOTE)
 	{
 		i = 0;
-		while (i < last_q - first_q - 1)
+		while (i < ret[0] - first_q - 1)
 		{
 			if (check_char_token(info, first_q + 1 + i) == C_DOLLAR)
-				expand_dollar(info, first_q + 1 + i);
+				expand_dollar(info, first_q + 1 + i, ret);
 			i++;
 		}
 	}
@@ -256,21 +283,20 @@ int	check_empty_quotes(t_info *info, int first_q, int last_q)
 		realloc_copy(info, first_q, 2);
 		realloc_copy(info, last_q, 2);
 		joinwithnormalbefore(info, first_q, last_q);
-		
 		return (1);
 	}
 	return (0);
 }
 
-int	parse_quotes(t_info *info)
+int	parse_quotes(t_info *info, int ret)
 {
 	int	i;
-	int	ret;
 	int	n;
 
 	i = 0;
 	while (info->tokens[i] != NULL)
 	{
+		ret = -1;
 		if (info->tokens[i][0] == C_QUOTE || info->tokens[i][0] == C_DQUOTE)
 		{
 			ret = check_unclosed(info, i, i + 1); // i is pos quote 1, ret is pos quote 2
@@ -278,12 +304,14 @@ int	parse_quotes(t_info *info)
 				return (-1);
 			if (check_empty_quotes(info, i, ret) == 1)
 				continue ;
-			check_dollar(info, i, ret);
+			check_dollar(info, i, &ret, 0);
 			n = check_before_after(info, i, ret); //n == 0: no normal chars before or after quotes  n == 1, only before, n = 2, after & before n = 3 only after
 			merge_cut_quotes(info, i, ret, n);
 			if (n == 1 || n == 2)
 				continue ;
 		}
+		else
+			check_dollar(info, i, &ret, 1);
 		i++;
 	}
 	return (0);
@@ -309,18 +337,18 @@ int	parser(t_info *info)
 {
 	int	ret;
 
-	ret = parse_quotes(info);
+	ret = parse_quotes(info, 0);
 	if (ret == -1)
 	{
 		printf("checkret-1\n");
 		return (-1);
 	}
 	remove_spaces(info);
-	//printf("after merge\n");
+	printf("after merge\n");
 	int p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		//printf("stored = %s\n", info->tokens[p]);
+		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	return (0);
