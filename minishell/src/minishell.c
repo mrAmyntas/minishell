@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/14 21:05:16 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/15 19:48:08 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ void	free_info(t_info *info)
 	int	i;
 
 	i = 0;
-	while (info->export[i])
-	{
-		free (info->export[i]);
-		i++;
-	}
-	free (info->export);
-	i = 0;
+	//while (info->export[i])
+	//{
+	//	free (info->export[i]);
+	//	i++;
+	//}
+	//free (info->export);
+	//i = 0;
 	while (info->env[i])
 	{
 		free (info->env[i]);
@@ -54,10 +54,14 @@ void	free_info(t_info *info)
 	}
 	free (info->env);
 	free (info->pwd);
+	free (info->home);
 }
 
 void	ft_init_struct(t_info *info, char **av, char **env)
 {
+	size_t	len;
+
+	len = 10;
 	info->av = av;
 	get_env(info, env);
 	info->line_read = NULL;
@@ -66,7 +70,14 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	info->ret = 0;
 	info->t_pos = 0;
 	info->p_pos = 0;
-	info->pwd = NULL;
+	info->home = ft_strdup(getenv("HOME"));
+	info->pwd = malloc(sizeof(char *) * len);
+	while (!getcwd(info->pwd, len))
+	{
+		len += 10;
+		free (info->pwd);
+		info->pwd = malloc(sizeof(char *) * len);
+	}
 	sort_export(info);
 }
 
@@ -90,6 +101,8 @@ int main(int ac, char **av, char **env)
 			info.t_pos = 0;
 			continue ;
 		}
+		//if (!ft_strncmp(info.line_read, "break", 4)) // om leaks te checken
+		//	break ;
 		info.cmd = ft_find_command(&info); //some temp bullshit to help check if milans work is working
 		if (info.cmd == 15)
 			printf("minishell: command not found: %s\n", info.line_read);
@@ -100,6 +113,7 @@ int main(int ac, char **av, char **env)
 		info.t_pos = 0;
 	}
 	free_info(&info);
+	//system("leaks minishell");
 	return (0);
 }
 // echo cd pwd export unset env exit

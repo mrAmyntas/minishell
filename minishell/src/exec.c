@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/14 21:57:05 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/15 20:14:50 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,23 +93,7 @@ int	exec_unset(t_info *info)
 
 int	exec_pwd(t_info *info)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (info->env[i] && strncmp(info->env[i], "PWD", 3))
-		i++;
-	if (!info->env[i])
-		add_env(info, ft_strjoin("PWD=", getenv("PWD")));
-	while (info->env[i][j] != '=' && info->env[i][j])
-		j++;
-	j++;
-	while (info->env[i][j])
-	{
-		write(1, &info->env[i][j], 1);
-		j++;
-	}
+	write(1, ft_strjoin("PWD=", info->pwd), ft_strlen(info->pwd) + 4);
 	write(1, "\n", 1);
 	return (0);
 }
@@ -125,7 +109,7 @@ int exec(t_info *info)
 		perror("fork error");
 	if (id)
 	{
-		waitpid(id, NULL, 0);
+		wait(&id);
 		return (0);
 	}
 	command = ft_split(info->line_read, ' ');

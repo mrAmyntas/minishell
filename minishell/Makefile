@@ -17,7 +17,8 @@ SRC =	src/minishell.c\
 		src/error.c\
 		src/lexer.c\
 		src/utils.c\
-		src/cd.c
+		src/cd.c\
+		src/manage_env.c
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 

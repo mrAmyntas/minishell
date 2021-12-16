@@ -21,6 +21,7 @@ typedef	struct	s_info
 	int			char_type;
 	int			p_pos;
 	char		**export;
+	char		*home;
 	char		*pwd;
 }				t_info;
 
@@ -62,5 +63,9 @@ void    unset_var(t_info *info, char *var);
 int		exec_pwd(t_info *info);
 void    make_dir(t_info *info, char **command);
 char	*get_path(char *cmd, char **env);
+char    *get_val(t_info *info, char *var);
+int     ft_strstrlen(char **str);
+int     ft_len_to_char(char *str, char c);
+void    put_str(char *env, char **export, int j);
 
 #endif
