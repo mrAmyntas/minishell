@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/16 13:58:37 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/16 16:36:58 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	info->ret = 0;
 	info->t_pos = 0;
 	info->p_pos = 0;
+	info->fd_std[0] = dup(0);
+	info->fd_std[1] = dup(1);
 	info->home = ft_strdup(getenv("HOME"));
 	info->pwd = malloc(sizeof(char *) * len);
 	while (!getcwd(info->pwd, len))
@@ -104,6 +106,8 @@ int main(int ac, char **av, char **env)
 		//if (!ft_strncmp(info.line_read, "break", 4)) // om leaks te checken
 		//	break ;
 		info.cmd = ft_find_command(&info); //some temp bullshit to help check if milans work is working
+		dup2(info.fd_std[0], 0);
+		dup2(info.fd_std[1], 1);
 		if (info.cmd == 15)
 			printf("minishell: command not found: %s\n", info.line_read);
 		if (info.line_read && *info.line_read)
