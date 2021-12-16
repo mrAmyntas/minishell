@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/15 20:14:50 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/16 14:56:09 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,52 +41,34 @@ char	*get_path(char *cmd, char **env)
 int	exec_export(t_info *info)
 {
 	int		i;
-	char	**command;
 
 	i = 1;
-	command = ft_split(info->line_read, ' ');
-	while (command[i])
+	while (info->tokens[i])
 	{
-		add_env(info, command[i]);
+		add_env(info, info->tokens[i]);
 		i++;
 	}
 	i = 0;
-	while (info->export[i] && !command[1])
+	while (info->export[i] && !info->tokens[1])
     {
 		write(1, "declare -x ", 11);
         write(1, info->export[i], ft_strlen(info->export[i]));
 		write(1, "\n", 1);
         i++;
     }
-	i = 0;
-	while (command[i])
-	{
-		free(command[i]);
-		i++;
-	}
-	free (command);
 	return (0);
 }
 
 int	exec_unset(t_info *info)
 {
-	char	**command;
 	int		i;
 
 	i = 1;
-	command = ft_split(info->line_read, ' ');
-	while (command[i])
+	while (info->tokens[i])
 	{
-		unset_var(info, command[i]);
+		unset_var(info, info->tokens[i]);
 		i++;
 	}
-	i = 0;
-	while (command[i])
-	{
-		free(command[i]);
-		i++;
-	}
-	free (command);
 	sort_export(info);
 	return (0);
 }
@@ -98,9 +80,25 @@ int	exec_pwd(t_info *info)
 	return (0);
 }
 
+int	exec_env(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (info->env[i])
+	{
+		if (ft_len_to_char(info->env[i], '=') > -1)
+		{
+			write(1, info->env[i], ft_strlen(info->env[i]));
+			write(1, "\n", 1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 int exec(t_info *info)
 {
-    char    **command;
     char    *path;
 	int		id;
 
@@ -112,9 +110,8 @@ int exec(t_info *info)
 		wait(&id);
 		return (0);
 	}
-	command = ft_split(info->line_read, ' ');
-    path = get_path(command[0], info->env);
-	execve(path, command, info->env);
+    path = get_path(info->tokens[0], info->env);
+	execve(path, info->tokens, info->env);
     perror("command error");
 	exit (1);
 }

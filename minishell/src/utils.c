@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/16 14:04:43 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/16 14:56:26 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	ft_find_command(t_info *info)
 	if (ft_strncmp(info->tokens[0], "unset", 5) == 0)
 		return (exec_unset(info));
 	if (ft_strncmp(info->tokens[0], "env", 3) == 0)
-		return (exec(info));
+		return (exec_env(info));
 	if (ft_strncmp(info->tokens[0], "exit", 4) == 0)
 		exit(0);
 	return (15);

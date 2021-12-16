@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/15 19:03:31 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/16 14:37:36 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	change_pwd(t_info *info, char **command)
 
 	i = 0;
 	add_env(info, ft_strjoin("OLDPWD=", info->pwd));
+	printf("TEST\n");
 	while (info->env[i] && ft_strncmp(info->env[i], "PWD=", 4))
 		i++;
 	if (!info->env[i])
@@ -76,13 +77,13 @@ void	change_pwd(t_info *info, char **command)
 	free (info->pwd);
 	info->pwd = ft_strdup(command[1]);
 	chdir(info->pwd);
-	i = 0;
-	while (command[i])
-	{
-		free (command[i]);
-		i++;
-	}
-	free (command);
+	//i = 0;
+	//while (command[i])
+	//{
+	//	free (command[i]);
+	//	i++;
+	//}
+	//free (command);
 	sort_export(info);
 }
 
@@ -90,30 +91,29 @@ int	exec_cd(t_info *info)
 {
 	int		id;
 	int		status;
-	char	**command;
 	char	*path;
 
-	command = ft_split(info->line_read, ' ');
-	if (!ft_strncmp(command[1], "..", 2))
+	if (!ft_strncmp(info->tokens[1], "..", 2))
 		trim_last_dir(info);
-	if (!ft_strncmp(command[1], "~", 1))
+	if (!ft_strncmp(info->tokens[1], "~", 1))
 		pwd_is_home(info);
-	if (!ft_strncmp(command[1], "..", 2) || !ft_strncmp(command[1], "~", 1))
+	if (!ft_strncmp(info->tokens[1], "..", 2) || !ft_strncmp(info->tokens[1], "~", 1) || !info->tokens[1])
 		return (0);
 	id = fork();
 	if (id == -1)
 		perror("fork error");
 	if (id)
 	{
-		if (command[1][0] != '/')
-			make_dir(info, &command[1]);
+		if (info->tokens[1][0] != '/')
+			make_dir(info, &info->tokens[1]);
 		waitpid(id, &status, 0);
 		if (status)
 			return (0);
-		change_pwd(info, command);
+		change_pwd(info, info->tokens);
 		return (0);
 	}
-	path = get_path(command[0], info->env);
-	execve(path, command, info->env);
+	path = get_path(info->tokens[0], info->env);
+	execve(path, info->tokens, info->env);
 	ft_error(3);
+	return (0);
 }
