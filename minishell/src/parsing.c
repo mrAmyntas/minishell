@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/16 18:33:08 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/16 18:51:12 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,11 +396,11 @@ int	parser(t_info *info)
 		return (-1);
 	}
 	remove_spaces(info);
-	printf("after merge\n");
+	//printf("after merge\n");
 	int p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s\n", info->tokens[p]);
+		//printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	return (0);
