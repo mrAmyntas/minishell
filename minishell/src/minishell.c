@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/15 19:48:08 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/16 13:58:37 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_free(t_info *info)
 	{
 		free(info->tokens[i]);
 		info->tokens[i] = NULL;
-		i--;
+		i++;
 	}
 	//{
 	//	printf("i:%d\n", i);
@@ -108,7 +108,7 @@ int main(int ac, char **av, char **env)
 			printf("minishell: command not found: %s\n", info.line_read);
 		if (info.line_read && *info.line_read)
     		add_history(info.line_read);
-		//ft_free(&info);
+		ft_free(&info);
 		info.p_pos = 0;
 		info.t_pos = 0;
 	}

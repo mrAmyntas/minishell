@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/15 18:57:44 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/16 14:04:43 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,19 +99,19 @@ void	get_env(t_info *info, char **env)
 
 int	ft_find_command(t_info *info)
 {
-	if (ft_strncmp(info->line_read, "echo", 4) == 0)
+	if (ft_strncmp(info->tokens[0], "echo", 4) == 0)
 		return (exec(info));
-	if (ft_strncmp(info->line_read, "cd", 2) == 0)
+	if (ft_strncmp(info->tokens[0], "cd", 2) == 0)
 		return (exec_cd(info));
-	if (ft_strncmp(info->line_read, "pwd", 3) == 0)
+	if (ft_strncmp(info->tokens[0], "pwd", 3) == 0)
 		return (exec_pwd(info));
-	if (ft_strncmp(info->line_read, "export", 6) == 0)
+	if (ft_strncmp(info->tokens[0], "export", 6) == 0)
 		return (exec_export(info));
-	if (ft_strncmp(info->line_read, "unset", 5) == 0)
+	if (ft_strncmp(info->tokens[0], "unset", 5) == 0)
 		return (exec_unset(info));
-	if (ft_strncmp(info->line_read, "env", 3) == 0)
+	if (ft_strncmp(info->tokens[0], "env", 3) == 0)
 		return (exec(info));
-	if (ft_strncmp(info->line_read, "exit", 4) == 0)
+	if (ft_strncmp(info->tokens[0], "exit", 4) == 0)
 		exit(0);
 	return (15);
 }

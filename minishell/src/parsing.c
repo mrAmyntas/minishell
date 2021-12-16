@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/13 20:08:06 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/16 14:05:30 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*ft_strjoinbas(char *s1, char const *s2)
 	x = ft_strlen(s1) + ft_strlen(s2) + 1;
 	buff = (char*)malloc(sizeof(char) * x);
 	if (buff == NULL)
-		return (NULL);
+		ft_error(1);
 	x = 0;
 	while (s1[x] != '\0')
 	{
@@ -125,48 +125,65 @@ int	check_unclosed(t_info *info, int i, int j)
 	return (j);
 }
 
-int	merge_cut_quotes(t_info *info, int *first_q, int *last_q, int n)
+void	trim_quotes2(t_info *info, int pos, int first, int last)
+{
+	while (info->tokens[pos][first + 1] != '\0')
+	{
+		info->tokens[pos][first] = info->tokens[pos][first + 1];
+		first++;
+	}
+	info->tokens[pos][first] = '\0';
+	while (info->tokens[pos][last] != '\0')
+	{
+		info->tokens[pos][last - 1] = info->tokens[pos][last];
+		last++;
+	}
+	info->tokens[pos][last - 1] = '\0';
+}
+
+void	trim_quotes(t_info *info, int pos, int len)
+{
+	int	first;
+	int last;
+	int	i;
+
+	i = 0;
+	while (info->tokens[pos][i] != '\0')
+	{
+		if (info->tokens[pos][i] == C_QUOTE || info->tokens[pos][i] == C_DQUOTE)
+			break ;
+		i++;
+	}
+	first = i;
+	i = len - 1;
+	while (i >= 0)
+	{
+		if (info->tokens[pos][i] == C_QUOTE || info->tokens[pos][i] == C_DQUOTE)
+			break ;
+		i--;
+	}
+	last = i;
+	trim_quotes2(info, pos, first, last);	
+}
+
+void	merge_cut_quotes(t_info *info, int first_q, int last_q, int n)
 {
 	int	i;
 
 	if (n == 1 || n == 2)
-		first_q[0]--;
+		first_q--;
 	if (n == 2 || n == 3)
-		last_q[0] = last_q[0] + 2;
-	i = first_q[0];
-	n = 1;
-	while (i < last_q[0] - 1)
+		last_q++;
+	i = first_q;
+	while (i < last_q)
 	{
-		info->tokens[first_q[0]] = ft_strjoinbas(info->tokens[first_q[0]], info->tokens[first_q[0] + n]);
-		free(info->tokens[first_q[0] + n]);
-		info->tokens[first_q[0] + n] = NULL;
+		info->tokens[first_q] = ft_strjoinbas(info->tokens[first_q], info->tokens[first_q + 1]);
+		free(info->tokens[first_q + 1]);
+		info->tokens[first_q + 1] = NULL;
+		realloc_copy(info, first_q + 1, 1);
 		i++;
-		n++;
 	}
-	return (n - 1);
-}
-
-void	reorder_lines(t_info *info, int first_q, int last_q, int n_cut)
-{
-	int	i;
-	int	j;
-
-	j = ft_strlen(info->line_read);
-	i = 1;
-	if (last_q != j)
-	{
-		while (n_cut > 0 || info->tokens[last_q + i] != NULL)
-		{
-			free(info->tokens[first_q + i]);
-			info->tokens[first_q + i] = NULL;
-			info->tokens[first_q + i] = (char *)malloc(sizeof(info->tokens[last_q + i]));
-			ft_strlcpy(info->tokens[first_q + i], info->tokens[last_q + i], ft_strlen(info->tokens[last_q + i]));
-			free(info->tokens[last_q + i]);
-			info->tokens[last_q + i] = NULL;
-			n_cut--;
-			i++;
-		}
-	}
+	trim_quotes(info, first_q, ft_strlen(info->tokens[first_q]));
 }
 
 int	check_before_after(t_info *info, int first_q, int last_q)
@@ -185,9 +202,9 @@ int	check_before_after(t_info *info, int first_q, int last_q)
 			{
 				if (info->tokens[last_q + 1] != NULL && check_char_token(info, last_q + 1) == C_NORMAL)
 					ret++;
+				return (ret);
 			}
 		}
-		return (ret);
 	}
 	if (last_q != i)
 	{
@@ -195,6 +212,37 @@ int	check_before_after(t_info *info, int first_q, int last_q)
 			ret = 3;
 	}
 	return (ret);
+}
+
+void	realloc_copy(t_info *info, int start, int incr)
+{
+	while (info->tokens[start + incr] != NULL)
+	{
+		info->tokens[start] = (char *)malloc(1 + ft_strlen(info->tokens[start + incr]));
+		if (info->tokens[start] == NULL)
+			ft_error(1);
+		ft_strlcpy(info->tokens[start], info->tokens[start + incr], 1 + ft_strlen(info->tokens[start + incr]));
+		free(info->tokens[start + incr]);
+		info->tokens[start + incr] = NULL;
+		start = start + incr;
+	}
+}
+
+void	joinwithnormalbefore(t_info *info, int first_q, int last_q)
+{
+	if (first_q != 0)
+	{
+		if (info->tokens[first_q] != NULL)
+		{
+			if (check_char_token(info, first_q) == C_NORMAL && check_char_token(info, first_q - 1) == C_NORMAL)
+			{
+				info->tokens[first_q - 1] = ft_strjoinbas(info->tokens[first_q - 1], info->tokens[first_q]);
+				free (info->tokens[first_q]);
+				info->tokens[first_q] = NULL;
+				realloc_copy(info, first_q, 1);
+			}
+		}
+	}
 }
 
 int	check_empty_quotes(t_info *info, int first_q, int last_q)
@@ -205,24 +253,10 @@ int	check_empty_quotes(t_info *info, int first_q, int last_q)
 		info->tokens[first_q] = NULL;
 		free(info->tokens[last_q]);
 		info->tokens[last_q] = NULL;
-		while (info->tokens[first_q + 2] != NULL)
-		{
-			info->tokens[first_q] = (char *)malloc(sizeof(char) * 2);
-			info->tokens[first_q][0] = info->tokens[first_q + 2][0];
-			info->tokens[first_q][1] = '\0';
-			free(info->tokens[first_q + 2]);
-			info->tokens[first_q + 2] = NULL;
-			first_q = first_q + 2;
-		}
-		while (info->tokens[last_q + 2] != NULL)
-		{
-			info->tokens[last_q] = (char *)malloc(sizeof(char) * 2);
-			info->tokens[last_q][0] = info->tokens[last_q + 2][0];
-			info->tokens[last_q][1] = '\0';
-			free(info->tokens[last_q + 2]);
-			info->tokens[last_q + 2] = NULL;
-			last_q = last_q + 2;
-		}
+		realloc_copy(info, first_q, 2);
+		realloc_copy(info, last_q, 2);
+		joinwithnormalbefore(info, first_q, last_q);
+		
 		return (1);
 	}
 	return (0);
@@ -246,15 +280,29 @@ int	parse_quotes(t_info *info)
 				continue ;
 			check_dollar(info, i, ret);
 			n = check_before_after(info, i, ret); //n == 0: no normal chars before or after quotes  n == 1, only before, n = 2, after & before n = 3 only after
-			n = merge_cut_quotes(info, &i, &ret, n); // n here returns as the amount of lines joined together
-			if (info->tokens[ret + 1] != NULL)
-				reorder_lines(info, i, ret, n);
-			i = ret - n;
+			merge_cut_quotes(info, i, ret, n);
+			if (n == 1 || n == 2)
+				continue ;
 		}
-		else
-			i++;
+		i++;
 	}
 	return (0);
+}
+
+void	remove_spaces(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (info->tokens[i] != NULL)
+	{
+		if (info->tokens[i][0] == ' ' && info->tokens[i][1] == '\0')
+		{
+			realloc_copy(info, i, 1);
+			continue ;
+		}
+		i++;
+	}
 }
 
 int	parser(t_info *info)
@@ -267,17 +315,51 @@ int	parser(t_info *info)
 		printf("checkret-1\n");
 		return (-1);
 	}
-//	expand_dollar(info);
-//	remove_quotes(info);
-//	fix_order(info);
-	printf("after merge\n");
+	remove_spaces(info);
+	//printf("after merge\n");
 	int p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s\n", info->tokens[p]);
+		//printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	return (0);
 }
 
 
+/*
+void	reorder_lines(t_info *info, int first_q, int last_q, int n_cut)
+{
+	int	i;
+	int	j;
+
+	j = ft_strlen(info->line_read);
+	i = 1;
+	if (last_q != j)
+	{
+		while (n_cut > 0 || info->tokens[last_q + i] != NULL)
+		{
+			free(info->tokens[first_q + i]);
+			info->tokens[first_q + i] = NULL;
+			info->tokens[first_q + i] = (char *)malloc(sizeof(info->tokens[last_q + i]));
+			ft_strlcpy(info->tokens[first_q + i], info->tokens[last_q + i], ft_strlen(info->tokens[last_q + i]));
+			free(info->tokens[last_q + i]);
+			info->tokens[last_q + i] = NULL;
+			n_cut--;
+			i++;
+		}
+	}
+}
+
+if (n == 0)
+	{
+		i = 0;
+		while (i < len - 2)
+		{
+			info->tokens[pos][i] = info->tokens[pos][i + 1];
+			i++;
+		}
+		info->tokens[pos][i] = '\0';
+		return ;
+	}
+ */

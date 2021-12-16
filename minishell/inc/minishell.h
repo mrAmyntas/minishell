@@ -67,5 +67,7 @@ char    *get_val(t_info *info, char *var);
 int     ft_strstrlen(char **str);
 int     ft_len_to_char(char *str, char c);
 void    put_str(char *env, char **export, int j);
+void	realloc_copy(t_info *info, int start, int incr);
+
 
 #endif
