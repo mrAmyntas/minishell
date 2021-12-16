@@ -71,5 +71,6 @@ int     ft_len_to_char(char *str, char c);
 void    put_str(char *env, char **export, int j);
 void	realloc_copy(t_info *info, int start, int incr);
 int		exec_env(t_info *info);
+int		check_before_after(t_info *info, int first_q, int last_q);
 
 #endif
