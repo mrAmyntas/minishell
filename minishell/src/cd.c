@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 11:56:38 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/17 16:31:46 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	pwd_is_home(t_info *info)
+void	pwd_is_home(t_info *info, char **command)
 {
 	int	i;
 	int	j;
@@ -38,9 +38,11 @@ void	pwd_is_home(t_info *info)
 	chdir(info->pwd);
 	info->env[i] = ft_strjoin("PWD=", info->pwd);
 	sort_export(info);
+	free (command[0]);
+	free (command);
 }
 
-void	trim_last_dir(t_info *info)
+void	trim_last_dir(t_info *info, char **command)
 {
 	int	i;
 	int	len;
@@ -59,6 +61,8 @@ void	trim_last_dir(t_info *info)
 	free (info->env[i]);
 	info->env[i] = ft_strjoin("PWD=", info->pwd);
 	sort_export(info);
+	free (command[0]);
+	free (command);
 }
 
 void	change_pwd(t_info *info, char **command)
@@ -76,13 +80,13 @@ void	change_pwd(t_info *info, char **command)
 	free (info->pwd);
 	info->pwd = ft_strdup(command[1]);
 	chdir(info->pwd);
-	//i = 0;
-	//while (command[i])
-	//{
-	//	free (command[i]);
-	//	i++;
-	//}
-	//free (command);
+	i = 0;
+	while (command[i])
+	{
+		free (command[i]);
+		i++;
+	}
+	free (command);
 	sort_export(info);
 }
 
@@ -93,9 +97,9 @@ int	exec_cd(t_info *info, char **command)
 	char	*path;
 
 	if (!ft_strncmp(command[1], "..", 2))
-		trim_last_dir(info);
+		trim_last_dir(info, command);
 	if (!ft_strncmp(command[1], "~", 1))
-		pwd_is_home(info);
+		pwd_is_home(info, command);
 	if (!ft_strncmp(command[1], "..", 2) || !ft_strncmp(command[1], "~", 1) || !command[1])
 		return (0);
 	id = fork();

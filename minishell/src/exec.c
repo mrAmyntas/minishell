@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 11:57:20 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/17 16:30:04 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,13 @@ int	exec_export(t_info *info, char **command)
 		write(1, "\n", 1);
         i++;
     }
+	i = 0;
+	while (command[i])
+	{
+		free (command[i]);
+		i++;
+	}
+	free (command);
 	return (0);
 }
 
@@ -77,6 +84,13 @@ int	exec_unset(t_info *info, char **command)
 		i++;
 	}
 	sort_export(info);
+	i = 0;
+	while (command[i])
+	{
+		free (command[i]);
+		i++;
+	}
+	free (command);
 	return (0);
 }
 
@@ -108,13 +122,21 @@ int exec(t_info *info, char **command)
 {
     char    *path;
 	int		id;
+	int		i;
 
+	i = 0;
 	id = fork();
 	if (id == -1)
 		perror("fork error");
 	if (id)
 	{
 		wait(&id);
+		while (command[i])
+		{
+			free (command[i]);
+			i++;
+		}
+		free (command);
 		return (0);
 	}
     path = get_path(command[0], info->env);

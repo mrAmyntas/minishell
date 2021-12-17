@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 12:48:22 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/17 16:28:07 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,13 @@ int	redirect(t_info *info, int type, char *file)
 	if (type == 4)
 		fd = open(file, O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (fd < 0)
-		return (1);
+		return (fd);
 	if (type == 1 || type == 2)
 		dup2(fd, type - 1);
 	if (type == 3 || type == 4)
 		dup2(fd, type - 3);
 	//printf("%i\n", fd);
-	return (0);
+	return (fd);
 }
 
 char	**trim_command(t_info *info, int start, int end)
@@ -127,12 +127,12 @@ char	**trim_command(t_info *info, int start, int end)
 	j = 0;
 	if (!ft_strncmp(info->tokens[start], "<", ft_strlen(info->tokens[start])))
 		start += 2;
-	while (ft_strncmp(info->tokens[start + i], ">", ft_strlen(info->tokens[start + i])) && (start + i) < end)
+	while ((start + i) < end && ft_strncmp(info->tokens[start + i], ">", ft_strlen(info->tokens[start + i])))
 		i++;
 	command = malloc(sizeof(char **) * (i + 1));
 	while (j < i)
 	{
-		command[j] = info->tokens[start];
+		command[j] = ft_strdup(info->tokens[start]);
 		j++;
 		start++;
 	}
@@ -140,77 +140,77 @@ char	**trim_command(t_info *info, int start, int end)
 	return (command);
 }
 
+int ft_pipe(t_info *info, char **command, int loc_pipe)
+{
+	int	id;
+	int	pipefd[2];
+	
+	pipe(pipefd);
+	id = fork();
+	if (id == -1)
+		ft_error(4);
+	if (id)
+	{
+		wait(&id);
+		close(pipefd[1]);
+		dup2(pipefd[0], 0);
+		command = trim_command(info, loc_pipe + 1, ft_strstrlen(info->tokens));
+		return (ft_find_command(info, command));
+	}
+	else
+	{
+		close(pipefd[0]);
+		dup2(pipefd[1], 1);
+		command = trim_command(info, 0, loc_pipe);
+		ft_find_command(info, command);
+		exit(0);
+	}
+}
+
 int	check_redirect(t_info *info)
 {
 	int		i;
-	int		fd;
+	int		fd[2];
 	int		loc_pipe;
-	int		pipefd[2];
 	char	**command;
-	int		id;
 
 	i = 0;
 	loc_pipe = 0;
+	fd[0] = 0;
+	fd[1] = 0;
 	while (info->tokens[i])
 	{
-		fd = 0;
 		if (info->tokens[i][0] == '<')
-			fd = redirect(info, 1, info->tokens[i + 1]);
+			fd[0] = redirect(info, 1, info->tokens[i + 1]);
 		if (info->tokens[i][0] == '|')
 			loc_pipe = i;
 		if (info->tokens[i][0] == '>')
-			fd = redirect(info, 2, info->tokens[i + 1]);
-		if (fd)
+			fd[1] = redirect(info, 2, info->tokens[i + 1]);
+		if (fd < 0)
 			perror("");
 		i++;
 	}
 	if (loc_pipe)
-	{
-		pipe(pipefd);
-		id = fork();
-		if (id == -1)
-			ft_error(4);
-		if (id)
-		{
-			wait(&id);
-			close(pipefd[1]);
-			dup2(pipefd[0], 0);
-			//write(1, "command na pipe", 15);
-			command = trim_command(info, loc_pipe + 1, ft_strstrlen(info->tokens));
-			return (ft_find_command(info, command));
-			// go to command
-		}
-		else
-		{
-			close(pipefd[0]);
-			dup2(pipefd[1], 1);
-			//write(1, "command voor pipe", 17);
-			command = trim_command(info, 0, loc_pipe);
-			ft_find_command(info, command);
-			exit(0);
-			// go to command
-		}
-		
-	}
+		return (ft_pipe(info, command, loc_pipe));	
 	command = trim_command(info, 0, ft_strstrlen(info->tokens));
 	return (ft_find_command(info, command));
 }
 
 int	ft_find_command(t_info *info, char **command)
 {
-	if (ft_strncmp(info->tokens[0], "echo", 4) == 0)
+	if (ft_strncmp(command[0], "echo", 4) == 0)
 		return (exec(info, command));
-	if (ft_strncmp(info->tokens[0], "cd", 2) == 0)
+	if (ft_strncmp(command[0], "cd", 2) == 0)
 		return (exec_cd(info, command));
-	if (ft_strncmp(info->tokens[0], "pwd", 3) == 0)
+	if (ft_strncmp(command[0], "pwd", 3) == 0)
 		return (exec_pwd(info));
-	if (ft_strncmp(info->tokens[0], "export", 6) == 0)
+	if (ft_strncmp(command[0], "export", 6) == 0)
 		return (exec_export(info, command));
-	if (ft_strncmp(info->tokens[0], "unset", 5) == 0)
+	if (ft_strncmp(command[0], "unset", 5) == 0)
 		return (exec_unset(info, command));
-	if (ft_strncmp(info->tokens[0], "env", 3) == 0)
+	if (ft_strncmp(command[0], "env", 3) == 0)
 		return (exec_env(info));
-	if (ft_strncmp(info->tokens[0], "exit", 4) == 0)
+	if (ft_strncmp(command[0], "exit", 4) == 0)
 		exit(0);
 	return (15);
 }
