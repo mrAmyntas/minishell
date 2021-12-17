@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 11:15:08 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/17 16:09:52 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,43 +70,39 @@ int	check_char(t_info *info, int i)
 		return (C_NEWLINE);
 	if (info->line_read[i] == ' ')
 		return (C_SPACE);
-	if (info->line_read[i] == '\0')
-		return (C_EOF);
 	return (C_NORMAL);
 }
 
-int	check_char_token(t_info *info, int i)
+int	check_char_token(t_info *info, int i, int j)
 {
-	if (info->tokens[i][0] == '<')
+	if (info->tokens[i][j] == '<')
 	{
-		if (info->tokens[i][0 + 1] == '<')
+		if (info->tokens[i][j + 1] == '<')
 			return (C_DLESSER);
 		return (C_LESSER);
 	}
-	if (info->tokens[i][0] == '>')
+	if (info->tokens[i][j] == '>')
 	{
-		if (info->tokens[i][0 + 1] == '>')
+		if (info->tokens[i][j + 1] == '>')
 			return (C_DGREATER);
 		return (C_GREATER);
 	}
-	if (info->tokens[i][0] == '|')
+	if (info->tokens[i][j] == '|')
 		return (C_PIPE);
-	if (info->tokens[i][0] == '$')
+	if (info->tokens[i][j] == '$')
 		return (C_DOLLAR);
-//	if (info->tokens[i][0] == ';')
+//	if (info->tokens[i][j] == ';')
 //		return (C_SEMICOLON);
-//	if (info->tokens[i][0] == '\\')
+//	if (info->tokens[i][j] == '\\')
 //		return (C_BACKSLASH);
-	if (info->tokens[i][0] == '\'')
+	if (info->tokens[i][j] == '\'')
 		return (C_QUOTE);
-	if (info->tokens[i][0] == '\"')
+	if (info->tokens[i][j] == '\"')
 		return (C_DQUOTE);
-	if (info->tokens[i][0] == '\n')
+	if (info->tokens[i][j] == '\n')
 		return (C_NEWLINE);
-	if (info->tokens[i][0] == ' ')
+	if (info->tokens[i][j] == ' ')
 		return (C_SPACE);
-	if (info->tokens[i][0] == '\0')
-		return (C_EOF);
 	return (C_NORMAL);
 }
 

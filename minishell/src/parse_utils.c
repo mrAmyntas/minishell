@@ -6,19 +6,57 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:17:21 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 13:13:25 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/17 15:49:34 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	joinwithnormalbefore(t_info *info, int first_q, int last_q)
+
+void	joinwithbefore(t_info *info, int first_q)
 {
 	if (first_q != 0)
 	{
 		if (info->tokens[first_q] != NULL)
 		{
-			if (check_char_token(info, first_q) == C_NORMAL && check_char_token(info, first_q - 1) == C_NORMAL)
+			info->tokens[first_q - 1] = ft_strjoinbas(info->tokens[first_q - 1], info->tokens[first_q]);
+			free (info->tokens[first_q]);
+			info->tokens[first_q] = NULL;
+			realloc_copy(info, first_q, 1);
+		}
+	}
+}
+
+int	join_tokens(t_info *info, int pos)
+{
+	int	ret;
+
+	ret = 0;
+	if (info->tokens[pos + 1] != NULL)
+	{
+		if (info->tokens[pos + 1][0] == C_DQUOTE || info->tokens[pos + 1][0] == C_QUOTE
+			|| check_char_token(info, pos + 1, 0) == C_NORMAL)
+			joinwithbefore(info, pos + 1);
+	}
+	if (pos != 0)
+	{
+		if (info->tokens[pos - 1][0] == C_DQUOTE || info->tokens[pos - 1][0] == C_QUOTE
+			|| check_char_token(info, pos - 1, 0) == C_NORMAL)
+		{
+			joinwithbefore(info, pos);
+			ret++;
+		}
+	}
+	return (ret);
+}
+
+void	joinwithnormalbefore(t_info *info, int first_q)
+{
+	if (first_q != 0)
+	{
+		if (info->tokens[first_q] != NULL)
+		{
+			if (check_char_token(info, first_q, 0) == C_NORMAL && check_char_token(info, first_q - 1, 0) == C_NORMAL)
 			{
 				info->tokens[first_q - 1] = ft_strjoinbas(info->tokens[first_q - 1], info->tokens[first_q]);
 				free (info->tokens[first_q]);
@@ -39,7 +77,7 @@ int	check_empty_quotes(t_info *info, int first_q, int last_q)
 		info->tokens[last_q] = NULL;
 		realloc_copy(info, first_q, 2);
 		realloc_copy(info, last_q, 2);
-		joinwithnormalbefore(info, first_q, last_q);
+		joinwithnormalbefore(info, first_q);
 		return (1);
 	}
 	return (0);
@@ -67,12 +105,12 @@ int	check_before_after(t_info *info, int first_q, int last_q)
 	ret = 0;
 	if (first_q != 0)
 	{
-		if (info->tokens[first_q - 1] != NULL && check_char_token(info, first_q - 1) == C_NORMAL)
+		if (info->tokens[first_q - 1] != NULL && check_char_token(info, first_q - 1, 0) == C_NORMAL)
 		{
 			ret++;
 			if (last_q != i)
 			{
-				if (info->tokens[last_q + 1] != NULL && check_char_token(info, last_q + 1) == C_NORMAL)
+				if (info->tokens[last_q + 1] != NULL && check_char_token(info, last_q + 1, 0) == C_NORMAL)
 					ret++;
 				return (ret);
 			}
@@ -80,7 +118,7 @@ int	check_before_after(t_info *info, int first_q, int last_q)
 	}
 	if (last_q != i)
 	{
-		if (info->tokens[last_q + 1] != NULL && check_char_token(info, last_q + 1) == C_NORMAL)
+		if (info->tokens[last_q + 1] != NULL && check_char_token(info, last_q + 1, 0) == C_NORMAL)
 			ret = 3;
 	}
 	return (ret);
@@ -128,5 +166,4 @@ void	merge_quotes(t_info *info, int first_q, int last_q, int n)
 		realloc_copy(info, first_q + 1, 1);
 		i++;
 	}
-	//trim_quotes(info, first_q, ft_strlen(info->tokens[first_q]));
 }

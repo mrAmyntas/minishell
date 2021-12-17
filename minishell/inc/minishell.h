@@ -41,7 +41,6 @@ enum	e_tokentype
 	C_QUOTE = '\'',
 	C_DQUOTE = '\"',
 	C_NEWLINE = '\n',
-	C_EOF = '\0',
 	C_DLESSER = 129,
 	C_DGREATER = 130
 };
@@ -57,7 +56,7 @@ int		check_char(t_info *info, int i);
 void    add_env(t_info *info, char *new_var);
 void    sort_export(t_info *info);
 int		parser(t_info *info);
-int		check_char_token(t_info *info, int i);
+int		check_char_token(t_info *info, int i, int j);
 void    get_env(t_info *info, char **env);
 int		exec_cd(t_info *info, char **command);
 int		exec_unset(t_info *info, char **command);
@@ -79,16 +78,18 @@ void	remove_spaces(t_info *info);
 char	*ft_strjoinbas(char *s1, char const *s2);
 int		check_unclosed(t_info *info, int i, int j);
 void	trim_quotes(t_info *info, int pos, int len);
-void	check_dollar(t_info *info);
+void	check_dollar_token(t_info *info);
 void	expand_dollar(t_info *info, int i);
 void	merge_quotes(t_info *info, int first_q, int last_q, int n);
 void	expandexitstatus(t_info *info, int i);
 int		check_redirect(t_info *info);
-void	joinwithnormalbefore(t_info *info, int first_q, int last_q);
+void	joinwithnormalbefore(t_info *info, int first_q);
 void	set_token_state(t_info *info);
 void	expand_exitstatus(t_info *info, int i);
 void	expand_token_dollar(t_info *info, int i);
 void	expand_str_dollar(t_info *info, int i, int pos);
-
+int		join_tokens(t_info *info, int pos);
+void	joinwithbefore(t_info *info, int first_q);
+char	*get_name(t_info *info, int i);
 
 #endif
