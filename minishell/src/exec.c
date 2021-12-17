@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/16 15:14:56 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/17 11:57:20 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,25 +38,25 @@ char	*get_path(char *cmd, char **env)
 	return (cmd);
 }
 
-int	exec_export(t_info *info)
+int	exec_export(t_info *info, char **command)
 {
 	int		i;
 	int		j;
 
 	i = 1;
 	j = 0;
-	while (info->tokens[i])
+	while (command[i])
 	{
-		if (info->tokens[i][j] == '\\' || info->tokens[i][j] == '|')
+		if (command[i][j] == '\\' || command[i][j] == '|')
 			j++;
-		if (info->tokens[i][j] < 65 || (info->tokens[i][j] > 90 && info->tokens[i][j] < 95) || info->tokens[i][j] > 122 || info->tokens[i][j] == 96)
-			perror(ft_strjoin(info->tokens[i], ": not a valid identifier"));
+		if (command[i][j] < 65 || (command[i][j] > 90 && command[i][j] < 95) || command[i][j] > 122 || command[i][j] == 96)
+			perror(ft_strjoin(command[i], ": not a valid identifier"));
 		else
-			add_env(info, info->tokens[i]);
+			add_env(info, command[i]);
 		i++;
 	}
 	i = 0;
-	while (info->export[i] && !info->tokens[1])
+	while (info->export[i] && !command[1])
     {
 		write(1, "declare -x ", 11);
         write(1, info->export[i], ft_strlen(info->export[i]));
@@ -66,14 +66,14 @@ int	exec_export(t_info *info)
 	return (0);
 }
 
-int	exec_unset(t_info *info)
+int	exec_unset(t_info *info, char **command)
 {
 	int		i;
 
 	i = 1;
-	while (info->tokens[i])
+	while (command[i])
 	{
-		unset_var(info, info->tokens[i]);
+		unset_var(info, command[i]);
 		i++;
 	}
 	sort_export(info);
@@ -104,7 +104,7 @@ int	exec_env(t_info *info)
 	return (0);
 }
 
-int exec(t_info *info)
+int exec(t_info *info, char **command)
 {
     char    *path;
 	int		id;
@@ -117,8 +117,8 @@ int exec(t_info *info)
 		wait(&id);
 		return (0);
 	}
-    path = get_path(info->tokens[0], info->env);
-	execve(path, info->tokens, info->env);
+    path = get_path(command[0], info->env);
+	execve(path, command, info->env);
     perror("command error");
 	exit (1);
 }

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/16 16:36:38 by mgroen        ########   odam.nl         */
+/*   Updated: 2021/12/17 12:48:22 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,60 +97,117 @@ void	get_env(t_info *info, char **env)
 	info->env[i] = NULL;
 }
 
-void	redirect(t_info *info, int type, char *files[2])
+int	redirect(t_info *info, int type, char *file)
 {
-	int	fd[2];
+	int	fd;
 	
-	if (type == 1 || type == 5 || type == 7 || type == 3)
-	{
-		fd[0] = open(files[0], O_RDONLY);
-		dup2(fd[0], 0);
-	}
-	if (type >= 4)
-	{
-		fd[1] = open(files[1], O_RDWR | O_TRUNC | O_CREAT, 0644);
-		dup2(fd[1], 1);
-	}
-	if (fd[0] < 0 || fd[1] < 0)
-		ft_error(3);
+	if (type == 1)
+		fd = open(file, O_RDONLY);
+	if (type == 2)
+		fd = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
+	if (type == 4)
+		fd = open(file, O_RDWR | O_APPEND | O_CREAT, 0644);
+	if (fd < 0)
+		return (1);
+	if (type == 1 || type == 2)
+		dup2(fd, type - 1);
+	if (type == 3 || type == 4)
+		dup2(fd, type - 3);
+	//printf("%i\n", fd);
+	return (0);
 }
 
-int	ft_find_command(t_info *info)
+char	**trim_command(t_info *info, int start, int end)
 {
+	char	**command;
 	int		i;
-	int		type;
-	char	*files[2];
+	int		j;
 
 	i = 0;
-	type = 0;
+	j = 0;
+	if (!ft_strncmp(info->tokens[start], "<", ft_strlen(info->tokens[start])))
+		start += 2;
+	while (ft_strncmp(info->tokens[start + i], ">", ft_strlen(info->tokens[start + i])) && (start + i) < end)
+		i++;
+	command = malloc(sizeof(char **) * (i + 1));
+	while (j < i)
+	{
+		command[j] = info->tokens[start];
+		j++;
+		start++;
+	}
+	command[j] = NULL;
+	return (command);
+}
+
+int	check_redirect(t_info *info)
+{
+	int		i;
+	int		fd;
+	int		loc_pipe;
+	int		pipefd[2];
+	char	**command;
+	int		id;
+
+	i = 0;
+	loc_pipe = 0;
 	while (info->tokens[i])
 	{
+		fd = 0;
 		if (info->tokens[i][0] == '<')
-		{
-			files[0] = ft_strdup(info->tokens[i + 1]);
-			type += 1;
-		}
+			fd = redirect(info, 1, info->tokens[i + 1]);
 		if (info->tokens[i][0] == '|')
-			type += 2;
+			loc_pipe = i;
 		if (info->tokens[i][0] == '>')
-		{
-			files[1] = ft_strdup(info->tokens[i + 1]);
-			type += 4;
-		}
+			fd = redirect(info, 2, info->tokens[i + 1]);
+		if (fd)
+			perror("");
 		i++;
 	}
-	if (type != 2 && type != 0)
-		redirect(info, type, files);
+	if (loc_pipe)
+	{
+		pipe(pipefd);
+		id = fork();
+		if (id == -1)
+			ft_error(4);
+		if (id)
+		{
+			wait(&id);
+			close(pipefd[1]);
+			dup2(pipefd[0], 0);
+			//write(1, "command na pipe", 15);
+			command = trim_command(info, loc_pipe + 1, ft_strstrlen(info->tokens));
+			return (ft_find_command(info, command));
+			// go to command
+		}
+		else
+		{
+			close(pipefd[0]);
+			dup2(pipefd[1], 1);
+			//write(1, "command voor pipe", 17);
+			command = trim_command(info, 0, loc_pipe);
+			ft_find_command(info, command);
+			exit(0);
+			// go to command
+		}
+		
+	}
+	command = trim_command(info, 0, ft_strstrlen(info->tokens));
+	return (ft_find_command(info, command));
+}
+
+int	ft_find_command(t_info *info, char **command)
+{
 	if (ft_strncmp(info->tokens[0], "echo", 4) == 0)
-		return (exec(info));
+		return (exec(info, command));
 	if (ft_strncmp(info->tokens[0], "cd", 2) == 0)
-		return (exec_cd(info));
+		return (exec_cd(info, command));
 	if (ft_strncmp(info->tokens[0], "pwd", 3) == 0)
 		return (exec_pwd(info));
 	if (ft_strncmp(info->tokens[0], "export", 6) == 0)
-		return (exec_export(info));
+		return (exec_export(info, command));
 	if (ft_strncmp(info->tokens[0], "unset", 5) == 0)
-		return (exec_unset(info));
+		return (exec_unset(info, command));
 	if (ft_strncmp(info->tokens[0], "env", 3) == 0)
 		return (exec_env(info));
 	if (ft_strncmp(info->tokens[0], "exit", 4) == 0)

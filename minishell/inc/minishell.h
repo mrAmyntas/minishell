@@ -45,9 +45,9 @@ enum	e_tokentype
 	C_DGREATER = 130
 };
 
-int		ft_find_command(t_info *info);
+int		ft_find_command(t_info *info, char **command);
 int		ft_find_redirect(t_info *info);
-int		exec(t_info *info);
+int		exec(t_info *info, char **command);
 void	lexer(t_info *info);
 void	ft_init_struct(t_info *info, char **av, char **env);
 void	ft_error(int error_type);
@@ -58,9 +58,9 @@ void    sort_export(t_info *info);
 int		parser(t_info *info);
 int		check_char_token(t_info *info, int i);
 void    get_env(t_info *info, char **env);
-int		exec_cd(t_info *info);
-int		exec_unset(t_info *info);
-int		exec_export(t_info *info);
+int		exec_cd(t_info *info, char **command);
+int		exec_unset(t_info *info, char **command);
+int		exec_export(t_info *info, char **command);
 void    unset_var(t_info *info, char *var);
 int		exec_pwd(t_info *info);
 void    make_dir(t_info *info, char **command);
