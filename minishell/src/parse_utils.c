@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:17:21 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 12:25:31 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/17 13:13:25 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	joinwithnormalbefore(t_info *info, int first_q, int last_q)
+void	joinwithnormalbefore(t_info *info, int first_q, int last_q)
 {
 	if (first_q != 0)
 	{

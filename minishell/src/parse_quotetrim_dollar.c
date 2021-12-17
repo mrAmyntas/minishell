@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:22:30 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 12:38:53 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/17 13:45:49 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	expand_dollar(t_info *info, int i, int pos)
+void	expand_dollar(t_info *info, int i)
 {
 	char	*name;
 

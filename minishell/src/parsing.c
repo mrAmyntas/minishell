@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 12:36:18 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/17 13:49:01 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,33 +37,57 @@ void	set_token_state(t_info *info)
 	
 }
 
+void	expand_exitstatus(t_info *info, int i)
+{
+
+}
+
+void	expand_token_dollar(t_info *info, int i)
+{
+	
+}
+
+void	expand_str_dollar(t_info *info, int i, int pos)
+{
+	
+}
+
+int	check_after_dollar(t_info *info)
+{
+	return (-1);
+}
+
 void	check_dollar(t_info *info)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	while (info->tokens[i] != NULL && info->tokens[i + 1] != NULL)
+	while (info->tokens[i] != NULL)
 	{
 		if (info->tokens[i][0] == '$')
 		{
-			if (info->tokens[i + 1][0] == '?')
-			{
-				expandexitstatus(info, i);
-				return ;
-			}
+			if (check_after_dollar(info) == 0)
+				expand_token_dollar(info, i); // if i+1 == NULL -> leave $ untouched
+			if (check_after_dollar(info) == 1)
+				expand_exitstatus(info, i);
+			joinwithnormalbefore(info, i - 1, i);
+		}
+		if (info->tokens[i][0] == '$' && info->tokens[i + 1] != NULL)
+		{
 			if (info->tokens[i + 1][0] == C_DQUOTE)
 			{
 				j = 1;
 				while (info->tokens[i + 1][j] != '\0')
 				{
-					if (info->tokens[i + 1][j] == C_DOLLAR)
-						expand_dollar(info, i + 1, j);
+					if (info->tokens[i + 1][j] == '$')
+					{
+						expand_str_dollar(info, i + 1, j);
+						joinwithnormalbefore(info, i, i + 1);
+					}
 					j++;
 				}
 			}
-			if (info->tokens[i + 1][0] == C_NORMAL)
-				expand_dollar(info, i, 0);
 		}
 		i++;
 	}

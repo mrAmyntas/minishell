@@ -80,8 +80,15 @@ char	*ft_strjoinbas(char *s1, char const *s2);
 int		check_unclosed(t_info *info, int i, int j);
 void	trim_quotes(t_info *info, int pos, int len);
 void	check_dollar(t_info *info);
-void	expand_dollar(t_info *info, int i, int pos);
+void	expand_dollar(t_info *info, int i);
 void	merge_quotes(t_info *info, int first_q, int last_q, int n);
 void	expandexitstatus(t_info *info, int i);
+int		check_redirect(t_info *info);
+void	joinwithnormalbefore(t_info *info, int first_q, int last_q);
+void	set_token_state(t_info *info);
+void	expand_exitstatus(t_info *info, int i);
+void	expand_token_dollar(t_info *info, int i);
+void	expand_str_dollar(t_info *info, int i, int pos);
+
 
 #endif
