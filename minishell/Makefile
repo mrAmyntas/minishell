@@ -18,7 +18,10 @@ SRC =	src/minishell.c\
 		src/lexer.c\
 		src/utils.c\
 		src/cd.c\
-		src/manage_env.c
+		src/manage_env.c\
+		src/parse_utils.c\
+		src/parse_utils2.c\
+		src/parse_quotetrim_dollar.c
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 

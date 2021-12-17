@@ -25,6 +25,7 @@ typedef	struct	s_info
 	char		*home;
 	char		*pwd;
 	int			fd_std[2];
+	int			*token_state;
 }				t_info;
 
 enum	e_tokentype
@@ -73,6 +74,14 @@ void	realloc_copy(t_info *info, int start, int incr);
 int		exec_env(t_info *info);
 int		check_before_after(t_info *info, int first_q, int last_q);
 int		check_empty_quotes(t_info *info, int first_q, int last_q);
-
+int		parse_quotes(t_info *info, int i);
+void	remove_spaces(t_info *info);
+char	*ft_strjoinbas(char *s1, char const *s2);
+int		check_unclosed(t_info *info, int i, int j);
+void	trim_quotes(t_info *info, int pos, int len);
+void	check_dollar(t_info *info);
+void	expand_dollar(t_info *info, int i, int pos);
+void	merge_quotes(t_info *info, int first_q, int last_q, int n);
+void	expandexitstatus(t_info *info, int i);
 
 #endif
