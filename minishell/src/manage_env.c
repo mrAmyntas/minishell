@@ -3,14 +3,21 @@
 char	*get_val(t_info *info, char *var)
 {
 	int	i;
-	int	len;
+	int	len[2];
 
 	i = 0;
-	len = ft_len_to_char(var, '=');
-	if (len == -1)
-		len = ft_strlen(var);
-	while (info->env[i] && strncmp(info->env[i], var, len))
+	len[0] = ft_len_to_char(var, '=');
+	if (len[0] < 0)
+		len[0] = ft_strlen(var);
+	while (info->env[i])
+	{
+		len[1] = ft_len_to_char(info->env[i], '=');
+		if (len[1] == -1)
+			len[1] = ft_strlen(info->env[i]);
+		if (!info->env[i] || (!ft_strncmp(info->env[i], var, len[0]) && len[0] == len[1]))
+			break ;
 		i++;
+	}
 	if (!info->env[i])
 		return (NULL);
 	return (info->env[i] + ft_strlen(var) + 1);
