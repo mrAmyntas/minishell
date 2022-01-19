@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 16:09:52 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2021/12/17 16:52:22 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,81 +190,3 @@ void	lexer(t_info *info)
 	}
 	store_input(info); // interpret line_read
 }
-
-/* 
-int	store_string_dquote(t_info *info, int i, int store_pos)
-{
-	int	j;
-
-	if (i - store_pos < 2) // nothing between the quotes
-	{
-		info->p_pos++;
-		return (i - store_pos);
-	}
-	info->tokens[info->t_pos] = (char *)malloc(sizeof(char) * (i - store_pos));
-	if (info->tokens[info->t_pos] == NULL)
-		ft_error(1);
-	j = 0;
-	while (info->p_pos < i)
-	{
-		info->tokens[info->t_pos][j] = info->line_read[info->p_pos];
-		info->p_pos++;
-		j++;
-	}
-	info->tokens[info->t_pos][j] = '\0';
-	info->t_pos++;
-	info->p_pos++;
-	return (i - store_pos);
-}
-
-int	store_string_quote(t_info *info, int i, int store_pos)
-{
-	int	j;
-
-	if (i - store_pos < 2) // nothing between the quotes
-	{
-		info->p_pos++;
-		return (i - store_pos);
-	}
-	info->tokens[info->t_pos] = (char *)malloc(sizeof(char) * (i - store_pos));
-	if (info->tokens[info->t_pos] == NULL)
-		ft_error(1);
-	j = 0;
-	while (info->p_pos < i)
-	{
-		info->tokens[info->t_pos][j] = info->line_read[info->p_pos];
-		info->p_pos++;
-		j++;
-	}
-	info->tokens[info->t_pos][j] = '\0';
-	info->t_pos++;
-	info->p_pos++;
-	return (i - store_pos);
-}
-
-int	iter_quotes(t_info *info, int i, int char_type, int store_pos)
-{
-	if (char_type == C_QUOTE)
-	{
-		i++;
-		while (check_char(info, i) != C_QUOTE && info->line_read[i] != '\0')
-			i++;
-		if (info->line_read[i] == '\0')
-			ft_error(2);
-		return(store_string_quote(info, i, store_pos));
-	}
-	else
-	{
-		i++;
-		while (check_char(info, i) != C_DQUOTE && info->line_read[i] != '\0')
-		{
-			if (check_char(info, i) == C_DOLLAR)
-				expand_dollar(info, i);
-			i++;
-		}
-		if (info->line_read[i] == '\0')
-			ft_error(2);
-		return (store_string_dquote(info, i, store_pos));
-	}
-} // loop till next quote, if no next quote (eof) ret error
-*/

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 16:37:35 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/19 11:38:46 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,12 +152,31 @@ void	check_dollar_str(t_info *info)
 	
 }
 
+void	check_dollar_in_quotes(t_info *info, int i)
+{
+	int j;
+
+	j = 0;
+	while (info->tokens[i][j] != '\0')
+	{
+		if (info->tokens[i][j] == '$')
+			
+		j++;
+	}
+}
 void	check_dollar_token(t_info *info)
 {
 	int	i;
 	int	j;
 
 	i = 0;
+	int p = 0;
+	//printf("in check_d_t\n");
+	while (info->tokens[p] != NULL)
+	{
+		//printf("stored = %s\n", info->tokens[p]);
+		p++;
+	}
 	while (info->tokens[i] != NULL)
 	{
 		if (info->tokens[i][0] == '$')
@@ -168,6 +187,8 @@ void	check_dollar_token(t_info *info)
 				expand_exitstatus(info, i);
 			i = i - join_tokens(info, i);
 		}
+		if (info->tokens[i][0] == '\"')
+			check_dollar_in_quotes(info, i);
 		i++;
 	}
 	check_dollar_str(info);
@@ -259,11 +280,11 @@ int	parser(t_info *info) // to-do: state assignment. $ expansion in a quoted "" 
 		p++;
 	}
 	remove_spaces(info);
-	//printf("after spaces\n");
+	printf("after spaces\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		//printf("stored = %s\n", info->tokens[p]);
+		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	return (0);
