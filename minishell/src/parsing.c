@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 11:38:46 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/19 11:49:35 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,24 +171,24 @@ void	check_dollar_token(t_info *info)
 
 	i = 0;
 	int p = 0;
-	//printf("in check_d_t\n");
+	printf("in check_d_t\n");
 	while (info->tokens[p] != NULL)
 	{
-		//printf("stored = %s\n", info->tokens[p]);
+		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	while (info->tokens[i] != NULL)
 	{
 		if (info->tokens[i][0] == '$')
 		{
+			if (info->tokens[i][0] == '\"')
+				check_dollar_in_quotes(info, i);
 			if (check_after_dollar(info, i) == 0)
 				expand_token_dollar(info, i); // if i+1 == NULL -> leave $ untouched
 			if (check_after_dollar(info, i) == 1) // if i+1 == quotes (ret 2) -> remove $
 				expand_exitstatus(info, i);
 			i = i - join_tokens(info, i);
 		}
-		if (info->tokens[i][0] == '\"')
-			check_dollar_in_quotes(info, i);
 		i++;
 	}
 	check_dollar_str(info);
@@ -264,19 +264,20 @@ int	parser(t_info *info) // to-do: state assignment. $ expansion in a quoted "" 
 	}
 	find_dgreater_dlesser(info);
 	int p = 0;
-	//printf("after parse\n");
+	printf("after parse\n");
 	while (info->tokens[p] != NULL)
 	{
-		//printf("stored = %s\n", info->tokens[p]);
+		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	check_dollar_token(info);
+	printf("check\n");
 	set_token_state(info);
-	//printf("after dollar\n");
+	printf("after dollar\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		//printf("stored = %s\n", info->tokens[p]);
+		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	remove_spaces(info);

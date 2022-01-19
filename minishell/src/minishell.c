@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/16 16:55:33 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 11:38:32 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/19 11:40:22 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,10 @@ int main(int ac, char **av, char **env)
 		//if (!ft_strncmp(info.line_read, "break", 4)) // om leaks te checken
 		//	break ;
 		if (info.tokens[0] == NULL)
+		{
+			printf("check\n");
 			continue ;
+		}
 		info.cmd = check_redirect(&info); //some temp bullshit to help check if milans work is working
 		dup2(info.fd_std[0], 0);
 		dup2(info.fd_std[1], 1);
