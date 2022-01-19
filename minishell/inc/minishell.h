@@ -90,7 +90,11 @@ void	expand_token_dollar(t_info *info, int i);
 void	expand_str_dollar(t_info *info, int i, int pos);
 int		join_tokens(t_info *info, int pos);
 void	joinwithbefore(t_info *info, int first_q);
-char	*get_name(t_info *info, int i);
+char	*get_name(t_info *info, int i, int j);
 char	*get_val(t_info *info, char *var);
+void	cut_dollar(t_info *info, int i, int start, int end);
+void	expand_str_dollar3(t_info *info, int i, char *name, int end);
+
+
 
 #endif

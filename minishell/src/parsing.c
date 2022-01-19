@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 12:32:40 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/19 16:25:51 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,6 @@ void	expand_exitstatus(t_info *info, int i)
 
 }
 
-char	*get_name(t_info *info, int i)
-{
-	char	*str;
-	int		j;
-
-	j = 0;
-	while (check_char_token(info, i, j) == C_NORMAL && info->tokens[i][j] != '\0')
-		j++;
-	str = (char *)malloc(j + 1);
-	ft_strlcpy(str, info->tokens[i], j + 1);
-	return (str);
-}
-
 static size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start)
 {
 	size_t i;
@@ -87,15 +74,26 @@ static size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start
 	return (ft_strlen(src));
 }
 
-
-char	*get_rest(t_info *info, int i)
+char	*get_name(t_info *info, int i, int j)
 {
 	char	*str;
-	int		j;
+	int		temp;
+
+	temp = j;
+	while (check_char_token(info, i, j) == C_NORMAL && info->tokens[i][j] != '\0')
+		j++;
+	str = (char *)malloc(j + 1);
+	j = j - temp;
+	ft_strlcpy2(str, info->tokens[i], j + 1, temp);
+	return (str);
+}
+
+char	*get_rest(t_info *info, int i, int j)
+{
+	char	*str;
 	int		k;
 
 	k = 0;
-	j = 0;
 	while (check_char_token(info, i, j) == C_NORMAL && info->tokens[i][j] != '\0')
 		j++;
 	if (info->tokens[i][j] == '\0')
@@ -104,7 +102,7 @@ char	*get_rest(t_info *info, int i)
 	while (info->tokens[i][k] != '\0')
 		k++;
 	str = (char *)malloc(k + 1);
-	int ret = ft_strlcpy2(str, info->tokens[i], k - j + 1, j);
+	ft_strlcpy2(str, info->tokens[i], k - j - 1, j + 1);
 	return (str);
 }
 
@@ -115,8 +113,8 @@ void	expand_token_dollar(t_info *info, int i)
 
 	if (info->tokens[i + 1] == NULL)
 		return ;
-	name = get_name(info, i + 1);
-	rest = get_rest(info, i + 1);
+	name = get_name(info, i + 1, 0);
+	rest = get_rest(info, i + 1, 0); // (e.g. $USER'kek')
 	name = get_val(info, name);
 	if (name == NULL)
 	{
@@ -140,10 +138,50 @@ void	expand_token_dollar(t_info *info, int i)
 	}
 }
 
+void	expand_str_dollar2(t_info *info, int i, int start, int pos)
+{
+	char	*name;
+	char	*rest;
+
+	name = get_name(info, i, start);
+	printf("name:%s\n", name);
+	rest = get_rest(info, i, start);
+	name = get_val(info, name);
+	printf("name:%s\n", name);
+	if (name == NULL)
+	{
+		//cut the $+normal chars
+		cut_dollar(info, i, start - 1, pos);
+	}
+	else
+	{
+		//replace $+normal with name
+		expand_str_dollar3(info, i, name, pos);
+	}
+}
+
 void	expand_str_dollar(t_info *info, int i, int pos)
 {
-	
+	int start;
+
+	start = pos + 1;
+	//read normal chars until find a non-normal char, cant start with a digit
+	if (check_char_token(info, i, pos + 1) == C_NORMAL && ft_isdigit(info->tokens[i][pos + 1]) == 0)
+	{
+		while (info->tokens[i][pos + 1] != '\"')
+		{
+			if (check_char_token(info, i, pos + 1) != C_NORMAL)
+				break ;
+			pos++;
+		}
+	} // pos is now the last part of the Name, start the start (not $)
+	printf("start:%d, pos:%d\n", start, pos);
+	if (start <= pos)
+		expand_str_dollar2(info, i, start, pos);
 }
+//3.230 Name
+//In the shell command language, a word consisting solely of underscores, digits, 
+//and alphabetics from the portable character set. The first character of a name is not a digit.
 
 int	check_after_dollar(t_info *info, int i)
 {
@@ -157,11 +195,6 @@ int	check_after_dollar(t_info *info, int i)
 			return (2);
 	}
 	return (-1);
-}
-
-void	check_dollar_str(t_info *info)
-{
-	
 }
 
 void	check_dollar_in_quotes(t_info *info, int i)
@@ -192,10 +225,10 @@ void	check_dollar_token(t_info *info)
 	}
 	while (info->tokens[i] != NULL)
 	{
-		if (info->tokens[i][0] == '$')
+		if (info->tokens[i][0] == '\"')
+			check_dollar_in_quotes(info, i);
+		else if (info->tokens[i][0] == '$')
 		{
-			if (info->tokens[i][0] == '\"')
-				check_dollar_in_quotes(info, i);
 			if (check_after_dollar(info, i) == 0)
 				expand_token_dollar(info, i); // if i+1 == NULL -> leave $ untouched
 			if (check_after_dollar(info, i) == 1) // if i+1 == quotes (ret 2) -> remove $
@@ -204,7 +237,6 @@ void	check_dollar_token(t_info *info)
 		}
 		i++;
 	}
-	check_dollar_str(info);
 }
 
 int	parse_quotes(t_info *info, int i)
@@ -264,8 +296,11 @@ void	find_dgreater_dlesser(t_info *info)
 		i++;
 	}
 }
-
-int	parser(t_info *info) // to-do: state assignment + $ expansion in a quoted "" string + meerdere quoted strings achte elkaar plakken (e.g. 'echo''hoi')
+// to-do: $ expansion in a quoted "" string + meerdere quoted strings achte elkaar plakken (e.g. 'echo''hoi')
+// + ${}  ??
+// crash bij export PID=$$
+// "$USER$" -> $ moet blijven
+int	parser(t_info *info)
 {
 	int	ret;
 
@@ -277,7 +312,7 @@ int	parser(t_info *info) // to-do: state assignment + $ expansion in a quoted ""
 	}
 	find_dgreater_dlesser(info);
 	int p = 0;
-	printf("after parse\n");
+	printf("after quotes\n");
 	while (info->tokens[p] != NULL)
 	{
 		printf("stored = %s\n", info->tokens[p]);

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 11:33:56 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/19 16:12:11 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,3 +48,68 @@ char	*ft_strjoinbas(char *s1, char const *s2)
 //and alphabetics from the portable character set. The first character of a name is not a digit.
 // https://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap03.html#tag_03_230
 // https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html#tag_02_06_02
+
+void	cut_dollar(t_info *info, int i, int start, int end)
+{
+	int	j;
+
+	j = 0;
+	while (start <= end)
+	{
+		info->tokens[i][start] = info->tokens[i][end + 1 + j];
+		if (info->tokens[i][start] == '\0')
+			return ;
+		start++;
+		j++;
+	}
+}
+
+static char	*realloc_token(t_info *info, int i, int len)
+{
+	char *temp;
+
+	if (len < 0)
+		len = 0;
+	temp = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) + len + 1));
+	if (temp == NULL)
+		ft_error(1);
+	ft_strlcpy(temp, info->tokens[i], ft_strlen(info->tokens[i]) + 1);
+	printf("temp:%s\n", temp);
+	free (info->tokens[i]);
+	info->tokens[i] = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) + len + 1));
+	if (info->tokens[i] == NULL)
+		ft_error(1);
+	ft_strlcpy(info->tokens[i], temp, ft_strlen(temp));
+	printf("temp:%s\n", temp);
+	return (temp);
+}
+
+void	expand_str_dollar3(t_info *info, int i, char *name, int end)
+{
+	int		j;
+	int		start;
+	char	*temp;
+
+	start = 0;
+	while (info->tokens[i][start] != '$')
+		start++;
+	temp = realloc_token(info, i, ft_strlen(name) - end - start + 1);
+	j = 0;
+//	printf("1:%s\n", info->tokens[i]);
+//	printf("temp:%s\n", temp);
+	while (name[j] != '\0')
+	{
+		info->tokens[i][start] = name[j];
+		j++;
+		start++;
+	}
+//	printf("2:%s\n", info->tokens[i]);
+	while (temp[end + 1] != '\0')
+	{
+		info->tokens[i][start] = temp[end + 1];
+		end++;
+		start++;
+	}
+	info->tokens[i][start] = '\0';
+//	printf("3:%s\n", info->tokens[i]);
+}
