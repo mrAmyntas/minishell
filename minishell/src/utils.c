@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 17:05:09 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/19 17:08:53 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	get_env(t_info *info, char **env)
 	info->env[i] = NULL;
 }
 
-int	ft_heredoc(t_info *info, int i)
+char	*ft_heredoc(t_info *info, int i)
 {
 	char	*buf;
 	char	*long_buf;
@@ -118,10 +118,12 @@ int	ft_heredoc(t_info *info, int i)
 	long_buf = ft_strjoin(buf, "\n");
 	while (buf && ft_strncmp(buf, info->tokens[i + 1], long_str(buf, info->tokens[i + 1])))
 	{
-		long_buf = ft_strjoin(long_buf, buf);
-		long_buf = ft_strjoin(long_buf, "\n");
 		free (buf);
 		buf = readline("> ");
+		if (!buf && !ft_strncmp(buf, info->tokens[i + 1], long_str(buf, info->tokens[i + 1])))
+			break ;
+		long_buf = ft_strjoin(long_buf, buf);
+		long_buf = ft_strjoin(long_buf, "\n");
 	}
 	write(1, long_buf, ft_strlen(long_buf));
 	free (long_buf);
