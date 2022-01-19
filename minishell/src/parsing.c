@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 12:05:15 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/19 12:32:40 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,19 @@ void	remove_spaces(t_info *info)
 
 void	set_token_state(t_info *info)
 {
-	
+	int	i;
+
+	i = 0;
+	while (info->tokens[i] != NULL)
+	{
+		if (info->tokens[i][0] == '\'' || info->tokens[i][0] == '\"')
+			info->token_state[i] = 1; // 1 = tussen quotes
+		else if (check_char_token(info, i, 0) != C_NORMAL)
+			info->token_state[i] = 2; // 1 = special char
+		else
+			info->token_state[i] = 0; // 0 = normal chars
+		i++;
+	}
 }
 
 void	expand_exitstatus(t_info *info, int i)
@@ -160,10 +172,11 @@ void	check_dollar_in_quotes(t_info *info, int i)
 	while (info->tokens[i][j] != '\0')
 	{
 		if (info->tokens[i][j] == '$')
-			
+			expand_str_dollar(info, i, j);
 		j++;
 	}
 }
+
 void	check_dollar_token(t_info *info)
 {
 	int	i;
@@ -171,10 +184,10 @@ void	check_dollar_token(t_info *info)
 
 	i = 0;
 	int p = 0;
-	printf("in check_d_t\n");
+	//printf("in check_d_t\n");
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s\n", info->tokens[p]);
+		//printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	while (info->tokens[i] != NULL)
@@ -252,7 +265,7 @@ void	find_dgreater_dlesser(t_info *info)
 	}
 }
 
-int	parser(t_info *info) // to-do: state assignment. $ expansion in a quoted "" string
+int	parser(t_info *info) // to-do: state assignment + $ expansion in a quoted "" string + meerdere quoted strings achte elkaar plakken (e.g. 'echo''hoi')
 {
 	int	ret;
 
@@ -264,15 +277,14 @@ int	parser(t_info *info) // to-do: state assignment. $ expansion in a quoted "" 
 	}
 	find_dgreater_dlesser(info);
 	int p = 0;
-	//printf("after parse\n");
+	printf("after parse\n");
 	while (info->tokens[p] != NULL)
 	{
-		//printf("stored = %s\n", info->tokens[p]);
+		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	check_dollar_token(info);
 	//printf("check\n");
-	set_token_state(info);
 	//printf("after dollar\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
@@ -281,11 +293,12 @@ int	parser(t_info *info) // to-do: state assignment. $ expansion in a quoted "" 
 		p++;
 	}
 	remove_spaces(info);
-	//printf("after spaces\n");
+	set_token_state(info);
+	printf("after parser\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		//printf("stored = %s\n", info->tokens[p]);
+		printf("stored = %s  state = %d\n", info->tokens[p], info->token_state[p]);
 		p++;
 	}
 	return (0);
