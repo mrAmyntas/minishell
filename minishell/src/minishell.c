@@ -6,13 +6,10 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/16 16:55:33 by bhoitzin      #+#    #+#                 */
-<<<<<<< HEAD
-/*   Updated: 2022/01/19 11:40:22 by bhoitzin      ########   odam.nl         */
-=======
-/*   Updated: 2022/01/19 11:42:54 by mgroen        ########   odam.nl         */
->>>>>>> 9fe908a9de3703db38d4f5594c0510f81c506a87
+/*   Updated: 2022/01/19 12:03:46 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 // input goed verwerken, combinaties uitproberen
 
@@ -37,6 +34,9 @@ void	ft_free(t_info *info)
 	//	i++;
 	//}
 	free(info->tokens);
+	info->t_pos = 0;
+	info->p_pos = 0;
+
 }
 
 void	free_info(t_info *info)
@@ -110,7 +110,10 @@ int main(int ac, char **av, char **env)
 		//if (!ft_strncmp(info.line_read, "break", 4)) // om leaks te checken
 		//	break ;
 		if (info.tokens[0] == NULL)
+		{
+			ft_free(&info);
 			continue ;
+		}
 		info.cmd = check_redirect(&info); //some temp bullshit to help check if milans work is working
 		dup2(info.fd_std[0], 0);
 		dup2(info.fd_std[1], 1);

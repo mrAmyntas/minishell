@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 16:52:22 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/19 12:05:00 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int	store_input(t_info *info)
 	int p = 0;
 	while (info->tokens[p] != NULL)
 	{
-//		printf("stored = %s\n", info->tokens[p]);
+		//printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	return (0);

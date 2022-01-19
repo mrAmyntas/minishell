@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 11:49:35 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/19 12:05:15 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,28 +264,28 @@ int	parser(t_info *info) // to-do: state assignment. $ expansion in a quoted "" 
 	}
 	find_dgreater_dlesser(info);
 	int p = 0;
-	printf("after parse\n");
+	//printf("after parse\n");
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s\n", info->tokens[p]);
+		//printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	check_dollar_token(info);
-	printf("check\n");
+	//printf("check\n");
 	set_token_state(info);
-	printf("after dollar\n");
+	//printf("after dollar\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s\n", info->tokens[p]);
+		//printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	remove_spaces(info);
-	printf("after spaces\n");
+	//printf("after spaces\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s\n", info->tokens[p]);
+		//printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	return (0);
