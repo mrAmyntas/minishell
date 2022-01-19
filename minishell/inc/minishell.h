@@ -94,6 +94,8 @@ char	*get_name(t_info *info, int i, int j);
 char	*get_val(t_info *info, char *var);
 void	cut_dollar(t_info *info, int i, int start, int end);
 void	expand_str_dollar3(t_info *info, int i, char *name, int end);
+void	remove_quotes(t_info *info);
+
 
 
 

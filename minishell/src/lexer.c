@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 12:05:00 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/19 16:48:07 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,12 +180,15 @@ void	lexer(t_info *info)
 	info->line_read = ft_remove_spaces(info); // leading spaces are ignored
 	i = ft_strlen(info->line_read);
 	info->tokens = (char **)malloc(sizeof(char *) * (i + 2)); // could pre-scan inputline to malloc precise amount required
-	info->token_state = (int *)malloc(sizeof(int) * i);
 	if (info->tokens == NULL)									//require +2 for the empty quote removal that jumps 2 in front to not go out of bound
+		ft_error(1);
+	info->token_state = (int *)malloc(sizeof(int) * (i + 2));
+	if (info->token_state == NULL)
 		ft_error(1);
 	while (i + 2 >= 0)
 	{
 		info->tokens[i + 2] = NULL;
+		info->token_state[i + 2] = 0;
 		i--;
 	}
 	store_input(info); // interpret line_read

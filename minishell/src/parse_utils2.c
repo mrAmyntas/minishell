@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 16:12:11 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/19 16:36:43 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,18 @@ void	expand_str_dollar3(t_info *info, int i, char *name, int end)
 	}
 	info->tokens[i][start] = '\0';
 //	printf("3:%s\n", info->tokens[i]);
+}
+
+void	remove_quotes(t_info *info)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (info->tokens[i] != NULL)
+	{
+		if (info->tokens[i][0] == '\'' || info->tokens[i][0] == '\"')
+			trim_quotes(info, i, ft_strlen(info->tokens[i]));
+		i++;
+	}
 }
