@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 18:15:54 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/19 11:32:41 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,40 +109,23 @@ void	get_env(t_info *info, char **env)
 	info->env[i] = NULL;
 }
 
-int	ft_heredoc(t_info *info, char *delim)
+int	ft_heredoc(t_info *info, int i)
 {
-	char **buff;
-	char *buf;
-
-	buff = malloc(sizeof(char **) * 2);
-	buff[1] = NULL;
-	buf = readline("heredoc> ");
-	if (buf || ft_strncmp(buf, delim, long_str(buf, delim)))
-		buff[0] = ft_strdup(buf);
-	else
-		buff[0] = NULL;
-	while (buf && buff[0])
-	{
-		buf = readline("heredoc> ");
-		if (!buf || !ft_strncmp(buf, delim, long_str(buf, delim)))
-			break ;
-		// add string to buff... repeat;
-	}
 	return (0);
 }
 
-int	redirect(t_info *info, int type, char *file)
+int	redirect(t_info *info, int type, int i)
 {
 	int	fd;
 	
 	if (type == 1)
-		fd = open(file, O_RDONLY);
+		fd = open(info->tokens[i + 1], O_RDONLY);
 	if (type == 2)
-		fd = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
+		fd = open(info->tokens[i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (type == 4)
-		fd = open(file, O_RDWR | O_APPEND | O_CREAT, 0644);
+		fd = open(info->tokens[i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (type == 3)
-		return (ft_heredoc(info, file));
+		return (ft_heredoc(info, i));
 	//printf("fd: %i\n", fd);
 	if (fd < 0)
 		return (fd);
@@ -198,7 +181,7 @@ int ft_pipe(t_info *info, char **command, int loc_pipe)
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], 1);
-		command = trim_command(info, 0, loc_pipe);
+		command = trim_command(info, 0, loc_pipe - 1);
 		ft_find_command(info, command);
 		exit(0);
 	}
@@ -218,15 +201,15 @@ int	check_redirect(t_info *info)
 	while (info->tokens[i])
 	{
 		if (!strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])))
-			fd[0] = redirect(info, 1, info->tokens[i + 1]);
+			fd[0] = redirect(info, 1, i);
 		if (!strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])))
 			loc_pipe = i;
 		if (!strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])))
-			fd[1] = redirect(info, 2, info->tokens[i + 1]);
+			fd[1] = redirect(info, 2, i);
 		if (!strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")))
-			fd[1] = redirect(info, 4, info->tokens[i + 1]);
+			fd[1] = redirect(info, 4, i);
 		if (!strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")))
-			fd[0] = redirect(info, 3, info->tokens[i + 1]);
+			fd[0] = redirect(info, 3, i);
 		if (fd[0] < 0 || fd[1] < 0)
 			perror("");
 		i++;
