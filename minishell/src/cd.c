@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 16:31:46 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/19 11:44:56 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ int	exec_cd(t_info *info, char **command)
 	int		status;
 	char	*path;
 
-	if (!ft_strncmp(command[1], "..", 2))
+	if (command[1] && !ft_strncmp(command[1], "..", 2))
 		trim_last_dir(info, command);
-	if (!ft_strncmp(command[1], "~", 1))
+	if (command[1] && !ft_strncmp(command[1], "~", 1))
 		pwd_is_home(info, command);
-	if (!ft_strncmp(command[1], "..", 2) || !ft_strncmp(command[1], "~", 1) || !command[1])
+	if (!command[1] || !ft_strncmp(command[1], "..", 2) || !ft_strncmp(command[1], "~", 1))
 		return (0);
 	id = fork();
 	if (id == -1)
