@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 13:06:45 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/20 13:33:45 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ void	join_quoted_tokens(t_info *info)
 	int	j;
 	int	ret;
 
+	ret = 0;
 	i = 0;
 	while (info->tokens[i] != NULL)
 	{
