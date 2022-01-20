@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 17:08:53 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/20 13:14:45 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,25 +109,24 @@ void	get_env(t_info *info, char **env)
 	info->env[i] = NULL;
 }
 
-char	*ft_heredoc(t_info *info, int i)
+int		ft_heredoc(t_info *info, int i)
 {
 	char	*buf;
-	char	*long_buf;
+	int		fd;
 
+	fd = open("/tmp/minishell_heredoc", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	if (fd < 0)
+		return (0);
 	buf = readline("> ");
-	long_buf = ft_strjoin(buf, "\n");
 	while (buf && ft_strncmp(buf, info->tokens[i + 1], long_str(buf, info->tokens[i + 1])))
 	{
-		free (buf);
+		write(fd, buf, ft_strlen(buf));
+		write(fd, "\n", 1);
+		free(buf);
 		buf = readline("> ");
-		if (!buf && !ft_strncmp(buf, info->tokens[i + 1], long_str(buf, info->tokens[i + 1])))
-			break ;
-		long_buf = ft_strjoin(long_buf, buf);
-		long_buf = ft_strjoin(long_buf, "\n");
 	}
-	write(1, long_buf, ft_strlen(long_buf));
-	free (long_buf);
-	return (0);
+	free(buf);
+	return (1);
 }
 
 int	redirect(t_info *info, int type, int i)
@@ -150,7 +149,7 @@ int	redirect(t_info *info, int type, int i)
 	return (fd);
 }
 
-char	**trim_command(t_info *info, int start, int end)
+char	**trim_command(t_info *info, int start, int end, int heredoc)
 {
 	char	**command;
 	int		i;
@@ -164,18 +163,23 @@ char	**trim_command(t_info *info, int start, int end)
 		&& ft_strncmp(info->tokens[start + i], ">>", long_str(info->tokens[start + i], ">>"))
 		&& ft_strncmp(info->tokens[start + i], "<<", long_str(info->tokens[start + i], "<<")))
 		i++;
-	command = malloc(sizeof(char **) * (i + 1));
+	command = malloc(sizeof(char **) * (i + 1 + heredoc));
 	while (j < i)
 	{
 		command[j] = ft_strdup(info->tokens[start]);
 		j++;
 		start++;
 	}
+	if (heredoc)
+	{
+		command[j] = ft_strdup("/tmp/minishell_heredoc");
+		j++;
+	}
 	command[j] = NULL;
 	return (command);
 }
 
-int ft_pipe(t_info *info, char **command, int loc_pipe)
+int ft_pipe(t_info *info, char **command, int loc_pipe, int heredoc)
 {
 	int	id;
 	int	pipefd[2];
@@ -189,14 +193,14 @@ int ft_pipe(t_info *info, char **command, int loc_pipe)
 		wait(&id);
 		close(pipefd[1]);
 		dup2(pipefd[0], 0);
-		command = trim_command(info, loc_pipe + 1, ft_strstrlen(info->tokens));
+		command = trim_command(info, loc_pipe + 1, ft_strstrlen(info->tokens), heredoc);
 		return (ft_find_command(info, command));
 	}
 	else
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], 1);
-		command = trim_command(info, 0, loc_pipe);
+		command = trim_command(info, 0, loc_pipe, heredoc);
 		ft_find_command(info, command);
 		exit(0);
 	}
@@ -212,33 +216,29 @@ int	check_redirect(t_info *info)
 
 	i = 0;
 	loc_pipe = -1;
-	heredoc = -1;
+	heredoc = 0;
 	fd[0] = 0;
 	fd[1] = 0;
 	while (info->tokens[i])
 	{
-		if (!strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])))
+		if (!strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])) && info->token_state[i])
 			fd[0] = redirect(info, 1, i);
-		if (!strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])))
+		if (!strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])) && info->token_state[i])
 			loc_pipe = i;
-		if (!strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])))
+		if (!strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])) && info->token_state[i])
 			fd[1] = redirect(info, 2, i);
-		if (!strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")))
+		if (!strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")) && info->token_state[i])
 			fd[1] = redirect(info, 4, i);
-		if (!strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")))
-			heredoc = i;
+		if (!strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")) && info->token_state[i])
+			heredoc = ft_heredoc(info, i);
 		if (fd[0] < 0 || fd[1] < 0)
 			perror("");
 		i++;
 	}
-	if (heredoc >= 0)
-	{
-		ft_heredoc(info, heredoc);
-		//return (0);
-	}
 	if (loc_pipe >= 0)
-		return (ft_pipe(info, command, loc_pipe));
-	command = trim_command(info, 0, ft_strstrlen(info->tokens));
+		return (ft_pipe(info, command, loc_pipe, heredoc));
+	command = trim_command(info, 0, ft_strstrlen(info->tokens), heredoc);
+	//printf("%s, %s, %s, %s\n", command[0], command[1], command[2], command[3]);
 	return (ft_find_command(info, command));
 }
 

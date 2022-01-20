@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/16 16:55:33 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 12:07:04 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/20 12:20:45 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 
 int main(int ac, char **av, char **env)
 {
-	t_info info;
+	t_info	info;
 
 	ft_init_struct(&info, av, env);
 	printf("\033[1;33mWelcome! You can exit by pressing Ctrl+C at any time...\n");
