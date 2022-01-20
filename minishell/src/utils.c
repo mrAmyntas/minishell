@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 14:45:37 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/20 18:32:02 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,9 @@ int	ft_len_to_char(char *str, char c)
 	return (i);
 }
 
-int	ft_strstrlen(char **str)
+int	ft_strstrlen(char **str, char *c, int i)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
+	while (str[i] && ft_strncmp(str[i], c, long_str(str[i], c)))
 		i++;
 	return (i);
 }
@@ -51,7 +48,7 @@ void	unset_var(t_info *info, char *var)
 	int	loc;
 
 	loc = 0;
-	while (info->env[loc] && strncmp(info->env[loc], var, ft_strlen(var)))
+	while (info->env[loc] && ft_strncmp(info->env[loc], var, ft_strlen(var)))
 		loc++;
 	if (!info->env[loc])
 		return ;
@@ -70,12 +67,12 @@ void	sort_export(t_info *info)
 	int	j;
 
 	i = 1;
-	info->export = malloc(sizeof(char **) * (ft_strstrlen(info->env) + 1));
+	info->export = malloc(sizeof(char **) * (ft_strstrlen(info->env, NULL, 0) + 1));
 	info->export[0] = ft_strdup(info->env[0]);
 	while (info->env[i])
 	{
 		info->export[i] = NULL;
-		j = ft_strstrlen(info->export) - 1;
+		j = ft_strstrlen(info->export, NULL, 0) - 1;
 		while (j >= 0)
 		{
 			if (ft_strncmp(info->env[i], info->export[j]
@@ -99,7 +96,7 @@ void	get_env(t_info *info, char **env)
 	int	env_len;
 
 	i = 0;
-	env_len = ft_strstrlen(env) + 1;
+	env_len = ft_strstrlen(env, NULL, 0) + 1;
 	info->env = malloc(sizeof(char **) * env_len);
 	while (env[i])
 	{
@@ -134,6 +131,7 @@ int	redirect(t_info *info, int type, int i)
 {
 	int	fd;
 	
+	//dup2(info->fd_std[1], 1);
 	if (type == 1)
 		fd = open(info->tokens[i + 1], O_RDONLY);
 	if (type == 2)
@@ -180,11 +178,12 @@ char	**trim_command(t_info *info, int start, int end, int heredoc)
 	return (command);
 }
 
-int ft_pipe(t_info *info, char **command, int loc_pipe, int heredoc)
+int ft_pipe(t_info *info, int loc_pipe, int heredoc, int start)
 {
-	int	id;
-	int	pipefd[2];
-	
+	int		id;
+	int		pipefd[2];
+	char	**command;
+
 	pipe(pipefd);
 	id = fork();
 	if (id == -1)
@@ -194,61 +193,121 @@ int ft_pipe(t_info *info, char **command, int loc_pipe, int heredoc)
 		wait(&id);
 		close(pipefd[1]);
 		dup2(pipefd[0], 0);
-		command = trim_command(info, loc_pipe + 1, ft_strstrlen(info->tokens), 0);
-		//printf("%s, %s, %s, %s\n", command[0], command[1], command[2], command[3]);
-		return (ft_find_command(info, command));
+		//printf("tst: %i, %i, %i\n", loc_pipe + 1, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]);
+		return (check_redirect_v2(info, loc_pipe + 1, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]));
 	}
 	else
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], 1);
-		command = trim_command(info, 0, loc_pipe, heredoc);
+		command = trim_command(info, start, loc_pipe, heredoc);
 		ft_find_command(info, command);
 		exit(0);
 	}
 }
 
-int	check_redirect(t_info *info)
+int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 {
-	int		i;
-	int		fd[2];
-	int		loc_pipe;
-	int		heredoc;
-	char	**command;
+	int	i;
+	int	fd[2];
+	int locations[2];
 
-	i = 0;
-	loc_pipe = -1;
-	heredoc = 0;
+	i = start;
 	fd[0] = 0;
 	fd[1] = 0;
-	while (info->tokens[i])
+	locations[0] = -1;
+	locations[1] = 0;
+	while (info->tokens[i] && i <= end)				//redirect in- and output check for heredoc and pipe
 	{
-		if (!strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])) && info->token_state[i])
+		if (!ft_strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])))
 			fd[0] = redirect(info, 1 , i);
-		if (!strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])) && info->token_state[i])
-			loc_pipe = i;
-		if (!strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])) && info->token_state[i])
-			fd[1] = redirect(info, 2, i);
-		if (!strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")) && info->token_state[i])
-			fd[1] = redirect(info, 4, i);
-		if (!strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")) && info->token_state[i])
-			heredoc = ft_heredoc(info, i);
+		if (!ft_strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])))
+			locations[0] = i;
+		if (!ft_strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])))
+			fd[1] = redirect(info, 2 , i);
+		if (!ft_strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")))
+			fd[1] = redirect(info, 4 , i);
+		if (!ft_strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")))
+			locations[1] = ft_heredoc(info, i);
 		if (fd[0] < 0 || fd[1] < 0)
 			perror("");
 		i++;
 	}
-	if (loc_pipe >= 0)
-		return (ft_pipe(info, command, loc_pipe, heredoc));
-	command = trim_command(info, 0, ft_strstrlen(info->tokens), heredoc);
-	//printf("%s, %s, %s, %s\n", command[0], command[1], command[2], command[3]);
-	return (ft_find_command(info, command));
+	//printf("location: %i\n", locations[0]);
+	if (locations[0] >= 0)
+		return (ft_pipe(info, locations[0], locations[1], start));
+	return (ft_find_command(info, trim_command(info, start, end, locations[1])));
 }
+
+//int ft_pipe(t_info *info, char **command, int loc_pipe, int heredoc)
+//{
+//	int	id;
+//	int	pipefd[2];
+//	
+//	pipe(pipefd);
+//	id = fork();
+//	if (id == -1)
+//		ft_error(4);
+//	if (id)
+//	{
+//		wait(&id);
+//		close(pipefd[1]);
+//		dup2(pipefd[0], 0);
+//		command = trim_command(info, loc_pipe + 1, ft_strstrlen(info->tokens, NULL, 0), 0);
+//		//printf("%s, %s, %s, %s\n", command[0], command[1], command[2], command[3]);
+//		return (ft_find_command(info, command));
+//	}
+//	else
+//	{
+//		close(pipefd[0]);
+//		dup2(pipefd[1], 1);
+//		command = trim_command(info, 0, loc_pipe, heredoc);
+//		ft_find_command(info, command);
+//		exit(0);
+//	}
+//}
+
+//int	check_redirect(t_info *info)
+//{
+//	int		i;
+//	int		fd[2];
+//	int		loc_pipe;
+//	int		heredoc;
+//	char	**command;
+//
+//	i = 0;
+//	loc_pipe = -1;
+//	heredoc = 0;
+//	fd[0] = 0;
+//	fd[1] = 0;
+//	while (info->tokens[i])
+//	{
+//		if (!strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])) && info->token_state[i])
+//			fd[0] = redirect(info, 1 , i);
+//		if (!strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])) && info->token_state[i])
+//			loc_pipe = i;
+//		if (!strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])) && info->token_state[i])
+//			fd[1] = redirect(info, 2, i);
+//		if (!strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")) && info->token_state[i])
+//			fd[1] = redirect(info, 4, i);
+//		if (!strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")) && info->token_state[i])
+//			heredoc = ft_heredoc(info, i);
+//		if (fd[0] < 0 || fd[1] < 0)
+//			perror("");
+//		i++;
+//	}
+//	if (loc_pipe >= 0)
+//		return (ft_pipe(info, command, loc_pipe, heredoc));
+//	command = trim_command(info, 0, ft_strstrlen(info->tokens, NULL, 0), heredoc);
+//	//printf("%s, %s, %s, %s\n", command[0], command[1], command[2], command[3]);
+//	return (ft_find_command(info, command));
+//}
 
 int	ft_find_command(t_info *info, char **command)
 {
-	int i;
-
-	i = 0;
+	//int i;
+//
+	//i = 0;
 	//while (command[i])
 	//{
 	//	printf("%s\n", command[i]);

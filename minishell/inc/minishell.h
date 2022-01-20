@@ -66,7 +66,7 @@ int		exec_pwd(t_info *info);
 void    make_dir(t_info *info, char **command);
 char	*get_path(char *cmd, char **env);
 char    *get_val(t_info *info, char *var);
-int     ft_strstrlen(char **str);
+int     ft_strstrlen(char **str, char *c, int i);
 int     ft_len_to_char(char *str, char c);
 void    put_str(char *env, char **export, int j);
 void	realloc_copy(t_info *info, int start, int incr);
@@ -82,7 +82,6 @@ void	check_dollar_token(t_info *info);
 void	expand_dollar(t_info *info, int i);
 void	merge_quotes(t_info *info, int first_q, int last_q, int n);
 void	expandexitstatus(t_info *info, int i);
-int		check_redirect(t_info *info);
 void	joinwithnormalbefore(t_info *info, int first_q);
 void	set_token_state(t_info *info);
 void	expand_exitstatus(t_info *info, int i);
@@ -97,5 +96,7 @@ void	expand_str_dollar3(t_info *info, int i, char *name, int end);
 void	remove_quotes(t_info *info);
 void	join_quoted_tokens(t_info *info);
 
+int		check_redirect(t_info *info);
+int		check_redirect_v2(t_info *info, int start, int end, int inputfd); // weet nog niet welke t wordt
 
 #endif

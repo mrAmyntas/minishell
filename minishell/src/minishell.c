@@ -104,7 +104,7 @@ int main(int ac, char **av, char **env)
 			ft_free(&info);
 			continue ;
 		}
-		info.cmd = check_redirect(&info); //some temp bullshit to help check if milans work is working
+		info.cmd = check_redirect_v2(&info, 0, ft_strstrlen(info.tokens, "|", 0), 0);//check_redirect(&info);
 		dup2(info.fd_std[0], 0);
 		dup2(info.fd_std[1], 1);
 		if (info.cmd == 15)
