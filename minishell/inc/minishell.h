@@ -77,7 +77,7 @@ int		parse_quotes(t_info *info, int i);
 void	remove_spaces(t_info *info);
 char	*ft_strjoinbas(char *s1, char const *s2);
 int		check_unclosed(t_info *info, int i, int j);
-void	trim_quotes(t_info *info, int pos, int len);
+int		cut_quotes(t_info *info, int pos, char c, int first);
 void	check_dollar_token(t_info *info);
 void	expand_dollar(t_info *info, int i);
 void	merge_quotes(t_info *info, int first_q, int last_q, int n);
@@ -95,8 +95,7 @@ char	*get_val(t_info *info, char *var);
 void	cut_dollar(t_info *info, int i, int start, int end);
 void	expand_str_dollar3(t_info *info, int i, char *name, int end);
 void	remove_quotes(t_info *info);
-
-
+void	join_quoted_tokens(t_info *info);
 
 
 #endif

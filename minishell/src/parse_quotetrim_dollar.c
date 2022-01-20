@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:22:30 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/12/17 15:42:49 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/20 12:39:27 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	expandexitstatus(t_info *info, int i)
 	// on i, and remove i+1
 }
 
-static void	trim_quotes2(t_info *info, int pos, int first, int last)
+static void	cut_quotes2(t_info *info, int pos, int first, int last)
 {
 	while (info->tokens[pos][first + 1] != '\0')
 	{
@@ -34,27 +34,15 @@ static void	trim_quotes2(t_info *info, int pos, int first, int last)
 	info->tokens[pos][last - 1] = '\0';
 }
 
-void	trim_quotes(t_info *info, int pos, int len)
+int	cut_quotes(t_info *info, int i, char c, int j)
 {
-	int	first;
 	int last;
-	int	i;
+	int first;
 
-	i = 0;
-	while (info->tokens[pos][i] != '\0')
-	{
-		if (info->tokens[pos][i] == C_QUOTE || info->tokens[pos][i] == C_DQUOTE)
-			break ;
-		i++;
-	}
-	first = i;
-	i = len - 1;
-	while (i >= 0)
-	{
-		if (info->tokens[pos][i] == C_QUOTE || info->tokens[pos][i] == C_DQUOTE)
-			break ;
-		i--;
-	}
-	last = i;
-	trim_quotes2(info, pos, first, last);	
+	first = j;
+	while (info->tokens[i][j + 1] != c)
+		j++;
+	last = j + 1;
+	cut_quotes2(info, i, first, last);
+	return (last - 2); // continue finding quotes on next char in string
 }

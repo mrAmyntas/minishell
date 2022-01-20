@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 16:36:43 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/20 12:39:49 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,11 @@ static char	*realloc_token(t_info *info, int i, int len)
 	if (temp == NULL)
 		ft_error(1);
 	ft_strlcpy(temp, info->tokens[i], ft_strlen(info->tokens[i]) + 1);
-	printf("temp:%s\n", temp);
 	free (info->tokens[i]);
 	info->tokens[i] = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) + len + 1));
 	if (info->tokens[i] == NULL)
 		ft_error(1);
 	ft_strlcpy(info->tokens[i], temp, ft_strlen(temp));
-	printf("temp:%s\n", temp);
 	return (temp);
 }
 
@@ -122,8 +120,70 @@ void	remove_quotes(t_info *info)
 	i = 0;
 	while (info->tokens[i] != NULL)
 	{
-		if (info->tokens[i][0] == '\'' || info->tokens[i][0] == '\"')
-			trim_quotes(info, i, ft_strlen(info->tokens[i]));
+		j = 0;
+		while (info->tokens[i][j] != '\0')
+		{
+			if (info->tokens[i][j] == '\'' || info->tokens[i][j] == '\"')
+			{
+				j = cut_quotes(info, i, info->tokens[i][j], j);
+				continue ;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+static int	check_next_token(t_info *info, int i)
+{
+	int	j;
+
+	if (info->tokens[i + 1] != NULL)
+	{
+		j = 0;
+		while (info->tokens[i + 1][j] != '\0')
+		{
+			if (info->tokens[i + 1][j] == '\'' || info->tokens[i + 1][j] == '\"')
+				return (1);
+			j++;
+		}
+	}
+	return (0);
+}
+
+static void	join_quoted_tokens2(t_info *info, int i)
+{
+	info->tokens[i] = ft_strjoinbas(info->tokens[i], info->tokens[i + 1]);
+	free(info->tokens[i + 1]);
+	info->tokens[i + 1] = NULL;
+	realloc_copy(info, i, 1);
+}
+
+void	join_quoted_tokens(t_info *info)
+{
+	int	i;
+	int	j;
+	int	ret;
+
+	i = 0;
+	while (info->tokens[i] != NULL)
+	{
+		j = 0;
+		while (info->tokens[i][j] != '\0')
+		{
+			if (info->tokens[i][j] == '\'' || info->tokens[i][j] == '\"')
+			{
+				ret = check_next_token(info, i); // 0 = no joining, 1 = join with next
+				if (ret == 1)
+				{
+					join_quoted_tokens2(info, i);
+					break ;
+				}
+			}
+			j++;
+		}
+		if (ret == 1)
+			continue ;
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 16:52:05 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/20 12:56:57 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ void	set_token_state(t_info *info)
 	while (info->tokens[i] != NULL)
 	{
 		if (info->tokens[i][0] == '\'' || info->tokens[i][0] == '\"')
-			info->token_state[i] = 1; // 1 = tussen quotes
+			info->token_state[i] = 0; // 0 = non-special-chars
 		else if (check_char_token(info, i, 0) != C_NORMAL)
-			info->token_state[i] = 2; // 1 = special char
+			info->token_state[i] = 1; // 1 = special char
+//		else
+//			info->token_state[i] = 3; // 3 = normal chars
 		i++;
 	}
 }
@@ -298,6 +300,7 @@ void	find_dgreater_dlesser(t_info *info)
 // + ${}  ??
 // crash bij export PID=$$
 // p'w'd -> quotes niet aan uiteinden ook verwijderen
+// Name = not just 'not special chars' but also not other none-alphanumerics
 int	parser(t_info *info)
 {
 	int	ret;
@@ -310,21 +313,23 @@ int	parser(t_info *info)
 	}
 	find_dgreater_dlesser(info);
 	int p = 0;
-	printf("after quotes\n");
+	//printf("after quotes\n");
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s\n", info->tokens[p]);
+		//printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	check_dollar_token(info);
 	//printf("check\n");
-	printf("after dollar\n");
+	//printf("after dollar\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s\n", info->tokens[p]);
+		//printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
+	//printf("check\n");
+	join_quoted_tokens(info);
 	remove_spaces(info);
 	set_token_state(info);
 	remove_quotes(info);
