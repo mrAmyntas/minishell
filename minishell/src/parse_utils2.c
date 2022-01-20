@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 12:39:49 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/20 13:06:45 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ static void	join_quoted_tokens2(t_info *info, int i)
 	info->tokens[i] = ft_strjoinbas(info->tokens[i], info->tokens[i + 1]);
 	free(info->tokens[i + 1]);
 	info->tokens[i + 1] = NULL;
-	realloc_copy(info, i, 1);
+	realloc_copy(info, i + 1, 1);
 }
 
 void	join_quoted_tokens(t_info *info)

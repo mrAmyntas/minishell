@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 12:56:57 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/20 13:04:12 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,6 +330,13 @@ int	parser(t_info *info)
 	}
 	//printf("check\n");
 	join_quoted_tokens(info);
+	//printf("after join_quoted_tokens\n");
+	p = 0;
+	while (info->tokens[p] != NULL)
+	{
+		//printf("stored = %s\n", info->tokens[p]);
+		p++;
+	}
 	remove_spaces(info);
 	set_token_state(info);
 	remove_quotes(info);
