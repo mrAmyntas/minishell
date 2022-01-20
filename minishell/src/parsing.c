@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 13:04:12 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/20 13:32:37 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,13 +216,6 @@ void	check_dollar_token(t_info *info)
 	int	j;
 
 	i = 0;
-	int p = 0;
-	//printf("in check_d_t\n");
-	while (info->tokens[p] != NULL)
-	{
-		//printf("stored = %s\n", info->tokens[p]);
-		p++;
-	}
 	while (info->tokens[i] != NULL)
 	{
 		if (info->tokens[i][0] == '\"')
