@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 15:02:29 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/20 15:23:28 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,21 @@ int	exec_export(t_info *info, char **command)
 	int		j;
 
 	i = 1;
+	printf("test3\n");
 	while (command[i])
 	{
 		j = 0;
+		printf("test1\n");
 		if (command[i][j] == '\\' || command[i][j] == '|')
 			j++;
 		if (command[i][j] < 65 || (command[i][j] > 90 && command[i][j] < 95) || command[i][j] > 122 || command[i][j] == 96)
-		{	
 			perror(ft_strjoin(command[i], ": not a valid identifier"));
-			
-		}
 		else
 		{
+			printf("test0\n");
 			while (command[i][j] && command[i][j] != '=')
 			{
+				printf("test\n");
 				if (command[i][j] < 48 || (command[i][j] > 57 && command[i][j] < 65) || (command[i][j] > 90 && command[i][j] < 95) || command[i][j] > 122 || command[i][j] == 96)
 				{
 					perror(ft_strjoin(command[i], ": not a valid identifier"));
@@ -68,6 +69,7 @@ int	exec_export(t_info *info, char **command)
 					add_env(info, command[i]);
 			}
 		}
+		printf("test2\n");
 		i++;
 	}
 	i = 0;
