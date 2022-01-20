@@ -117,5 +117,5 @@ int main(int ac, char **av, char **env)
 	//system("leaks minishell");
 	return (0);
 }
-// echo cd pwd export unset env exit
+
 // tokens: < > << >> | $

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 13:14:45 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/20 14:45:37 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int		ft_heredoc(t_info *info, int i)
 	fd = open("/tmp/minishell_heredoc", O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (fd < 0)
 		return (0);
+	dup2(info->fd_std[0], 0);
 	buf = readline("> ");
 	while (buf && ft_strncmp(buf, info->tokens[i + 1], long_str(buf, info->tokens[i + 1])))
 	{
@@ -193,7 +194,8 @@ int ft_pipe(t_info *info, char **command, int loc_pipe, int heredoc)
 		wait(&id);
 		close(pipefd[1]);
 		dup2(pipefd[0], 0);
-		command = trim_command(info, loc_pipe + 1, ft_strstrlen(info->tokens), heredoc);
+		command = trim_command(info, loc_pipe + 1, ft_strstrlen(info->tokens), 0);
+		//printf("%s, %s, %s, %s\n", command[0], command[1], command[2], command[3]);
 		return (ft_find_command(info, command));
 	}
 	else
@@ -222,7 +224,7 @@ int	check_redirect(t_info *info)
 	while (info->tokens[i])
 	{
 		if (!strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])) && info->token_state[i])
-			fd[0] = redirect(info, 1, i);
+			fd[0] = redirect(info, 1 , i);
 		if (!strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])) && info->token_state[i])
 			loc_pipe = i;
 		if (!strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])) && info->token_state[i])
