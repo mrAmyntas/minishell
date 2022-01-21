@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/21 14:50:19 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/21 15:52:33 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,15 +107,12 @@ void	find_dgreater_dlesser(t_info *info)
 	}
 }
 // to-do:
-// + ${}  ??
 // crash bij export PID=$$
 // Name = not just 'not special chars' but also not other none-alphanumerics
 // echo "$a>" (werkt alleen niet bij milan)
+// $?
 // add function to milans heredoc loop -> to make the expansion$ work
-// echo "$a" kek vs echo "$a"kek   $#$#$!#%%!$
-// echo '$USER'"sadasd" does expand $
-// echo $ gives space
-// echo "$" segfaults
+
 int	parser(t_info *info)
 {
 	int	ret;

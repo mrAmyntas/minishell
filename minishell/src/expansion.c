@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/21 15:16:44 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/21 15:47:12 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,13 +203,15 @@ void	expand_str_dollar(t_info *info, int i, int pos)
 {
 	int start;
 
-	start = pos + 2;
+	start = pos + 1;
 	//read normal chars until find a non-normal char, cant start with a digit
 	pos = check_name(info, i, start);
 	//pos is now the first illegal char or the last ", start the start (not $)
 	printf("start:%d, pos:%d\n", start, pos);
 	if (start == pos)
 	{
+		if (info->tokens[i][pos] == '\"')
+			return ;
 		cut_dollar(info, i, start - 1, pos);
 		return ;
 	}
@@ -237,15 +239,21 @@ int	check_after_dollar(t_info *info, int i)
 void	check_dollar_in_quotes(t_info *info, int i)
 {
 	int j;
+	int	k;
 
 	j = 0;
 	while (info->tokens[i][j] != '\0')
 	{
 		if (info->tokens[i][j] == '\"')
 		{
-			expand_str_dollar(info, i, j);
+			j++;
+			k = j;
 			while (info->tokens[i][j] != '\"')
+			{
+				if (info->tokens[i][j] == '$')
+					expand_str_dollar(info, i, k);
 				j++;
+			}
 		}
 		j++;
 	}
@@ -275,8 +283,8 @@ void	expansion(t_info *info)
 				expand_token_dollar(info, i); // if i+1 == NULL (ret=-1) -> leave $ untouched
 			else if (check_after_dollar(info, i) == 1) // if i+1 == quotes (ret 2) -> remove $
 				expand_exitstatus(info, i);
-			else if (check_after_dollar(info, i) == -1)
-				join_quoted_tokens2(info, i - 1);
+			//else if (check_after_dollar(info, i) == -1)
+			//	join_quoted_tokens2(info, i);
 			else if (check_after_dollar(info, i) == 2)
 				remove_dollar(info, i);
 			i = i - join_tokens(info, i);
