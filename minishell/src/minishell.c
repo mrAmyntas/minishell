@@ -86,6 +86,8 @@ int main(int ac, char **av, char **env)
 	while (1 == 1)
 	{
 		info.line_read = readline("\033[0;33mminishell: \033[0m");
+		if (!info.line_read)
+			break ;
 		if (!info.line_read[0])
 			continue ;
 		lexer(&info);

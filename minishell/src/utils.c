@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/21 15:10:32 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/21 15:54:56 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,15 +216,15 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	locations[1] = 0;
 	while (info->tokens[i] && i <= end)
 	{
-		if (!ft_strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])))
+		if (!ft_strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])) && info->token_state[i])
 			fd[0] = redirect(info, 1 , i);
-		if (!ft_strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])))
+		if (!ft_strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])) && info->token_state[i])
 			locations[0] = i;
-		if (!ft_strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])))
+		if (!ft_strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])) && info->token_state[i])
 			fd[1] = redirect(info, 2 , i);
-		if (!ft_strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")))
+		if (!ft_strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")) && info->token_state[i])
 			fd[1] = redirect(info, 4 , i);
-		if (!ft_strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")))
+		if (!ft_strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")) && info->token_state[i])
 			locations[1] = ft_heredoc(info, i);
 		if (fd[0] < 0 || fd[1] < 0)
 			perror("");
