@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/21 15:54:56 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/21 16:02:57 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,12 +154,14 @@ char	**trim_command(t_info *info, int start, int end, int heredoc)
 
 	i = 0;
 	j = 0;
-	if (!ft_strncmp(info->tokens[start], "<", ft_strlen(info->tokens[start])))
+	if (!ft_strncmp(info->tokens[start], "<", ft_strlen(info->tokens[start])) && info->token_state[start])
 		start += 2;
-	while ((start + i) < end && ft_strncmp(info->tokens[start + i], ">", ft_strlen(info->tokens[start + i]))
-		&& ft_strncmp(info->tokens[start + i], ">>", long_str(info->tokens[start + i], ">>"))
-		&& ft_strncmp(info->tokens[start + i], "<<", long_str(info->tokens[start + i], "<<")))
+	while ((start + i) < end && !info->token_state[start + i])
 		i++;
+	//while ((start + i) < end && ft_strncmp(info->tokens[start + i], ">", ft_strlen(info->tokens[start + i]))
+	//	&& ft_strncmp(info->tokens[start + i], ">>", long_str(info->tokens[start + i], ">>"))
+	//	&& ft_strncmp(info->tokens[start + i], "<<", long_str(info->tokens[start + i], "<<")))
+	//	i++;
 	command = malloc(sizeof(char **) * (i + 1 + heredoc));
 	while (j < i)
 	{
