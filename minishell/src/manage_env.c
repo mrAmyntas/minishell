@@ -6,20 +6,41 @@ char	*get_val(t_info *info, char *var)
 	int	len[2];
 
 	i = 0;
+	printf("test28\n");
 	len[0] = ft_len_to_char(var, '=');
+	printf("test29\n");
 	if (len[0] < 0)
+	{
+		printf("test30\n");
 		len[0] = ft_strlen(var);
+	}
+	printf("test31\n");
 	while (info->env[i])
 	{
+		printf("test32\n");
 		len[1] = ft_len_to_char(info->env[i], '=');
+		printf("test33\n");
 		if (len[1] == -1)
+		{
+			printf("test34\n");
 			len[1] = ft_strlen(info->env[i]);
+		}
+		printf("test35\n");
 		if (!info->env[i] || (!ft_strncmp(info->env[i], var, len[0]) && len[0] == len[1]))
+		{
+			printf("test36\n");
 			break ;
+		}
+		printf("test37\n");
 		i++;
 	}
+	printf("test38\n");
 	if (!info->env[i])
+	{
+		printf("test39\n");
 		return (NULL);
+	}
+	printf("test40\n");
 	return (info->env[i] + ft_strlen(var) + 1);
 }
 
@@ -79,15 +100,27 @@ void	add_env(t_info *info, char *new_var)
 	char	**temp;
 
 	i = 0;
+	printf("test20\n");
 	if (get_val(info, new_var))
 	{
+		printf("test21\n");
 		if (ft_len_to_char(new_var, '=') == -1)
+		{
+			printf("test22\n");
 			return ;
+		}
 		while (ft_strncmp(info->env[i], new_var, ft_len_to_char(new_var, '=')))
+		{
+			printf("test23\n");
 			i++;
+		}
+		printf("test24\n");
 		free (info->env[i]);
+		printf("test25\n");
 		info->env[i] = ft_strdup(new_var);
+		printf("test26\n");
 		sort_export(info);
+		printf("test27\n");
 		return ;
 	}
 	temp = malloc(sizeof(char **) * (ft_strstrlen(info->env, NULL, 0) + 1));

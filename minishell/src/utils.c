@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 18:32:02 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/21 15:10:32 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,14 +131,12 @@ int	redirect(t_info *info, int type, int i)
 {
 	int	fd;
 	
-	//dup2(info->fd_std[1], 1);
 	if (type == 1)
 		fd = open(info->tokens[i + 1], O_RDONLY);
 	if (type == 2)
 		fd = open(info->tokens[i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (type == 4)
 		fd = open(info->tokens[i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
-	//printf("fd: %i\n", fd);
 	if (fd < 0)
 		return (fd);
 	if (type == 1 || type == 2)
@@ -193,7 +191,6 @@ int ft_pipe(t_info *info, int loc_pipe, int heredoc, int start)
 		wait(&id);
 		close(pipefd[1]);
 		dup2(pipefd[0], 0);
-		//printf("tst: %i, %i, %i\n", loc_pipe + 1, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]);
 		return (check_redirect_v2(info, loc_pipe + 1, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]));
 	}
 	else
@@ -217,7 +214,7 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	fd[1] = 0;
 	locations[0] = -1;
 	locations[1] = 0;
-	while (info->tokens[i] && i <= end)				//redirect in- and output check for heredoc and pipe
+	while (info->tokens[i] && i <= end)
 	{
 		if (!ft_strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])))
 			fd[0] = redirect(info, 1 , i);
@@ -233,86 +230,13 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 			perror("");
 		i++;
 	}
-	//printf("location: %i\n", locations[0]);
 	if (locations[0] >= 0)
 		return (ft_pipe(info, locations[0], locations[1], start));
 	return (ft_find_command(info, trim_command(info, start, end, locations[1])));
 }
 
-//int ft_pipe(t_info *info, char **command, int loc_pipe, int heredoc)
-//{
-//	int	id;
-//	int	pipefd[2];
-//	
-//	pipe(pipefd);
-//	id = fork();
-//	if (id == -1)
-//		ft_error(4);
-//	if (id)
-//	{
-//		wait(&id);
-//		close(pipefd[1]);
-//		dup2(pipefd[0], 0);
-//		command = trim_command(info, loc_pipe + 1, ft_strstrlen(info->tokens, NULL, 0), 0);
-//		//printf("%s, %s, %s, %s\n", command[0], command[1], command[2], command[3]);
-//		return (ft_find_command(info, command));
-//	}
-//	else
-//	{
-//		close(pipefd[0]);
-//		dup2(pipefd[1], 1);
-//		command = trim_command(info, 0, loc_pipe, heredoc);
-//		ft_find_command(info, command);
-//		exit(0);
-//	}
-//}
-
-//int	check_redirect(t_info *info)
-//{
-//	int		i;
-//	int		fd[2];
-//	int		loc_pipe;
-//	int		heredoc;
-//	char	**command;
-//
-//	i = 0;
-//	loc_pipe = -1;
-//	heredoc = 0;
-//	fd[0] = 0;
-//	fd[1] = 0;
-//	while (info->tokens[i])
-//	{
-//		if (!strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])) && info->token_state[i])
-//			fd[0] = redirect(info, 1 , i);
-//		if (!strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])) && info->token_state[i])
-//			loc_pipe = i;
-//		if (!strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])) && info->token_state[i])
-//			fd[1] = redirect(info, 2, i);
-//		if (!strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")) && info->token_state[i])
-//			fd[1] = redirect(info, 4, i);
-//		if (!strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")) && info->token_state[i])
-//			heredoc = ft_heredoc(info, i);
-//		if (fd[0] < 0 || fd[1] < 0)
-//			perror("");
-//		i++;
-//	}
-//	if (loc_pipe >= 0)
-//		return (ft_pipe(info, command, loc_pipe, heredoc));
-//	command = trim_command(info, 0, ft_strstrlen(info->tokens, NULL, 0), heredoc);
-//	//printf("%s, %s, %s, %s\n", command[0], command[1], command[2], command[3]);
-//	return (ft_find_command(info, command));
-//}
-
 int	ft_find_command(t_info *info, char **command)
 {
-	//int i;
-//
-	//i = 0;
-	//while (command[i])
-	//{
-	//	printf("%s\n", command[i]);
-	//	i++;
-	//}
 	if (!ft_strncmp(command[0], "echo", long_str(command[0], "echo"))
 		|| !ft_strncmp(command[0], "cat", long_str(command[0], "cat"))
 		|| !ft_strncmp(command[0], "grep", long_str(command[0], "grep")))

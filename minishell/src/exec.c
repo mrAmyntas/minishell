@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 15:23:28 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/21 15:15:30 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,49 +44,70 @@ int	exec_export(t_info *info, char **command)
 	int		j;
 
 	i = 1;
-	printf("test3\n");
+	printf("test\n");
 	while (command[i])
 	{
 		j = 0;
 		printf("test1\n");
 		if (command[i][j] == '\\' || command[i][j] == '|')
+		{
+			printf("test2\n");
 			j++;
+		}
 		if (command[i][j] < 65 || (command[i][j] > 90 && command[i][j] < 95) || command[i][j] > 122 || command[i][j] == 96)
+		{
+			printf("test3\n");
 			perror(ft_strjoin(command[i], ": not a valid identifier"));
+		}
 		else
 		{
-			printf("test0\n");
+			printf("test4\n");
 			while (command[i][j] && command[i][j] != '=')
 			{
-				printf("test\n");
+				printf("test5\n");
 				if (command[i][j] < 48 || (command[i][j] > 57 && command[i][j] < 65) || (command[i][j] > 90 && command[i][j] < 95) || command[i][j] > 122 || command[i][j] == 96)
 				{
+					printf("test6\n");
 					perror(ft_strjoin(command[i], ": not a valid identifier"));
 					break ;
 				}
+				printf("test7\n");
 				j++;
 				if (!command[i][j] || command[i][j] == '=')
+				{
+					printf("test8\n");
 					add_env(info, command[i]);
+				}
+				printf("test9\n");
 			}
+			printf("test10\n");
 		}
-		printf("test2\n");
+		printf("test11\n");
 		i++;
 	}
+	printf("test12\n");
 	i = 0;
 	while (info->export[i] && !command[1])
     {
+		printf("test13\n");
 		write(1, "declare -x ", 11);
         write(1, info->export[i], ft_strlen(info->export[i]));
 		write(1, "\n", 1);
         i++;
+		printf("test14\n");
     }
+	printf("test15\n");
 	i = 0;
 	while (command[i])
 	{
+		printf("test16\n");
 		free (command[i]);
 		i++;
+		printf("test17\n");
 	}
+	printf("test18\n");
 	free (command);
+	printf("test19\n");
 	return (0);
 }
 
