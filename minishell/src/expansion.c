@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/21 13:59:17 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/21 15:16:44 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,7 @@ void	expand_str_dollar(t_info *info, int i, int pos)
 {
 	int start;
 
-	start = pos + 1;
+	start = pos + 2;
 	//read normal chars until find a non-normal char, cant start with a digit
 	pos = check_name(info, i, start);
 	//pos is now the first illegal char or the last ", start the start (not $)
@@ -241,8 +241,12 @@ void	check_dollar_in_quotes(t_info *info, int i)
 	j = 0;
 	while (info->tokens[i][j] != '\0')
 	{
-		if (info->tokens[i][j] == '$')
+		if (info->tokens[i][j] == '\"')
+		{
 			expand_str_dollar(info, i, j);
+			while (info->tokens[i][j] != '\"')
+				j++;
+		}
 		j++;
 	}
 }
@@ -280,3 +284,28 @@ void	expansion(t_info *info)
 		i++;
 	}
 }
+
+/* void	check_dollar_in_quotes(t_info *info, int i)
+{
+	int j;
+
+	j = 0;
+	printf("check\n");
+	while (info->tokens[i][j] != '\0')
+	{
+		if (info->tokens[i][j] == '\'')
+		{
+			while (info->tokens[i][j] != '\'')
+				j++;
+		}
+		if (info->tokens[i][j] == '\"')
+		{
+			while (info->tokens[i][j + 1] != '$' && info->tokens[i][j + 1] != '\"')
+				j++;
+			printf("j:%d\n", j);
+			if (info->tokens[i][j + 1] == '$')
+				expand_str_dollar(info, i, j);
+		}
+		j++;
+	}
+}*/

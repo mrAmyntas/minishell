@@ -90,7 +90,7 @@ int main(int ac, char **av, char **env)
 			continue ;
 		lexer(&info);
 		info.ret = parser(&info);
-		if (info.ret == -1)
+		if (info.ret == -1 || info.tokens[0] == NULL)
 		{
 			ft_free(&info);
 			info.p_pos = 0;
@@ -99,11 +99,6 @@ int main(int ac, char **av, char **env)
 		}
 		//if (!ft_strncmp(info.line_read, "break", 4)) // om leaks te checken
 		//	break ;
-		if (info.tokens[0] == NULL)
-		{
-			ft_free(&info);
-			continue ;
-		}
 		info.cmd = check_redirect_v2(&info, 0, ft_strstrlen(info.tokens, "|", 0), 0);//check_redirect(&info);
 		dup2(info.fd_std[0], 0);
 		dup2(info.fd_std[1], 1);
