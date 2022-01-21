@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 13:33:45 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/21 13:58:19 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,85 +54,15 @@ void	cut_dollar(t_info *info, int i, int start, int end)
 	int	j;
 
 	j = 0;
-	while (start <= end)
+	while (info->tokens[i][end + 1 + j] != '\0')
 	{
 		info->tokens[i][start] = info->tokens[i][end + 1 + j];
-		if (info->tokens[i][start] == '\0')
-			return ;
 		start++;
 		j++;
-	}
-}
-
-static char	*realloc_token(t_info *info, int i, int len)
-{
-	char *temp;
-
-	if (len < 0)
-		len = 0;
-	temp = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) + len + 1));
-	if (temp == NULL)
-		ft_error(1);
-	ft_strlcpy(temp, info->tokens[i], ft_strlen(info->tokens[i]) + 1);
-	free (info->tokens[i]);
-	info->tokens[i] = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) + len + 1));
-	if (info->tokens[i] == NULL)
-		ft_error(1);
-	ft_strlcpy(info->tokens[i], temp, ft_strlen(temp));
-	return (temp);
-}
-
-void	expand_str_dollar3(t_info *info, int i, char *name, int end)
-{
-	int		j;
-	int		start;
-	char	*temp;
-
-	start = 0;
-	while (info->tokens[i][start] != '$')
-		start++;
-	temp = realloc_token(info, i, ft_strlen(name) - end - start + 1);
-	j = 0;
-//	printf("1:%s\n", info->tokens[i]);
-//	printf("temp:%s\n", temp);
-	while (name[j] != '\0')
-	{
-		info->tokens[i][start] = name[j];
-		j++;
-		start++;
-	}
-//	printf("2:%s\n", info->tokens[i]);
-	while (temp[end + 1] != '\0')
-	{
-		info->tokens[i][start] = temp[end + 1];
-		end++;
-		start++;
 	}
 	info->tokens[i][start] = '\0';
-//	printf("3:%s\n", info->tokens[i]);
 }
 
-void	remove_quotes(t_info *info)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (info->tokens[i] != NULL)
-	{
-		j = 0;
-		while (info->tokens[i][j] != '\0')
-		{
-			if (info->tokens[i][j] == '\'' || info->tokens[i][j] == '\"')
-			{
-				j = cut_quotes(info, i, info->tokens[i][j], j);
-				continue ;
-			}
-			j++;
-		}
-		i++;
-	}
-}
 
 static int	check_next_token(t_info *info, int i)
 {
@@ -151,7 +81,7 @@ static int	check_next_token(t_info *info, int i)
 	return (0);
 }
 
-static void	join_quoted_tokens2(t_info *info, int i)
+void	join_quoted_tokens2(t_info *info, int i)
 {
 	info->tokens[i] = ft_strjoinbas(info->tokens[i], info->tokens[i + 1]);
 	free(info->tokens[i + 1]);
@@ -187,4 +117,19 @@ void	join_quoted_tokens(t_info *info)
 			continue ;
 		i++;
 	}
+}
+
+int	check_name(t_info *info, int i, int j)
+{
+	if ((info->tokens[i][j] >= 'a' && info->tokens[i][j] <= 'z') ||
+		(info->tokens[i][j] >= 'A' && info->tokens[i][j] <= 'Z') ||
+		info->tokens[i][j] == '_')
+	{
+		while ((info->tokens[i][j] >= '0' && info->tokens[i][j] <= '9') || 
+			(info->tokens[i][j] >= 'a'&& info->tokens[i][j] <= 'z') ||
+			(info->tokens[i][j] >= 'A' && info->tokens[i][j] <= 'Z') ||
+			info->tokens[i][j] == '_')
+			j++;
+	}
+	return (j);
 }
