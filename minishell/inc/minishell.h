@@ -95,6 +95,9 @@ void	cut_dollar(t_info *info, int i, int start, int end);
 void	expand_str_dollar3(t_info *info, int i, char *name, int end);
 void	remove_quotes(t_info *info);
 void	join_quoted_tokens(t_info *info);
+void	join_quoted_tokens2(t_info *info, int i);
+int		check_name(t_info *info, int i, int j);
+void	expansion(t_info *info);
 
 int		check_redirect(t_info *info);
 int		check_redirect_v2(t_info *info, int start, int end, int inputfd); // weet nog niet welke t wordt

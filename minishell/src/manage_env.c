@@ -5,6 +5,8 @@ char	*get_val(t_info *info, char *var)
 	int	i;
 	int	len[2];
 
+	if (var == NULL)
+		return (NULL);
 	i = 0;
 	len[0] = ft_len_to_char(var, '=');
 	if (len[0] < 0)
