@@ -31,13 +31,13 @@ CFLAGS = #-Wall -Werror -Wextra
 all: $(LIBFT_NAME) $(OBJ_DIR) $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT_NAME)
-	$(CC) $(OBJ) -ledit -Llibft -lft -lreadline -L$(HOME)/.brew/opt/readline/lib -I$(HOME)/.brew/opt/readline/include -o $(NAME)
+	$(CC) $(OBJ) -ledit -Llibft -lft -lreadline -o $(NAME)
 
 $(OBJ_DIR):
 	mkdir $@
 
 $(OBJ): $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER_FILES)
-	$(CC) -c $(CFLAGS) -I$(HOME)/.brew/opt/readline/include -o $@ $<
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 $(LIBFT_NAME): $(HEADER_FILES) $(LIBFT_DIR)*.c $(LIBFT_DIR)
 	make -C libft

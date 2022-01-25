@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 16:48:07 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/25 16:38:32 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ void	lexer(t_info *info)
 	while (i + 2 >= 0)
 	{
 		info->tokens[i + 2] = NULL;
-		info->token_state[i + 2] = 0;
+		info->token_state[i + 2] = -1;
 		i--;
 	}
 	store_input(info); // interpret line_read

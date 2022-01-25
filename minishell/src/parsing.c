@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/21 15:52:33 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/25 16:42:36 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,13 @@ void	set_token_state(t_info *info)
 	i = 0;
 	while (info->tokens[i] != NULL)
 	{
+		printf("in token_state: char: %c\n", info->tokens[i][0]);
 		if (info->tokens[i][0] == '\'' || info->tokens[i][0] == '\"')
-			info->token_state[i] = 0; // 0 = non-special-chars
+			info->token_state[i] = 0; // 0 = quoted
 		else if (check_char_token(info, i, 0) != C_NORMAL)
 			info->token_state[i] = 1; // 1 = special char
-//		else
-//			info->token_state[i] = 3; // 3 = normal chars
+		else
+			info->token_state[i] = 0; // normal chars
 		i++;
 	}
 }
@@ -112,11 +113,23 @@ void	find_dgreater_dlesser(t_info *info)
 // echo "$a>" (werkt alleen niet bij milan)
 // $?
 // add function to milans heredoc loop -> to make the expansion$ work
-
+// echo $  fix
+// state voor echo $USERa > out
 int	parser(t_info *info)
 {
 	int	ret;
 
+	int p = 0;
+	printf("---------------------------------------------------------------------------------------------\n");
+	printf("after lex\n");
+	while (info->tokens[p] != NULL)
+	{
+		printf("stored = %s\n", info->tokens[p]);
+		p++;
+	}
+	//----------------------------------------------
+	//            PARSING QUOTES
+	//----------------------------------------------
 	ret = parse_quotes(info, 0);
 	if (ret == -1)
 	{
@@ -124,15 +137,20 @@ int	parser(t_info *info)
 		return (-1);
 	}
 	find_dgreater_dlesser(info);
-	int p = 0;
+	p = 0;
+	printf("---------------------------------------------------------------------------------------------\n");
 	printf("after quotes\n");
 	while (info->tokens[p] != NULL)
 	{
 		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
+
+	//----------------------------------------------
+	//            EXPANSION
+	//----------------------------------------------
 	expansion(info);
-	//printf("check\n");
+	printf("---------------------------------------------------------------------------------------------\n");
 	printf("after dollar\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
@@ -140,18 +158,47 @@ int	parser(t_info *info)
 		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
-	//printf("check\n");
+	//----------------------------------------------
+	//            MERGE TOKENS THAT ARE QUOTED
+	//----------------------------------------------
 	join_quoted_tokens(info);
-	//printf("after join_quoted_tokens\n");
+	printf("---------------------------------------------------------------------------------------------\n");
+	printf("after join_quoted_tokens\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		//printf("stored = %s\n", info->tokens[p]);
+		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
+	//----------------------------------------------
+	//            REMOVE SPACES
+	//----------------------------------------------
 	remove_spaces(info);
+	printf("---------------------------------------------------------------------------------------------\n");
+	printf("after remove_spaces\n");
+	p = 0;
+	while (info->tokens[p] != NULL)
+	{
+		printf("stored = %s state = %d\n", info->tokens[p], info->token_state[p]);
+		p++;
+	}
+	//----------------------------------------------
+	//            SET TOKEN STATE
+	//----------------------------------------------
 	set_token_state(info);
+	printf("---------------------------------------------------------------------------------------------\n");
+	printf("after set_token_state\n");
+	p = 0;
+	while (info->tokens[p] != NULL)
+	{
+		printf("stored = %s state = %d\n", info->tokens[p], info->token_state[p]);
+		p++;
+	}
+	//----------------------------------------------
+	//            REMOVE QUOTES
+	//----------------------------------------------
 	remove_quotes(info);
+	printf("---------------------------------------------------------------------------------------------\n");
 	printf("after parser\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
@@ -161,3 +208,4 @@ int	parser(t_info *info)
 	}
 	return (0);
 }
+
