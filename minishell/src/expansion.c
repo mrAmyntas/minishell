@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/21 15:47:12 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/25 16:17:33 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ int	check_after_dollar(t_info *info, int i)
 void	check_dollar_in_quotes(t_info *info, int i)
 {
 	int j;
-	int	k;
+//	int	k;
 
 	j = 0;
 	while (info->tokens[i][j] != '\0')
@@ -247,11 +247,11 @@ void	check_dollar_in_quotes(t_info *info, int i)
 		if (info->tokens[i][j] == '\"')
 		{
 			j++;
-			k = j;
+			//k = j;
 			while (info->tokens[i][j] != '\"')
 			{
 				if (info->tokens[i][j] == '$')
-					expand_str_dollar(info, i, k);
+					expand_str_dollar(info, i, j);
 				j++;
 			}
 		}

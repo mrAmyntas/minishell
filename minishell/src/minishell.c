@@ -77,39 +77,58 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	sort_export(info);
 }
 
+//const struct sigaction	*sig_handler(int signum)
+//{
+//	write(1, "\n", 1);
+//	rl_on_new_line();
+//	rl_replace_line("", 0);
+//	rl_redisplay();
+//	write(1, "\n", 1);
+//	return ();
+//}
+
+int	minishell(t_info *info)
+{
+	while (1 == 1)
+	{
+		//sigaction(SIGINT, sig_handler, NULL);
+		info->line_read = readline("\033[0;33mminishell: \033[0m");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		if (!info->line_read)
+			break ;
+		if (!info->line_read[0])
+			continue ;
+		lexer(info);
+		info->ret = parser(info);
+		if (info->ret == -1 || info->tokens[0] == NULL)
+		{
+			ft_free(info);
+			info->p_pos = 0;
+			info->t_pos = 0;
+			continue ;
+		}
+		//if (!ft_strncmp(info->line_read, "break", 4)) // om leaks te checken
+		//	break ;
+		info->cmd = check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);//check_redirect(&info);
+		dup2(info->fd_std[0], 0);
+		dup2(info->fd_std[1], 1);
+		if (info->cmd == 15)
+			printf("minishell: command not found: %s\n", info->line_read);
+		if (info->line_read && *info->line_read)
+    		add_history(info->line_read);
+		ft_free(info);
+	}
+	return (info->cmd);
+}
 int main(int ac, char **av, char **env)
 {
 	t_info	info;
 
 	ft_init_struct(&info, av, env);
 	printf("\033[1;33mWelcome! You can exit by pressing Ctrl+C at any time...\n");
-	while (1 == 1)
-	{
-		info.line_read = readline("\033[0;33mminishell: \033[0m");
-		if (!info.line_read)
-			break ;
-		if (!info.line_read[0])
-			continue ;
-		lexer(&info);
-		info.ret = parser(&info);
-		if (info.ret == -1 || info.tokens[0] == NULL)
-		{
-			ft_free(&info);
-			info.p_pos = 0;
-			info.t_pos = 0;
-			continue ;
-		}
-		//if (!ft_strncmp(info.line_read, "break", 4)) // om leaks te checken
-		//	break ;
-		info.cmd = check_redirect_v2(&info, 0, ft_strstrlen(info.tokens, "|", 0), 0);//check_redirect(&info);
-		dup2(info.fd_std[0], 0);
-		dup2(info.fd_std[1], 1);
-		if (info.cmd == 15)
-			printf("minishell: command not found: %s\n", info.line_read);
-		if (info.line_read && *info.line_read)
-    		add_history(info.line_read);
-		ft_free(&info);
-	}
+	minishell(&info);
 	free_info(&info);
 	//system("leaks minishell");
 	return (0);
