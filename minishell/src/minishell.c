@@ -93,6 +93,9 @@ int	minishell(t_info *info)
 	{
 		//sigaction(SIGINT, sig_handler, NULL);
 		info->line_read = readline("\033[0;33mminishell: \033[0m");
+//		rl_on_new_line();
+//		rl_replace_line("", 0);
+//		rl_redisplay();
 		if (!info->line_read)
 			break ;
 		if (!info->line_read[0])
