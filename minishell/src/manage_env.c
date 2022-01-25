@@ -125,15 +125,24 @@ void	add_env(t_info *info, char *new_var)
 		printf("test27\n");
 		return ;
 	}
+	write(1, "test41b\n", 8);
+	printf("test41\n");
 	temp = malloc(sizeof(char **) * (ft_strstrlen(info->env, NULL, 0) + 1));
+	printf("test42\n");
 	while (i < ft_strstrlen(info->env, NULL, 0))
 	{
+		printf("test43\n");
 		temp[i] = ft_strdup(info->env[i]);
+		printf("test44\n");
 		free(info->env[i]);
 		i++;
 	}
+	printf("test45\n");
 	temp[i] = NULL;
 	free (info->env);
+	printf("test46\n");
 	copy_to_env(info, temp, new_var);
+	printf("test47\n");
 	sort_export(info);
+	printf("test48\n");
 }
