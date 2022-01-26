@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 15:09:12 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 16:16:55 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,19 @@ void	store_char(t_info *info, int i)
 	int j;
 	char *temp;
 
-	free(info->tokens[info->t_pos]);
-	info->tokens[info->t_pos] = NULL;
+// leak checker thinks this matters but i dont
+//	if (info->tokens[info->t_pos])
+//	{
+//		printf("token:%s, i:%d\n", info->tokens[info->t_pos], i);
+//		free(info->tokens[info->t_pos]);
+//		info->tokens[info->t_pos] = NULL;
+//	}
 	info->tokens[info->t_pos] = (char *)malloc(sizeof(char) * 2);
 	if (info->tokens[info->t_pos] == NULL)
 		ft_error(1);
 	info->tokens[info->t_pos][0] = info->line_read[i];
 	info->tokens[info->t_pos][1] = '\0';
-//	printf("store:%c i:%d\n", info->tokens[info->t_pos][0], info->t_pos);
+	printf("store:%c i:%d\n", info->tokens[info->t_pos][0], info->t_pos);
 	info->t_pos++;
 	info->p_pos++;
 }
@@ -144,7 +149,7 @@ void	store_string(t_info *info, int i)
 		info->tokens[info->t_pos][j] = '\0';
 		info->t_pos++;
 	}
-	if (i > 0 && info->line_read[i] != '\0' )
+	if (info->line_read[i] != '\0' )
 		store_char(info, i);
 }
 
@@ -165,7 +170,7 @@ int	store_input(t_info *info)
 	int p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		//printf("stored = %s\n", info->tokens[p]);
+		printf("stored = %s i:%d\n", info->tokens[p], p);
 		p++;
 	}
 	return (0);

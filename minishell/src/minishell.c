@@ -6,20 +6,19 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 13:47:24 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 16:21:08 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-void	check_leaks(void);
 
 void	ft_free(t_info *info)
 {
 	int	i;
 
 	i = 0;
-	//free(info->line_read);
+	free(info->line_read);
+	info->line_read = NULL;
 	while (info->tokens[i] != NULL)
 	{
 		free(info->tokens[i]);
@@ -135,8 +134,7 @@ int main(int ac, char **av, char **env)
 	minishell(&info);
 	free_info(&info);
 	//system("leaks minishell");
-	printf("??\n");
-	check_leaks();
+//	rl_clear_history();
 	return (0);
 }
 

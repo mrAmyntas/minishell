@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 14:54:06 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 16:20:26 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	remove_spaces(t_info *info)
 		{
 			if (info->tokens[i + 1] != NULL)
 			{
+				free(info->tokens[i]);
+				info->tokens[i] = NULL;
 				realloc_copy(info, i, 1);
 				continue ;
 			}

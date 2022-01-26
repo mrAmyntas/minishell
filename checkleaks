@@ -1,14 +1,14 @@
 
-LEAKS: there are 1 leaks. TOTAL size: 1438 bytes
+LEAKS: there are 5 leaks. TOTAL size: 1436 bytes
 
-Leak at address: 0x7feeba407820 | Leaked 224 bytes
+Leak at address: 0x7fba91407820 | Leaked 224 bytes
  malloc + 137
  sort_export + 56
  ft_init_struct + 306
  main + 46
  start + 1
 
-Leak at address: 0x7feeba408210 | Leaked 76 bytes
+Leak at address: 0x7fba91408210 | Leaked 76 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 145
@@ -17,7 +17,7 @@ Leak at address: 0x7feeba408210 | Leaked 76 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba4074e0 | Leaked 20 bytes
+Leak at address: 0x7fba914074e0 | Leaked 20 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 145
@@ -26,7 +26,7 @@ Leak at address: 0x7feeba4074e0 | Leaked 20 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba4074c0 | Leaked 22 bytes
+Leak at address: 0x7fba914074c0 | Leaked 22 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -35,7 +35,7 @@ Leak at address: 0x7feeba4074c0 | Leaked 22 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba402e60 | Leaked 103 bytes
+Leak at address: 0x7fba91402e60 | Leaked 103 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 145
@@ -44,7 +44,7 @@ Leak at address: 0x7feeba402e60 | Leaked 103 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba4071f0 | Leaked 21 bytes
+Leak at address: 0x7fba914071f0 | Leaked 21 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -53,7 +53,7 @@ Leak at address: 0x7feeba4071f0 | Leaked 21 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba407260 | Leaked 17 bytes
+Leak at address: 0x7fba91407260 | Leaked 17 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -62,7 +62,7 @@ Leak at address: 0x7feeba407260 | Leaked 17 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba4158e0 | Leaked 17 bytes
+Leak at address: 0x7fba914158e0 | Leaked 17 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -71,7 +71,7 @@ Leak at address: 0x7feeba4158e0 | Leaked 17 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba40a6b0 | Leaked 37 bytes
+Leak at address: 0x7fba9140a6b0 | Leaked 37 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -80,7 +80,7 @@ Leak at address: 0x7feeba40a6b0 | Leaked 37 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba40a680 | Leaked 39 bytes
+Leak at address: 0x7fba9140a680 | Leaked 39 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -89,7 +89,7 @@ Leak at address: 0x7feeba40a680 | Leaked 39 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba415890 | Leaked 67 bytes
+Leak at address: 0x7fba91415890 | Leaked 67 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -98,7 +98,7 @@ Leak at address: 0x7feeba415890 | Leaked 67 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba407230 | Leaked 44 bytes
+Leak at address: 0x7fba91407230 | Leaked 44 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -107,7 +107,7 @@ Leak at address: 0x7feeba407230 | Leaked 44 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba411e20 | Leaked 24 bytes
+Leak at address: 0x7fba91411e20 | Leaked 24 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -116,7 +116,7 @@ Leak at address: 0x7feeba411e20 | Leaked 24 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba402ef0 | Leaked 15 bytes
+Leak at address: 0x7fba91402ef0 | Leaked 15 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -125,7 +125,7 @@ Leak at address: 0x7feeba402ef0 | Leaked 15 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba4081c0 | Leaked 8 bytes
+Leak at address: 0x7fba914081c0 | Leaked 8 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -134,7 +134,7 @@ Leak at address: 0x7feeba4081c0 | Leaked 8 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba411dd0 | Leaked 66 bytes
+Leak at address: 0x7fba91411dd0 | Leaked 66 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -143,7 +143,7 @@ Leak at address: 0x7feeba411dd0 | Leaked 66 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba40a660 | Leaked 20 bytes
+Leak at address: 0x7fba9140a660 | Leaked 20 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 145
@@ -152,7 +152,7 @@ Leak at address: 0x7feeba40a660 | Leaked 20 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba40a6e0 | Leaked 20 bytes
+Leak at address: 0x7fba9140a6e0 | Leaked 20 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -161,7 +161,7 @@ Leak at address: 0x7feeba40a6e0 | Leaked 20 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba411e40 | Leaked 28 bytes
+Leak at address: 0x7fba91411e40 | Leaked 28 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -170,7 +170,7 @@ Leak at address: 0x7feeba411e40 | Leaked 28 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba4211e0 | Leaked 57 bytes
+Leak at address: 0x7fba914211e0 | Leaked 57 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -179,7 +179,7 @@ Leak at address: 0x7feeba4211e0 | Leaked 57 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba407900 | Leaked 14 bytes
+Leak at address: 0x7fba91407900 | Leaked 14 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -188,7 +188,7 @@ Leak at address: 0x7feeba407900 | Leaked 14 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba426cc0 | Leaked 120 bytes
+Leak at address: 0x7fba91426cc0 | Leaked 120 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -197,7 +197,7 @@ Leak at address: 0x7feeba426cc0 | Leaked 120 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba421140 | Leaked 146 bytes
+Leak at address: 0x7fba91421140 | Leaked 146 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -206,7 +206,7 @@ Leak at address: 0x7feeba421140 | Leaked 146 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba424920 | Leaked 98 bytes
+Leak at address: 0x7fba91424920 | Leaked 98 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -215,7 +215,7 @@ Leak at address: 0x7feeba424920 | Leaked 98 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba424d90 | Leaked 14 bytes
+Leak at address: 0x7fba91424d90 | Leaked 14 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -224,7 +224,7 @@ Leak at address: 0x7feeba424d90 | Leaked 14 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba402e40 | Leaked 19 bytes
+Leak at address: 0x7fba91402e40 | Leaked 19 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -233,7 +233,7 @@ Leak at address: 0x7feeba402e40 | Leaked 19 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba4081d0 | Leaked 54 bytes
+Leak at address: 0x7fba914081d0 | Leaked 54 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 145
@@ -242,7 +242,7 @@ Leak at address: 0x7feeba4081d0 | Leaked 54 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba407480 | Leaked 40 bytes
+Leak at address: 0x7fba91407480 | Leaked 40 bytes
  malloc + 137
  ft_strdup + 42
  put_str + 93
@@ -251,17 +251,17 @@ Leak at address: 0x7feeba407480 | Leaked 40 bytes
  main + 46
  start + 1
 
-Leak at address: 0x7feeba500090 | Leaked 2 bytes
+Leak at address: 0x7fba91500070 | Leaked 2 bytes
  malloc + 137
- store_char + 74
- store_string + 351
+ store_char + 141
+ store_string + 341
  store_input + 89
  lexer + 242
  minishell + 83
  main + 75
  start + 1
 
-Leak at address: 0x7feeba5000a0 | Leaked 2 bytes
+Leak at address: 0x7fba91500080 | Leaked 2 bytes
  malloc + 137
  realloc_copy + 83
  remove_spaces + 144
@@ -270,16 +270,7 @@ Leak at address: 0x7feeba5000a0 | Leaked 2 bytes
  main + 75
  start + 1
 
-Leak at address: 0x7feeba5000b0 | Leaked 2 bytes
- malloc + 137
- realloc_copy + 83
- remove_spaces + 144
- parser + 277
- minishell + 92
- main + 75
- start + 1
-
-Leak at address: 0x7feeba5000c0 | Leaked 2 bytes
+Leak at address: 0x7fba91500090 | Leaked 2 bytes
  malloc + 137
  realloc_copy + 83
  remove_spaces + 144
