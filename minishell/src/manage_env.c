@@ -71,7 +71,7 @@ void	copy_to_env(t_info *info, char **temp, char *new_var)
 
 	i = 0;
 	temp_len = ft_strstrlen(temp, NULL, 0);
-	info->env = malloc(sizeof(char **) * (temp_len + 1));
+	info->env = malloc(sizeof(char **) * (temp_len + 2));
 	while (i < temp_len)
 	{
 		info->env[i] = malloc(sizeof(char *) * ft_strlen(temp[i]));
@@ -79,10 +79,9 @@ void	copy_to_env(t_info *info, char **temp, char *new_var)
 		free(temp[i]);
 		i++;
 	}
-	info->env[i] = NULL;
 	free (temp);
-	i = ft_strstrlen(info->env, NULL, 0);
 	info->env[i] = ft_strdup(new_var);
+	info->env[i + 1] = NULL;
 }
 
 void	add_env(t_info *info, char *new_var)
@@ -90,7 +89,6 @@ void	add_env(t_info *info, char *new_var)
 	int		i;
 	char	**temp;
 	int		env_len;
-	//int t = 0;
 
 	i = 0;
 	if (get_val(info, new_var))
@@ -113,23 +111,11 @@ void	add_env(t_info *info, char *new_var)
 	while (i < env_len)
 	{
 		temp[i] = ft_strdup(info->env[i]);
-	//	printf("temp: %s\nenv: %s\ni: %i\n", temp[i], info->env[i], i);
 		free(info->env[i]);
 		i++;
 	}
 	temp[i] = NULL;
 	free (info->env);
-	//while (temp[t])
-	//{
-	//	printf("%s\n", temp[t]);
-	//	t++;
-	//}
 	copy_to_env(info, temp, new_var);
-	//t = 0;
-	//while (info->env[t])
-	//{
-	//	printf("%s\n", info->env[t]);
-	//	t++;
-	//}
 	sort_export(info);
 }

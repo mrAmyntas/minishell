@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/25 17:56:13 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/26 17:04:49 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ int	exec_export(t_info *info, char **command)
 				}
 				printf("test9\n");
 			}
+			printf("test10\n");
 		}
+		printf("test11\n");
 		i++;
 	}
 	i = 0;
