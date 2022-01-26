@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 13:02:57 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 14:54:06 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void	find_dgreater_dlesser(t_info *info)
 // crash bij export PID=$$
 // $?
 // add function to milans heredoc loop -> to make the expansion$ work
+// leaks: seems to leak something in lexer->store_str->store_char also in remove_spaces
 int	parser(t_info *info)
 {
 	int	ret;

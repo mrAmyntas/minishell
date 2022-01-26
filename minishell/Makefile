@@ -1,5 +1,7 @@
 NAME = minishell
 
+CC = gcc
+
 LIBFT_NAME = libft/libft.a
 
 HEADER_FILES =	inc/minishell.h\
@@ -22,16 +24,17 @@ SRC =	src/minishell.c\
 		src/parse_utils.c\
 		src/parse_utils2.c\
 		src/parse_quotetrim_dollar.c\
-		src/expansion.c
+		src/expansion.c\
+		src/check_leaks.c
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
-CFLAGS = #-Wall -Werror -Wextra
+CFLAGS = #-fsanitize=address #-Wall -Werror -Wextra 
 
 all: $(LIBFT_NAME) $(OBJ_DIR) $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT_NAME)
-	$(CC) $(OBJ) -ledit -Llibft -lft -lreadline -o $(NAME)
+	$(CC) $(OBJ) $(CFLAGS) -ledit -Llibft -lft -lreadline -o $(NAME)
 
 $(OBJ_DIR):
 	mkdir $@

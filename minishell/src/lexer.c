@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/25 16:38:32 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 15:09:12 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,18 +109,16 @@ int	check_char_token(t_info *info, int i, int j)
 void	store_char(t_info *info, int i)
 {
 	int j;
+	char *temp;
 
-	//j = check_char(info, i);
-	//if (j == C_SPACE)
-	//{
-	//	info->p_pos++;
-	//	return ;
-	//}
+	free(info->tokens[info->t_pos]);
+	info->tokens[info->t_pos] = NULL;
 	info->tokens[info->t_pos] = (char *)malloc(sizeof(char) * 2);
 	if (info->tokens[info->t_pos] == NULL)
 		ft_error(1);
 	info->tokens[info->t_pos][0] = info->line_read[i];
 	info->tokens[info->t_pos][1] = '\0';
+//	printf("store:%c i:%d\n", info->tokens[info->t_pos][0], info->t_pos);
 	info->t_pos++;
 	info->p_pos++;
 }
@@ -185,10 +183,10 @@ void	lexer(t_info *info)
 	info->token_state = (int *)malloc(sizeof(int) * (i + 2));
 	if (info->token_state == NULL)
 		ft_error(1);
-	while (i + 2 >= 0)
+	while (i + 1 >= 0)
 	{
-		info->tokens[i + 2] = NULL;
-		info->token_state[i + 2] = -1;
+		info->tokens[i + 1] = NULL;
+		info->token_state[i + 1] = -1;
 		i--;
 	}
 	store_input(info); // interpret line_read

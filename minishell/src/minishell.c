@@ -1,28 +1,32 @@
-
-
-
-// input goed verwerken, combinaties uitproberen
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   minishell.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
+/*   Updated: 2022/01/26 13:47:24 by bhoitzin      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	check_leaks(void);
 
 void	ft_free(t_info *info)
 {
 	int	i;
 
 	i = 0;
-	free(info->line_read);
+	//free(info->line_read);
 	while (info->tokens[i] != NULL)
 	{
 		free(info->tokens[i]);
 		info->tokens[i] = NULL;
 		i++;
 	}
-	//{
-	//	printf("i:%d\n", i);
-	//	free(info->tokens[i]);
-	//	info->tokens[i] = NULL;
-	//	i++;
-	//}
+	free(info->token_state);
 	free(info->tokens);
 	info->t_pos = 0;
 	info->p_pos = 0;
@@ -131,6 +135,8 @@ int main(int ac, char **av, char **env)
 	minishell(&info);
 	free_info(&info);
 	//system("leaks minishell");
+	printf("??\n");
+	check_leaks();
 	return (0);
 }
 

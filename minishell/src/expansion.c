@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 12:39:49 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 14:25:34 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@ static char	*realloc_token(t_info *info, int i, int len)
 
 	if (len < 0)
 		len = 0;
-	temp = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) + len + 1));
+	len = ft_strlen(info->tokens[i]) + len + 1;
+	temp = (char *)malloc(sizeof(char) * len);
 	if (temp == NULL)
 		ft_error(1);
 	ft_strlcpy(temp, info->tokens[i], ft_strlen(info->tokens[i]) + 1);
 	free (info->tokens[i]);
-	info->tokens[i] = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) + len + 1));
+	info->tokens[i] = (char *)malloc(sizeof(char) * len);
 	if (info->tokens[i] == NULL)
 		ft_error(1);
 	ft_strlcpy(info->tokens[i], temp, ft_strlen(temp) + 1);
@@ -161,7 +162,7 @@ void	expand_str_dollar3(t_info *info, int i, char *name, int end)
 	temp = realloc_token(info, i, ft_strlen(name) - (end - start + 1));
 	j = 0;
 //	printf("1:%s\n", info->tokens[i]);
-//	printf("temp:%s\n", temp);
+	printf("temp:%s\n", temp);
 	while (name[j] != '\0')
 	{
 		info->tokens[i][start] = name[j];
