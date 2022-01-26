@@ -27,6 +27,7 @@ typedef	struct	s_info
 	char		*pwd;
 	int			fd_std[2];
 	int			*token_state;
+	int			exit_status;
 }				t_info;
 
 enum	e_tokentype
@@ -51,7 +52,7 @@ int		ft_find_redirect(t_info *info);
 int		exec(t_info *info, char **command);
 void	lexer(t_info *info);
 void	ft_init_struct(t_info *info, char **av, char **env);
-void	ft_error(int error_type);
+void	ft_error(t_info *info, int error_type);
 int		store_input(t_info *info);
 int		check_char(t_info *info, int i);
 void    add_env(t_info *info, char *new_var);
@@ -76,13 +77,12 @@ int		check_before_after(t_info *info, int first_q, int last_q);
 int		check_empty_quotes(t_info *info, int first_q, int last_q);
 int		parse_quotes(t_info *info, int i);
 void	remove_spaces(t_info *info);
-char	*ft_strjoinbas(char *s1, char const *s2);
+char	*ft_strjoinbas(t_info *info, char *s1, char const *s2);
 int		check_unclosed(t_info *info, int i, int j);
 int		cut_quotes(t_info *info, int pos, char c, int first);
 void	check_dollar_token(t_info *info);
 void	expand_dollar(t_info *info, int i);
 void	merge_quotes(t_info *info, int first_q, int last_q, int n);
-void	expandexitstatus(t_info *info, int i);
 void	joinwithnormalbefore(t_info *info, int first_q);
 void	set_token_state(t_info *info);
 void	expand_exitstatus(t_info *info, int i);
@@ -99,7 +99,8 @@ void	join_quoted_tokens(t_info *info);
 void	join_quoted_tokens2(t_info *info, int i);
 int		check_name(t_info *info, int i, int j);
 void	expansion(t_info *info);
-
+int		minishell(t_info *info);
+void	ft_free(t_info *info);
 int		check_redirect(t_info *info);
 int		check_redirect_v2(t_info *info, int start, int end, int inputfd); // weet nog niet welke t wordt
 

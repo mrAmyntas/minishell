@@ -6,17 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:22:30 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 13:00:18 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 17:36:05 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-void	expandexitstatus(t_info *info, int i)
-{
-	// $ at tokens[i] '?' at i+1 -> need to put exitstatus + whatever comes after the ? onthe same line
-	// on i, and remove i+1
-}
 
 static void	cut_quotes2(t_info *info, int pos, int first, int last)
 {

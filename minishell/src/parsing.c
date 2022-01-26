@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 16:20:26 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 17:31:48 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,11 @@ void	find_dgreater_dlesser(t_info *info)
 	}
 }
 // to-do:
-// crash bij export PID=$$
+// crash bij export
 // $?
 // add function to milans heredoc loop -> to make the expansion$ work
-// leaks: seems to leak something in lexer->store_str->store_char also in remove_spaces
+// leaks: ???
+// exit status: if it is X -> a call to minishell should NOT reset it, if there is no new command
 int	parser(t_info *info)
 {
 	int	ret;
@@ -131,10 +132,7 @@ int	parser(t_info *info)
 	//----------------------------------------------
 	ret = parse_quotes(info, 0);
 	if (ret == -1)
-	{
-		printf("checkret-1\n");
-		return (-1);
-	}
+		ft_error(info, 2);
 	find_dgreater_dlesser(info);
 	p = 0;
 //	printf("---------------------------------------------------------------------------------------------\n");

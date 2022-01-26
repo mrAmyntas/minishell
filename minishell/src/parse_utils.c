@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:17:21 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 12:59:21 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 17:10:16 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	joinwithbefore(t_info *info, int first_q)
 	{
 		if (info->tokens[first_q] != NULL)
 		{
-			info->tokens[first_q - 1] = ft_strjoinbas(info->tokens[first_q - 1], info->tokens[first_q]);
+			info->tokens[first_q - 1] = ft_strjoinbas(info, info->tokens[first_q - 1], info->tokens[first_q]);
 			free (info->tokens[first_q]);
 			info->tokens[first_q] = NULL;
 			realloc_copy(info, first_q, 1);
@@ -58,7 +58,7 @@ void	joinwithnormalbefore(t_info *info, int first_q)
 		{
 			if (check_char_token(info, first_q, 0) == C_NORMAL && check_char_token(info, first_q - 1, 0) == C_NORMAL)
 			{
-				info->tokens[first_q - 1] = ft_strjoinbas(info->tokens[first_q - 1], info->tokens[first_q]);
+				info->tokens[first_q - 1] = ft_strjoinbas(info, info->tokens[first_q - 1], info->tokens[first_q]);
 				free (info->tokens[first_q]);
 				info->tokens[first_q] = NULL;
 				realloc_copy(info, first_q, 1);
@@ -89,7 +89,7 @@ void	realloc_copy(t_info *info, int start, int incr)
 	{
 		info->tokens[start] = (char *)malloc(1 + ft_strlen(info->tokens[start + incr]));
 		if (info->tokens[start] == NULL)
-			ft_error(1);
+			ft_error(info, 1);
 		ft_strlcpy(info->tokens[start], info->tokens[start + incr], 1 + ft_strlen(info->tokens[start + incr]));
 		info->token_state[start] = info->token_state[start + incr];
 		free(info->tokens[start + incr]);
@@ -162,7 +162,7 @@ void	merge_quotes(t_info *info, int first_q, int last_q, int n)
 	i = first_q;
 	while (i < last_q)
 	{
-		info->tokens[first_q] = ft_strjoinbas(info->tokens[first_q], info->tokens[first_q + 1]);
+		info->tokens[first_q] = ft_strjoinbas(info, info->tokens[first_q], info->tokens[first_q + 1]);
 		free(info->tokens[first_q + 1]);
 		info->tokens[first_q + 1] = NULL;
 		realloc_copy(info, first_q + 1, 1);

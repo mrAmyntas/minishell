@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 14:25:34 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 17:07:29 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ static char	*realloc_token(t_info *info, int i, int len)
 	len = ft_strlen(info->tokens[i]) + len + 1;
 	temp = (char *)malloc(sizeof(char) * len);
 	if (temp == NULL)
-		ft_error(1);
+		ft_error(info, 1);
 	ft_strlcpy(temp, info->tokens[i], ft_strlen(info->tokens[i]) + 1);
 	free (info->tokens[i]);
 	info->tokens[i] = (char *)malloc(sizeof(char) * len);
 	if (info->tokens[i] == NULL)
-		ft_error(1);
+		ft_error(info, 1);
 	ft_strlcpy(info->tokens[i], temp, ft_strlen(temp) + 1);
 //	printf("after realloc_token:\ntemp:%s\ninfo->tokens[i]:%s\n", temp, info->tokens[i]);
 	return (temp);
@@ -104,6 +104,7 @@ void	expand_token_dollar(t_info *info, int i)
 {
 	char	*name;
 	char	*rest;
+	char	*temp;
 	int		pos;
 
 	pos = check_name(info, i + 1, 0);
@@ -116,10 +117,11 @@ void	expand_token_dollar(t_info *info, int i)
 		cut_dollar(info, i, 0, 0);
 		return ;
 	}
-	name = get_name(info, i + 1, 0);
+	temp = get_name(info, i + 1, 0);
 //	printf("name:%s\n", name);
 	rest = get_rest(info, i + 1, 0); // (e.g. $USER'kek')
-	name = get_val(info, name);
+	name = get_val(info, temp);
+	free(temp);
 //	printf("name:%s rest:%s\n", name, rest);
 	if (name == NULL)
 	{
@@ -132,6 +134,7 @@ void	expand_token_dollar(t_info *info, int i)
 		{
 			info->tokens[i] = (char *)malloc(sizeof(char) * ft_strlen(rest) + 1);
 			ft_strlcpy(info->tokens[i], rest, ft_strlen(rest) + 1);
+			free(rest);
 		}
 		else
 			realloc_copy(info, i, 1);
@@ -142,7 +145,10 @@ void	expand_token_dollar(t_info *info, int i)
 		info->tokens[i] = (char *)malloc(ft_strlen(name) + 1);
 		ft_strlcpy(info->tokens[i], name, ft_strlen(name) + 1);
 		if (rest != NULL)
-			info->tokens[i] = ft_strjoinbas(info->tokens[i], rest);
+		{
+			info->tokens[i] = ft_strjoinbas(info, info->tokens[i], rest);
+			free(rest);
+		}
 		free(info->tokens[i + 1]);
 		info->tokens[i + 1] = NULL;
 		realloc_copy(info, i + 1, 1);
@@ -184,11 +190,12 @@ void	expand_str_dollar2(t_info *info, int i, int start, int pos)
 {
 	char	*name;
 	char	*rest;
+	char	*temp;
 
-	name = get_name(info, i, start);
+	temp = get_name(info, i, start);
 //	printf("name:%s\n", name);
-//	rest = get_rest(info, i, start);
-	name = get_val(info, name);
+	name = get_val(info, temp);
+	free(temp);
 //	printf("name:%s\n", name);
 //	printf("name:%s rest:%s\n", name, rest);
 	if (name == NULL)

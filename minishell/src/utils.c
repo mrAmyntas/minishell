@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 17:35:35 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/26 17:41:05 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ int ft_pipe(t_info *info, int loc_pipe, int heredoc, int start)
 	pipe(pipefd);
 	id = fork();
 	if (id == -1)
-		ft_error(4);
+		ft_error(info, 4);
 	if (id)
 	{
 		wait(&id);
@@ -231,7 +231,7 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 		if (!ft_strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")) && info->token_state[i])
 			locations[1] = ft_heredoc(info, i);
 		if (fd[0] < 0 || fd[1] < 0)
-			perror("");
+			ft_error(info, 3);
 		i++;
 	}
 	if (locations[0] >= 0)

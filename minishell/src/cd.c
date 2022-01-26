@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/19 11:44:56 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/26 17:18:00 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	exec_cd(t_info *info, char **command)
 		return (0);
 	id = fork();
 	if (id == -1)
-		ft_error(4);
+		ft_error(info, 4);
 	if (id)
 	{
 		if (command[1][0] != '/')
@@ -116,7 +116,7 @@ int	exec_cd(t_info *info, char **command)
 		return (0);
 	}
 	path = get_path(command[0], info->env);
-	execve(path, command, info->env);
-	ft_error(3);
+	info->exit_status = execve(path, command, info->env);
+	ft_error(info, 4);
 	return (0);
 }

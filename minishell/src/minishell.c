@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 16:21:08 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 17:29:34 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_free(t_info *info)
 	free(info->tokens);
 	info->t_pos = 0;
 	info->p_pos = 0;
-
+	info->exit_status = 0;
 }
 
 void	free_info(t_info *info)
@@ -71,6 +71,7 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	info->fd_std[1] = dup(1);
 	info->home = ft_strdup(getenv("HOME"));
 	info->pwd = malloc(sizeof(char *) * len);
+	info->exit_status = 0;
 	while (!getcwd(info->pwd, len))
 	{
 		len += 10;
@@ -108,8 +109,6 @@ int	minishell(t_info *info)
 		if (info->ret == -1 || info->tokens[0] == NULL)
 		{
 			ft_free(info);
-			info->p_pos = 0;
-			info->t_pos = 0;
 			continue ;
 		}
 		//if (!ft_strncmp(info->line_read, "break", 4)) // om leaks te checken

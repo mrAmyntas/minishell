@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/21 13:58:19 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 17:06:37 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*ft_strjoinbas(char *s1, char const *s2)
+char	*ft_strjoinbas(t_info *info, char *s1, char const *s2)
 {
 	char	*buff;
 	int		x;
@@ -23,7 +23,7 @@ char	*ft_strjoinbas(char *s1, char const *s2)
 	x = ft_strlen(s1) + ft_strlen(s2) + 1;
 	buff = (char*)malloc(sizeof(char) * x);
 	if (buff == NULL)
-		ft_error(1);
+		ft_error(info, 1);
 	x = 0;
 	while (s1[x] != '\0')
 	{
@@ -83,7 +83,7 @@ static int	check_next_token(t_info *info, int i)
 
 void	join_quoted_tokens2(t_info *info, int i)
 {
-	info->tokens[i] = ft_strjoinbas(info->tokens[i], info->tokens[i + 1]);
+	info->tokens[i] = ft_strjoinbas(info, info->tokens[i], info->tokens[i + 1]);
 	free(info->tokens[i + 1]);
 	info->tokens[i + 1] = NULL;
 	realloc_copy(info, i + 1, 1);
