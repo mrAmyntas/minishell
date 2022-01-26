@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/25 16:17:33 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/26 12:39:49 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static char	*realloc_token(t_info *info, int i, int len)
 	info->tokens[i] = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) + len + 1));
 	if (info->tokens[i] == NULL)
 		ft_error(1);
-	ft_strlcpy(info->tokens[i], temp, ft_strlen(temp));
+	ft_strlcpy(info->tokens[i], temp, ft_strlen(temp) + 1);
+//	printf("after realloc_token:\ntemp:%s\ninfo->tokens[i]:%s\n", temp, info->tokens[i]);
 	return (temp);
 }
 
@@ -46,7 +47,7 @@ static size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start
 {
 	size_t i;
 
-	//printf("cpy2:\nsize:%ld start:%d\n", dstsize, start);
+//	printf("cpy2:\nsize:%ld start:%d\n", dstsize, start);
 	if (src == NULL)
 		return (0);
 	i = 0;
@@ -156,17 +157,18 @@ void	expand_str_dollar3(t_info *info, int i, char *name, int end)
 	start = 0;
 	while (info->tokens[i][start] != '$')
 		start++;
-	temp = realloc_token(info, i, ft_strlen(name) - end - start + 1);
+//	printf("ft_strlen(name):%d - end:%d - start:%d + 1 = %d\n", ft_strlen(name), end, start, (ft_strlen(name) - (end - start + 1)));
+	temp = realloc_token(info, i, ft_strlen(name) - (end - start + 1));
 	j = 0;
-	//printf("1:%s\n", info->tokens[i]);
-	//printf("temp:%s\n", temp);
+//	printf("1:%s\n", info->tokens[i]);
+//	printf("temp:%s\n", temp);
 	while (name[j] != '\0')
 	{
 		info->tokens[i][start] = name[j];
 		j++;
 		start++;
 	}
-	//printf("2:%s\n", info->tokens[i]);
+//	printf("2:%s\n", info->tokens[i]);
 	while (temp[end + 1] != '\0')
 	{
 		info->tokens[i][start] = temp[end + 1];
@@ -174,7 +176,8 @@ void	expand_str_dollar3(t_info *info, int i, char *name, int end)
 		start++;
 	}
 	info->tokens[i][start] = '\0';
-	//printf("3:%s\n", info->tokens[i]);
+	free(temp);
+//	printf("3:%s\n", info->tokens[i]);
 }
 void	expand_str_dollar2(t_info *info, int i, int start, int pos)
 {
@@ -182,10 +185,10 @@ void	expand_str_dollar2(t_info *info, int i, int start, int pos)
 	char	*rest;
 
 	name = get_name(info, i, start);
-	printf("name:%s\n", name);
+//	printf("name:%s\n", name);
 //	rest = get_rest(info, i, start);
 	name = get_val(info, name);
-	printf("name:%s\n", name);
+//	printf("name:%s\n", name);
 //	printf("name:%s rest:%s\n", name, rest);
 	if (name == NULL)
 	{
@@ -207,7 +210,7 @@ void	expand_str_dollar(t_info *info, int i, int pos)
 	//read normal chars until find a non-normal char, cant start with a digit
 	pos = check_name(info, i, start);
 	//pos is now the first illegal char or the last ", start the start (not $)
-	printf("start:%d, pos:%d\n", start, pos);
+//	printf("start:%d, pos:%d\n", start, pos);
 	if (start == pos)
 	{
 		if (info->tokens[i][pos] == '\"')

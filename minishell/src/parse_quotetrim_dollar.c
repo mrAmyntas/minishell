@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:22:30 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/21 12:45:11 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/26 13:00:18 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	cut_quotes(t_info *info, int i, char c, int j)
 	cut_quotes2(info, i, first, last);
 	return (last - 1); // continue finding quotes on next char in string
 }
+
 
 void	remove_quotes(t_info *info)
 {
