@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 17:39:36 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 17:48:58 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 
 void	handle_sig(int signum)
 {
-
+	write(1, "test\n", 5);
 	if (signum == SIGINT)
 	{
 		if (g_sig.sigint)
@@ -110,7 +110,10 @@ int	minishell(t_info *info)
 		signal(SIGQUIT, &handle_sig);
 		info->line_read = readline("\033[0;33mminishell: \033[0m");
 		if (!info->line_read)
-			break ;
+		{	
+			write(1, "\b\b  \n", 5);
+			break;
+		}
 		if (!info->line_read[0])
 			continue ;
 		lexer(info);
