@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 15:59:44 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 16:48:43 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,23 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 
 void	handle_sig(int signum)
 {
+
 	if (signum == SIGINT)
 	{
-		ft_putstr_fd("\b\b  \n\033[0;33mminishell: \033[0m", 1);
+		if (g_sig.sigint)
+			ft_putstr_fd("\b\b  \n\033[0;33mminishell: \033[0m", 1);
+		if (!g_sig.sigint)
+			ft_putstr_fd("\b \n\033[0;33mminishell: \033[0m", 1);
+		g_sig.sigint = 1;
 	}
 	if (signum == SIGQUIT)
-		write(1, "\b\b  \b\b", 6);
+	{
+		if (g_sig.sigquit)
+			write(1, "\b\b  \b\b", 6);
+		if (!g_sig.sigquit)
+			write(1, " ", 6);
+		g_sig.sigquit = 1;
+	}
 	return ;
 }
 
@@ -127,6 +138,8 @@ int main(int ac, char **av, char **env)
 {
 	t_info	info;
 
+	g_sig.sigint = 0;
+	g_sig.sigquit = 0;
 	ft_init_struct(&info, av, env);
 	printf("\033[1;33mWelcome! You can exit by pressing Ctrl+D at any time...\033[1;33m\n");
 	minishell(&info);

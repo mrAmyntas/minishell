@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 16:00:23 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 16:50:22 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,16 +144,17 @@ int	redirect(t_info *info, int type, int i)
 		fd = open(info->tokens[i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (type == 4)
 		fd = open(info->tokens[i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
-	if (fd < 0)
-		return (fd);
-	if (type == 1)
-		dup2(fd, STDIN_FILENO);
 	if (type == 2 || type == 4)
 	{
 		if (fd < 0)
 			ft_error(info, 3);
-		dup2(fd, STDOUT_FILENO);
+		else
+			dup2(fd, STDOUT_FILENO);
 	}
+	if (fd < 0)
+		return (fd);
+	if (type == 1)
+		dup2(fd, STDIN_FILENO);
 	close(fd);
 	return (1);
 }
@@ -233,7 +234,7 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 			locations[1] = ft_heredoc(info, i);
 		i++;
 	}
-	if (fd[0] < 0 || fd[1] < 0)
+	if (fd[0] < 0)
 	{
 		ft_error(info, 4);
 		return(1);
