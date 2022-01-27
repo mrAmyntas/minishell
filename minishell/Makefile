@@ -30,8 +30,8 @@ OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 CFLAGS = #-fsanitize=address #-Wall -Werror -Wextra 
 
-LDFLAGS = -L/Users/mgroen/.brew/opt/readline/lib
-CPPFLAGS= -I/Users/mgroen/.brew/opt/readline/include
+LDFLAGS = -L$(HOME)/.brew/opt/readline/lib
+CPPFLAGS= -I$(HOME)/.brew/opt/readline/include
 
 all: $(LIBFT_NAME) $(OBJ_DIR) $(NAME)
 

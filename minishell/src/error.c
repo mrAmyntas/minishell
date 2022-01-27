@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 15:59:19 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 16:43:03 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	set_error(t_info *info, int error_type)
 {
 	info->exit_status = error_type;
+	if (error_type == 258)
+		printf("minishell: syntax error\n");
 }
 
 void	ft_error(t_info *info, int i)
@@ -35,6 +37,9 @@ void	ft_error(t_info *info, int i)
 		printf("minishell: %s: No such file or directory\n", info->tokens[i]);
 	if (info->exit_status == 258)
 		printf("minishell: syntax error\n");
-	info->exit_status = 0;
+	if (info->exit_status == 127)
+		printf("minishell: command not found\n");
+	else
+		info->exit_status = 0;
 	return ;
 }

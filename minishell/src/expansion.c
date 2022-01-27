@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 15:27:28 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 16:52:38 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,12 @@ void	remove_dollar(t_info *info, int i)
 
 void	expand_exitstatus(t_info *info, int i)
 {
-	
+	free(info->tokens[i]);
+	info->tokens[i] = NULL;
+	info->tokens[i] = ft_itoa(info->exit_status);
+	free(info->tokens[i + 1]);
+	info->tokens[i + 1] = NULL;
+	realloc_copy(info, i + 1, 1);
 }
 
 static size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start)

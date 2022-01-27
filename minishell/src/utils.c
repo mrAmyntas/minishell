@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 16:00:23 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 16:46:59 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,9 @@ int	redirect(t_info *info, int type, int i)
 	if (type == 2 || type == 4)
 	{
 		if (fd < 0)
-			ft_error(info, 3);
-		dup2(fd, STDOUT_FILENO);
+			set_error(info, 1);
+		else
+			dup2(fd, STDOUT_FILENO);
 	}
 	close(fd);
 	return (1);
@@ -190,7 +191,7 @@ int ft_pipe(t_info *info, int loc_pipe, int start)
 	pipe(pipefd);
 	id = fork();
 	if (id == -1)
-		ft_error(info, 4);
+		set_error(info, 1);
 	if (id)
 	{
 		wait(&id);
@@ -233,11 +234,8 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 			locations[1] = ft_heredoc(info, i);
 		i++;
 	}
-	if (fd[0] < 0 || fd[1] < 0)
-	{
-		ft_error(info, 4);
-		return(1);
-	}
+	if (fd[0] < 0)
+		set_error(info, 1);
 	if (locations[0] >= 0)
 		return (ft_pipe(info, locations[0], start));
 	return (ft_find_command(info, trim_command(info, start, end)));
