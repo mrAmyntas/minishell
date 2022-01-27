@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 13:27:31 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 14:29:24 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	reset_token(t_info *info, int i)
 	j = 0;
 }
 
-void	expand_buf(t_info *info, char *buf, int i)
+char	*expand_buf(t_info *info, char *buf, int i)
 {
 	int	j;
 
@@ -62,6 +62,7 @@ void	expand_buf(t_info *info, char *buf, int i)
 		}
 		buf[j] = '\0';
 		reset_token(info, i); // turn info->tokens[i] back into heredoc '<<'
+		return (buf);
 	}
 }
 
@@ -221,7 +222,7 @@ void	expand_str_dollar3(t_info *info, int i, char *name, int end)
 	temp = realloc_token(info, i, ft_strlen(name) - (end - start + 1));
 	j = 0;
 //	printf("1:%s\n", info->tokens[i]);
-	printf("temp:%s\n", temp);
+//	printf("temp:%s\n", temp);
 	while (name[j] != '\0')
 	{
 		info->tokens[i][start] = name[j];

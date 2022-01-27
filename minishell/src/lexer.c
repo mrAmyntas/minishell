@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 17:09:15 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 14:07:11 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	store_char(t_info *info, int i)
 		ft_error(info, 1);
 	info->tokens[info->t_pos][0] = info->line_read[i];
 	info->tokens[info->t_pos][1] = '\0';
-	printf("store:%c i:%d\n", info->tokens[info->t_pos][0], info->t_pos);
+//	printf("store:%c i:%d\n", info->tokens[info->t_pos][0], info->t_pos);
 	info->t_pos++;
 	info->p_pos++;
 }
@@ -170,7 +170,7 @@ int	store_input(t_info *info)
 	int p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s i:%d\n", info->tokens[p], p);
+//		printf("stored = %s i:%d\n", info->tokens[p], p);
 		p++;
 	}
 	return (0);
