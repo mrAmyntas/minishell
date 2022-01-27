@@ -47,6 +47,13 @@ enum	e_tokentype
 	C_DGREATER = 130
 };
 
+typedef struct	s_sig
+{
+	int				sigint;
+	int				sigquit;
+}				t_sig;
+
+t_sig	g_sig;
 int		ft_find_command(t_info *info, char **command);
 int		ft_find_redirect(t_info *info);
 int		exec(t_info *info, char **command);

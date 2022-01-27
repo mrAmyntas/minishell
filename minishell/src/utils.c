@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 17:41:05 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 13:00:04 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,10 @@ int		ft_heredoc(t_info *info, int i)
 		buf = readline("> ");
 	}
 	free(buf);
+	close(fd);
+	fd = open("/tmp/minishell_heredoc", O_RDONLY);
+	dup2(fd, STDIN_FILENO);
+	close(fd);
 	return (1);
 }
 
@@ -141,14 +145,15 @@ int	redirect(t_info *info, int type, int i)
 		fd = open(info->tokens[i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (fd < 0)
 		return (fd);
-	if (type == 1 || type == 2)
-		dup2(fd, type - 1);
-	if (type == 3 || type == 4)
-		dup2(fd, type - 3);
-	return (fd);
+	if (type == 1)
+		dup2(fd, STDIN_FILENO);
+	if (type == 2 || type == 4)
+		dup2(fd, STDOUT_FILENO);
+	close(fd);
+	return (1);
 }
 
-char	**trim_command(t_info *info, int start, int end, int heredoc)
+char	**trim_command(t_info *info, int start, int end)
 {
 	char	**command;
 	int		i;
@@ -160,27 +165,18 @@ char	**trim_command(t_info *info, int start, int end, int heredoc)
 		start += 2;
 	while ((start + i) < end && !info->token_state[start + i])
 		i++;
-	//while ((start + i) < end && ft_strncmp(info->tokens[start + i], ">", ft_strlen(info->tokens[start + i]))
-	//	&& ft_strncmp(info->tokens[start + i], ">>", long_str(info->tokens[start + i], ">>"))
-	//	&& ft_strncmp(info->tokens[start + i], "<<", long_str(info->tokens[start + i], "<<")))
-	//	i++;
-	command = malloc(sizeof(char **) * (i + 1 + heredoc));
+	command = malloc(sizeof(char **) * (i + 1));
 	while (j < i)
 	{
 		command[j] = ft_strdup(info->tokens[start]);
 		j++;
 		start++;
 	}
-	if (heredoc)
-	{
-		command[j] = ft_strdup("/tmp/minishell_heredoc");
-		j++;
-	}
 	command[j] = NULL;
 	return (command);
 }
 
-int ft_pipe(t_info *info, int loc_pipe, int heredoc, int start)
+int ft_pipe(t_info *info, int loc_pipe, int start)
 {
 	int		id;
 	int		pipefd[2];
@@ -201,7 +197,7 @@ int ft_pipe(t_info *info, int loc_pipe, int heredoc, int start)
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], 1);
-		command = trim_command(info, start, loc_pipe, heredoc);
+		command = trim_command(info, start, loc_pipe);
 		ft_find_command(info, command);
 		exit(0);
 	}
@@ -235,8 +231,8 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 		i++;
 	}
 	if (locations[0] >= 0)
-		return (ft_pipe(info, locations[0], locations[1], start));
-	return (ft_find_command(info, trim_command(info, start, end, locations[1])));
+		return (ft_pipe(info, locations[0], start));
+	return (ft_find_command(info, trim_command(info, start, end)));
 }
 
 int	ft_find_command(t_info *info, char **command)
