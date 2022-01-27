@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 14:29:24 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 14:33:45 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ char	*expand_buf(t_info *info, char *buf, int i)
 		}
 		buf[j] = '\0';
 		reset_token(info, i); // turn info->tokens[i] back into heredoc '<<'
-		return (buf);
 	}
+	return (buf);
 }
 
 static char	*realloc_token(t_info *info, int i, int len)
