@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 14:18:13 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 14:35:17 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ int		ft_heredoc(t_info *info, int i)
 	while (buf && ft_strncmp(buf, info->tokens[i + 1], long_str(buf, info->tokens[i + 1])))
 	{
 		buf = expand_buf(info, buf, i);
-		printf("buf i:%s\n", buf);
 		write(fd, buf, ft_strlen(buf));
 		write(fd, "\n", 1);
 		free(buf);
