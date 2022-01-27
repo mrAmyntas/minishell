@@ -6,11 +6,64 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 17:07:29 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 13:27:31 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	add_dquotes(t_info *info, char *buf, int len, int i)
+{
+	int	j;
+
+	free(info->tokens[i]);
+	info->tokens[i] = NULL;
+	info->tokens[i] = (char *)malloc(sizeof(char) * len + 3);
+	info->tokens[i][0] = '\"';
+	info->tokens[i][len + 1] = '\"';
+	info->tokens[i][len + 2] = '\0';
+	j = 0;
+	while (buf[j] != '\0')
+	{
+		info->tokens[i][j + 1] = buf[j];
+		j++;
+	}
+}
+
+void	reset_token(t_info *info, int i)
+{
+	int	j;
+
+	free(info->tokens[i]);
+	info->tokens[i] = NULL;
+	info->tokens[i] = (char *)malloc(sizeof(char) * 3);
+	info->tokens[i][0] = '<';
+	info->tokens[i][1] = '<';
+	info->tokens[i][2] = '\0';
+	j = 0;
+}
+
+void	expand_buf(t_info *info, char *buf, int i)
+{
+	int	j;
+
+	if (info->token_state[i + 1] == 0)
+	{
+		add_dquotes(info, buf, ft_strlen(buf), i); // make info->tokens[i] = buf with dquotes around it
+		check_dollar_in_quotes(info, i);
+		free(buf);
+		buf = NULL;
+		buf = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) - 1));
+		j = 0;
+		while (info->tokens[i][j + 2] != '\0')
+		{
+			buf[j] = info->tokens[i][j + 1];
+			j++;
+		}
+		buf[j] = '\0';
+		reset_token(info, i); // turn info->tokens[i] back into heredoc '<<'
+	}
+}
 
 static char	*realloc_token(t_info *info, int i, int len)
 {

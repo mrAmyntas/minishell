@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 17:31:48 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 12:29:58 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	set_token_state(t_info *info)
 	{
 //		printf("in token_state: char: %c\n", info->tokens[i][0]);
 		if (info->tokens[i][0] == '\'' || info->tokens[i][0] == '\"')
-			info->token_state[i] = 0; // 0 = quoted
+			info->token_state[i] = 3; // 0 = quoted
 		else if (check_char_token(info, i, 0) != C_NORMAL && check_char_token(info, i, 0) != C_DOLLAR)
 			info->token_state[i] = 1; // 1 = special char
 		else
@@ -115,6 +115,7 @@ void	find_dgreater_dlesser(t_info *info)
 // add function to milans heredoc loop -> to make the expansion$ work
 // leaks: ???
 // exit status: if it is X -> a call to minishell should NOT reset it, if there is no new command
+// write naar stderr ipv printf met de errors
 int	parser(t_info *info)
 {
 	int	ret;
@@ -207,3 +208,18 @@ int	parser(t_info *info)
 	return (0);
 }
 
+/*
+bash-3.2$ www
+bash: www: command not found
+bash-3.2$ echo $?
+127
+bash-3.2$ www
+bash: www: command not found
+bash-3.2$ echo $? > t1 | echo $? > t2 | www | echo $? > t3
+bash: www: command not found
+bash-3.2$ cat t1
+127
+bash-3.2$ cat t2
+0
+bash-3.2$ cat t3
+0 */
