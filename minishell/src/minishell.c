@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 18:09:24 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/27 18:53:56 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,17 @@ int	minishell(t_info *info)
 		signal(SIGINT, &handle_sig);
 		signal(SIGQUIT, &handle_sig);
 		info->line_read = readline("\033[0;33mminishell: \033[0m");
-		g_sig.sigint = 0;
-		g_sig.sigquit = 0;
-		if (!info->line_read)
-		{	
+		if (!info->line_read && (!g_sig.sigint || !g_sig.sigquit))
+		{
 			write(1, "\b\b  \n", 5);
 			break;
+		}
+		g_sig.sigint = 0;
+		g_sig.sigquit = 0;
+		if (info->line_read == NULL)
+		{
+			write(1, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n", 18);
+			continue ;
 		}
 		if (!info->line_read[0])
 			continue ;
