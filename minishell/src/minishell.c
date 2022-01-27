@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 13:35:27 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/27 15:51:50 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,12 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 
 void	handle_sig(int signum)
 {
-	//printf("|%i|\n", signum);
 	if (signum == SIGINT)
-		write(1, "\n", 24);
+	{
+		ft_putstr_fd("\b\b  \n\033[0;33mminishell: \033[0m", 1);
+	}
+	if (signum == SIGQUIT)
+		write(1, "\b\b  \b\b", 6);
 	return ;
 }
 
@@ -112,8 +115,6 @@ int	minishell(t_info *info)
 		info->cmd = check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);//check_redirect(&info);
 		dup2(info->fd_std[0], 0);
 		dup2(info->fd_std[1], 1);
-		if (info->cmd == 15)
-			printf("minishell: command not found: %s\n", info->line_read);
 		if (info->line_read && *info->line_read)
     		add_history(info->line_read);
 		ft_free(info);

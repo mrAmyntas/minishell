@@ -30,16 +30,19 @@ OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 CFLAGS = #-fsanitize=address #-Wall -Werror -Wextra 
 
+LDFLAGS = -L/Users/mgroen/.brew/opt/readline/lib
+CPPFLAGS= -I/Users/mgroen/.brew/opt/readline/include
+
 all: $(LIBFT_NAME) $(OBJ_DIR) $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT_NAME)
-	$(CC) $(OBJ) $(CFLAGS) -ledit -Llibft -lft -lreadline -o $(NAME)
+	$(CC) $(OBJ) $(CFLAGS) -ledit -Llibft -lft -lreadline $(LDFLAGS) $(CPPFLAGS) -o $(NAME)
 
 $(OBJ_DIR):
 	mkdir $@
 
 $(OBJ): $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER_FILES)
-	$(CC) -c $(CFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
 $(LIBFT_NAME): $(HEADER_FILES) $(LIBFT_DIR)*.c $(LIBFT_DIR)
 	make -C libft
