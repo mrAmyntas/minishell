@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 17:18:00 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 15:54:24 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,8 @@ int	exec_cd(t_info *info, char **command)
 		return (0);
 	}
 	path = get_path(command[0], info->env);
-	info->exit_status = execve(path, command, info->env);
-	ft_error(info, 4);
+	ft_error(info, 0);
+	execve(path, command, info->env);
+	set_error(info, 127);
 	return (0);
 }

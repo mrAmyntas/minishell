@@ -6,26 +6,35 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/26 17:20:30 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 15:53:31 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	ft_error(t_info *info, int error_type)
+void	set_error(t_info *info, int error_type)
 {
-	if (error_type == 1)
-		perror("malloc error:");
-	if (error_type == 2)
+	info->exit_status = error_type;
+}
+
+void	ft_error(t_info *info, int i)
+{
+	if (i == -1)
 	{
-		info->exit_status = 1;
-		printf("minishell: unclosed quote\n");
+		printf("minishell: malloc error\n");
+		ft_free(info);
+		exit(1);
 	}
-	if (error_type == 3)
+	if (i == -2)
 	{
-		info->exit_status = 258;
+		printf("minishell: syntax error: unclosed quote\n");
+		ft_free(info);
+		minishell(info);
+	}
+	if (info->exit_status == 1)
+		printf("minishell: %s: No such file or directory\n", info->tokens[i]);
+	if (info->exit_status == 258)
 		printf("minishell: syntax error\n");
-	}
-	ft_free(info);
-	minishell(info);
+	info->exit_status = 0;
+	return ;
 }

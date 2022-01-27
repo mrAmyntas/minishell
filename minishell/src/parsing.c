@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 14:07:47 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 15:42:24 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	parse_quotes(t_info *info, int i)
 		if (info->tokens[i][0] == C_QUOTE || info->tokens[i][0] == C_DQUOTE)
 		{
 			ret = check_unclosed(info, i, i + 1); // i is pos quote 1, ret is pos quote 2
-			if (ret == -1)
-				return (-1);
+			if (ret == -2)
+				return (ret);
 			if (check_empty_quotes(info, i, ret) == 1) //removes the empty quotes from tokens
 				continue ;
 			n = check_before_after(info, i, ret); //n == 0: no normal chars before or after quotes  n == 1, only before, n = 2, after & before n = 3 only after
@@ -112,12 +112,11 @@ void	find_dgreater_dlesser(t_info *info)
 // to-do:
 // crash bij export
 // $?
-// add function to milans heredoc loop -> to make the expansion$ work
 // leaks: ???
 // exit status: if it is X -> a call to minishell should NOT reset it, if there is no new command
 // write naar stderr ipv printf met de errors
 // echo | -> syntax error
-// enter 'aa'$USER''bb' in heredoc crash
+
 int	parser(t_info *info)
 {
 	int	ret;
@@ -134,8 +133,8 @@ int	parser(t_info *info)
 	//            PARSING QUOTES
 	//----------------------------------------------
 	ret = parse_quotes(info, 0);
-	if (ret == -1)
-		ft_error(info, 2);
+	if (ret == -2)
+		ft_error(info, ret);
 	find_dgreater_dlesser(info);
 	p = 0;
 //	printf("---------------------------------------------------------------------------------------------\n");

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 14:07:59 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 15:50:24 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,10 @@ void	ft_free(t_info *info)
 		info->tokens[i] = NULL;
 		i++;
 	}
-	free(info->token_state);
 	free(info->tokens);
+	free(info->token_state);
 	info->t_pos = 0;
 	info->p_pos = 0;
-	info->exit_status = 0;
 }
 
 void	free_info(t_info *info)
@@ -94,10 +93,9 @@ int	minishell(t_info *info)
 	while (1 == 1)
 	{
 		signal(SIGINT, &handle_sig);
-//		printf("hoi\n");
 		signal(SIGQUIT, &handle_sig);
 		info->line_read = readline("\033[0;33mminishell: \033[0m");
-//		printf("hoi2\n");
+		printf("$? = %d\n", info->exit_status);
 		if (!info->line_read)
 			break ;
 		if (!info->line_read[0])
@@ -114,8 +112,8 @@ int	minishell(t_info *info)
 		info->cmd = check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);//check_redirect(&info);
 		dup2(info->fd_std[0], 0);
 		dup2(info->fd_std[1], 1);
-		if (info->cmd == 15)
-			printf("minishell: command not found: %s\n", info->line_read);
+//		if (info->cmd == 15)
+//			printf("minishell: command not found: %s\n", info->line_read);
 		if (info->line_read && *info->line_read)
     		add_history(info->line_read);
 		ft_free(info);

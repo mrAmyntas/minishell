@@ -112,6 +112,7 @@ int		check_redirect(t_info *info);
 int		check_redirect_v2(t_info *info, int start, int end, int inputfd); // weet nog niet welke t wordt
 char	*expand_buf(t_info *info, char *buf, int i);
 void	check_dollar_in_quotes(t_info *info, int i);
+void	set_error(t_info *info, int error_type);
 
 
 
