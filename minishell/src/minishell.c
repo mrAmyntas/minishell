@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 15:50:24 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 15:59:44 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,12 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 
 void	handle_sig(int signum)
 {
-	//printf("|%i|\n", signum);
 	if (signum == SIGINT)
-		write(1, "\n", 23);
+	{
+		ft_putstr_fd("\b\b  \n\033[0;33mminishell: \033[0m", 1);
+	}
+	if (signum == SIGQUIT)
+		write(1, "\b\b  \b\b", 6);
 	return ;
 }
 
