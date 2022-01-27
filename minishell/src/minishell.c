@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 13:34:07 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/27 13:35:27 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,9 @@ int	minishell(t_info *info)
 		signal(SIGINT, &handle_sig);
 		signal(SIGQUIT, &handle_sig);
 		info->line_read = readline("\033[0;33mminishell: \033[0m");
-		//if (!info->line_read)
-		//	break ;
-		if (!info->line_read || !info->line_read[0])
+		if (!info->line_read)
+			break ;
+		if (!info->line_read[0])
 			continue ;
 		lexer(info);
 		info->ret = parser(info);
