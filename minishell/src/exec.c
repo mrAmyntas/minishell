@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 15:54:17 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 17:38:53 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,9 @@ int	exec_export(t_info *info, char **command)
 				}
 				j++;
 				if (!command[i][j] || command[i][j] == '=')
-				{
-					printf("test8\n");
 					add_env(info, command[i]);
-				}
-				printf("test9\n");
 			}
-			printf("test10\n");
 		}
-		printf("test11\n");
 		i++;
 	}
 	i = 0;
@@ -162,8 +156,8 @@ int exec(t_info *info, char **command)
 		return (0);
 	}
     path = get_path(command[0], info->env);
-	ft_error(info, 0);
+	ft_error(info, 0, NULL);
 	execve(path, command, info->env);
-    set_error(info, 127);
+    set_error(info, 127, NULL);
 	exit (1);
 }

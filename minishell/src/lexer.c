@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 15:27:29 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 17:20:12 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	store_char(t_info *info, int i)
 //	}
 	info->tokens[info->t_pos] = (char *)malloc(sizeof(char) * 2);
 	if (info->tokens[info->t_pos] == NULL)
-		ft_error(info, -1);
+		ft_error(info, -1, NULL);
 	info->tokens[info->t_pos][0] = info->line_read[i];
 	info->tokens[info->t_pos][1] = '\0';
 //	printf("store:%c i:%d\n", info->tokens[info->t_pos][0], info->t_pos);
@@ -138,7 +138,7 @@ void	store_string(t_info *info, int i)
 	{
 		info->tokens[info->t_pos] = (char *)malloc(sizeof(char) * (i - info->p_pos + 1));
 		if (info->tokens[info->t_pos] == NULL)
-			ft_error(info, -1);
+			ft_error(info, -1, NULL);
 		j = 0;
 		while (info->p_pos < i)
 		{
@@ -184,10 +184,10 @@ void	lexer(t_info *info)
 	i = ft_strlen(info->line_read);
 	info->tokens = (char **)malloc(sizeof(char *) * (i + 2)); // could pre-scan inputline to malloc precise amount required
 	if (info->tokens == NULL)									//require +2 for the empty quote removal that jumps 2 in front to not go out of bound
-		ft_error(info, -1);
+		ft_error(info, -1, NULL);
 	info->token_state = (int *)malloc(sizeof(int) * (i + 2));
 	if (info->token_state == NULL)
-		ft_error(info, -1);
+		ft_error(info, -1, NULL);
 	while (i + 1 >= 0)
 	{
 		info->tokens[i + 1] = NULL;

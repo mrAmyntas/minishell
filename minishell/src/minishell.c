@@ -6,11 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-<<<<<<< HEAD
-/*   Updated: 2022/01/27 16:28:51 by bhoitzin      ########   odam.nl         */
-=======
-/*   Updated: 2022/01/27 16:48:43 by mgroen        ########   odam.nl         */
->>>>>>> c603dd84f5abeeeca8d837adad4ff4c7586050f0
+/*   Updated: 2022/01/27 17:39:36 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +109,6 @@ int	minishell(t_info *info)
 		signal(SIGINT, &handle_sig);
 		signal(SIGQUIT, &handle_sig);
 		info->line_read = readline("\033[0;33mminishell: \033[0m");
-		printf("$? = %d\n", info->exit_status);
 		if (!info->line_read)
 			break ;
 		if (!info->line_read[0])
@@ -127,6 +122,7 @@ int	minishell(t_info *info)
 		}
 		//if (!ft_strncmp(info->line_read, "break", 4)) // om leaks te checken
 		//	break ;
+		info->exit_status = 0;
 		info->cmd = check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);//check_redirect(&info);
 		dup2(info->fd_std[0], 0);
 		dup2(info->fd_std[1], 1);

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 15:42:24 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 17:20:12 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int	parser(t_info *info)
 	//----------------------------------------------
 	ret = parse_quotes(info, 0);
 	if (ret == -2)
-		ft_error(info, ret);
+		ft_error(info, ret, NULL);
 	find_dgreater_dlesser(info);
 	p = 0;
 //	printf("---------------------------------------------------------------------------------------------\n");

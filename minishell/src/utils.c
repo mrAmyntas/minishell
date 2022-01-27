@@ -6,11 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-<<<<<<< HEAD
-/*   Updated: 2022/01/27 16:46:59 by bhoitzin      ########   odam.nl         */
-=======
-/*   Updated: 2022/01/27 16:50:22 by mgroen        ########   odam.nl         */
->>>>>>> c603dd84f5abeeeca8d837adad4ff4c7586050f0
+/*   Updated: 2022/01/27 17:38:42 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,16 +147,17 @@ int	redirect(t_info *info, int type, int i)
 	if (type == 2 || type == 4)
 	{
 		if (fd < 0)
-<<<<<<< HEAD
-			set_error(info, 1);
-=======
-			ft_error(info, 3);
->>>>>>> c603dd84f5abeeeca8d837adad4ff4c7586050f0
-		else
-			dup2(fd, STDOUT_FILENO);
+		{
+			set_error(info, 258, info->tokens[i + 1]); // >
+			return (fd);
+		}
+		dup2(fd, STDOUT_FILENO);
 	}
 	if (fd < 0)
+	{
+		set_error(info, 1, info->tokens[i + 1]); // <
 		return (fd);
+	}
 	if (type == 1)
 		dup2(fd, STDIN_FILENO);
 	close(fd);
@@ -199,7 +196,7 @@ int ft_pipe(t_info *info, int loc_pipe, int start)
 	pipe(pipefd);
 	id = fork();
 	if (id == -1)
-		set_error(info, 1);
+		set_error(info, 13, NULL);
 	if (id)
 	{
 		wait(&id);
@@ -240,17 +237,15 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 			fd[1] = redirect(info, 4 , i);
 		if (!ft_strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")) && info->token_state[i])
 			locations[1] = ft_heredoc(info, i);
+		if (fd[1] < 0)
+			return (1);
 		i++;
 	}
 	if (fd[0] < 0)
-<<<<<<< HEAD
-		set_error(info, 1);
-=======
 	{
-		ft_error(info, 4);
-		return(1);
+		ft_error(info, 0, NULL); // perror
+		return (1);
 	}
->>>>>>> c603dd84f5abeeeca8d837adad4ff4c7586050f0
 	if (locations[0] >= 0)
 		return (ft_pipe(info, locations[0], start));
 	return (ft_find_command(info, trim_command(info, start, end)));
@@ -274,5 +269,7 @@ int	ft_find_command(t_info *info, char **command)
 		return (exec_env(info));
 	if (!ft_strncmp(command[0], "exit", long_str(command[0], "exit")))
 		exit(0);
+	set_error(info, 127, NULL);
+	ft_error(info, 0, command[0]);
 	return (15);
 }

@@ -59,7 +59,7 @@ int		ft_find_redirect(t_info *info);
 int		exec(t_info *info, char **command);
 void	lexer(t_info *info);
 void	ft_init_struct(t_info *info, char **av, char **env);
-void	ft_error(t_info *info, int error_type);
+void	ft_error(t_info *info, int i, char *cmd);
 int		store_input(t_info *info);
 int		check_char(t_info *info, int i);
 void    add_env(t_info *info, char *new_var);
@@ -112,7 +112,7 @@ int		check_redirect(t_info *info);
 int		check_redirect_v2(t_info *info, int start, int end, int inputfd); // weet nog niet welke t wordt
 char	*expand_buf(t_info *info, char *buf, int i);
 void	check_dollar_in_quotes(t_info *info, int i);
-void	set_error(t_info *info, int error_type);
+void	set_error(t_info *info, int error_type, char *str);
 
 
 
