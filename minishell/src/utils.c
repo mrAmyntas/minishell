@@ -6,7 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2022/01/27 16:46:59 by bhoitzin      ########   odam.nl         */
+=======
+/*   Updated: 2022/01/27 16:50:22 by mgroen        ########   odam.nl         */
+>>>>>>> c603dd84f5abeeeca8d837adad4ff4c7586050f0
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,17 +148,21 @@ int	redirect(t_info *info, int type, int i)
 		fd = open(info->tokens[i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (type == 4)
 		fd = open(info->tokens[i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
+	if (type == 2 || type == 4)
+	{
+		if (fd < 0)
+<<<<<<< HEAD
+			set_error(info, 1);
+=======
+			ft_error(info, 3);
+>>>>>>> c603dd84f5abeeeca8d837adad4ff4c7586050f0
+		else
+			dup2(fd, STDOUT_FILENO);
+	}
 	if (fd < 0)
 		return (fd);
 	if (type == 1)
 		dup2(fd, STDIN_FILENO);
-	if (type == 2 || type == 4)
-	{
-		if (fd < 0)
-			set_error(info, 1);
-		else
-			dup2(fd, STDOUT_FILENO);
-	}
 	close(fd);
 	return (1);
 }
@@ -235,7 +243,14 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 		i++;
 	}
 	if (fd[0] < 0)
+<<<<<<< HEAD
 		set_error(info, 1);
+=======
+	{
+		ft_error(info, 4);
+		return(1);
+	}
+>>>>>>> c603dd84f5abeeeca8d837adad4ff4c7586050f0
 	if (locations[0] >= 0)
 		return (ft_pipe(info, locations[0], start));
 	return (ft_find_command(info, trim_command(info, start, end)));
