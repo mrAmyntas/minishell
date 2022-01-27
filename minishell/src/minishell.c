@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 15:51:50 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/27 15:56:57 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,10 @@ int	minishell(t_info *info)
 	while (1 == 1)
 	{
 		signal(SIGINT, &handle_sig);
+//		printf("hoi\n");
 		signal(SIGQUIT, &handle_sig);
 		info->line_read = readline("\033[0;33mminishell: \033[0m");
+//		printf("hoi2\n");
 		if (!info->line_read)
 			break ;
 		if (!info->line_read[0])
@@ -126,7 +128,7 @@ int main(int ac, char **av, char **env)
 	t_info	info;
 
 	ft_init_struct(&info, av, env);
-	printf("\033[1;33mWelcome! You can exit by pressing Ctrl+C at any time...\033[1;33m\n");
+	printf("\033[1;33mWelcome! You can exit by pressing Ctrl+D at any time...\033[1;33m\n");
 	minishell(&info);
 	free_info(&info);
 	//system("leaks minishell");

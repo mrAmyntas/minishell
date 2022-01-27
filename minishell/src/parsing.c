@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 12:29:58 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/27 14:07:47 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ void	find_dgreater_dlesser(t_info *info)
 // leaks: ???
 // exit status: if it is X -> a call to minishell should NOT reset it, if there is no new command
 // write naar stderr ipv printf met de errors
+// echo | -> syntax error
+// enter 'aa'$USER''bb' in heredoc crash
 int	parser(t_info *info)
 {
 	int	ret;
@@ -196,15 +198,15 @@ int	parser(t_info *info)
 	//            REMOVE QUOTES
 	//----------------------------------------------
 	remove_quotes(info);
-	printf("---------------------------------------------------------------------------------------------\n");
-	printf("after parser\n");
+//	printf("---------------------------------------------------------------------------------------------\n");
+//	printf("after parser\n");
 	p = 0;
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s state = %d\n", info->tokens[p], info->token_state[p]);
+//		printf("stored = %s state = %d\n", info->tokens[p], info->token_state[p]);
 		p++;
 	}
-	printf("---------------------------------------------------------------------------------------------\n");
+//	printf("---------------------------------------------------------------------------------------------\n");
 	return (0);
 }
 
