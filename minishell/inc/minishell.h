@@ -28,6 +28,7 @@ typedef	struct	s_info
 	int			fd_std[2];
 	int			*token_state;
 	int			exit_status;
+	char		*exit_msg;
 }				t_info;
 
 enum	e_tokentype
@@ -59,7 +60,7 @@ int		ft_find_redirect(t_info *info);
 int		exec(t_info *info, char **command);
 void	lexer(t_info *info);
 void	ft_init_struct(t_info *info, char **av, char **env);
-void	ft_error(t_info *info, int i, char *cmd);
+void	ft_error(t_info *info, int i);
 int		store_input(t_info *info);
 int		check_char(t_info *info, int i);
 void    add_env(t_info *info, char *new_var);
