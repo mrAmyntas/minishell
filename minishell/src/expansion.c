@@ -6,11 +6,59 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 18:00:12 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/28 12:37:41 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+static char	*realloc_token(t_info *info, int i, int len)
+{
+	char *temp;
+
+	if (len < 0)
+		len = 0;
+	len = ft_strlen(info->tokens[i]) + len + 1;
+	temp = (char *)malloc(sizeof(char) * len);
+	if (temp == NULL)
+		ft_error(info, -1);
+	ft_strlcpy(temp, info->tokens[i], ft_strlen(info->tokens[i]) + 1);
+	free (info->tokens[i]);
+	info->tokens[i] = (char *)malloc(sizeof(char) * len);
+	if (info->tokens[i] == NULL)
+		ft_error(info, -1);
+	ft_strlcpy(info->tokens[i], temp, ft_strlen(temp) + 1);
+//	printf("after realloc_token:\ntemp:%s\ninfo->tokens[i]:%s\n", temp, info->tokens[i]);
+	return (temp);
+}
+
+void	expand_ex_status_str(t_info *info, int i, int j, int n) // j = pos $ n = j + 2
+{
+	char	*temp;
+	char	*str;
+	int		k;
+
+	temp = realloc_token(info, i, 10);
+	str = ft_itoa(info->exit_status);
+	k = 0;
+	while (str[k] != '\0')
+	{
+		info->tokens[i][j] = str[k];
+		k++;
+		j++;
+	}
+	while (temp[n] != '\0')
+	{
+		info->tokens[i][j] = temp[n];
+		n++;
+		j++;
+	}
+	info->tokens[i][j] = '\0';
+	free(str);
+	str = NULL;
+	free(temp);
+	temp = NULL;
+}
 
 void	add_dquotes(t_info *info, char *buf, int len, int i)
 {
@@ -64,26 +112,6 @@ char	*expand_buf(t_info *info, char *buf, int i)
 		reset_token(info, i); // turn info->tokens[i] back into heredoc '<<'
 	}
 	return (buf);
-}
-
-static char	*realloc_token(t_info *info, int i, int len)
-{
-	char *temp;
-
-	if (len < 0)
-		len = 0;
-	len = ft_strlen(info->tokens[i]) + len + 1;
-	temp = (char *)malloc(sizeof(char) * len);
-	if (temp == NULL)
-		ft_error(info, -1);
-	ft_strlcpy(temp, info->tokens[i], ft_strlen(info->tokens[i]) + 1);
-	free (info->tokens[i]);
-	info->tokens[i] = (char *)malloc(sizeof(char) * len);
-	if (info->tokens[i] == NULL)
-		ft_error(info, -1);
-	ft_strlcpy(info->tokens[i], temp, ft_strlen(temp) + 1);
-//	printf("after realloc_token:\ntemp:%s\ninfo->tokens[i]:%s\n", temp, info->tokens[i]);
-	return (temp);
 }
 
 void	remove_dollar(t_info *info, int i)
@@ -320,6 +348,8 @@ void	check_dollar_in_quotes(t_info *info, int i)
 			//k = j;
 			while (info->tokens[i][j] != '\"')
 			{
+				if (info->tokens[i][j] == '$' && info->tokens[i][j + 1] == '?')
+					expand_ex_status_str(info, i, j, j + 2);
 				if (info->tokens[i][j] == '$')
 					expand_str_dollar(info, i, j);
 				j++;

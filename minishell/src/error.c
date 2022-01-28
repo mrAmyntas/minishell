@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 13:09:45 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/28 13:17:22 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,27 @@ void	set_error(t_info *info, int error_type, char *str)
 	ft_strlcpy(info->exit_msg, str, i + 1);
 	info->exit_status = error_type;
 	if (error_type == 258)
-		printf("minishell: syntax error\n");
+		write(2, "minishell: syntax error near unexpected token `newline'\n", 57);
 }
 
 void	ft_error(t_info *info, int i)
 {
-	//printf("check\n");
+//	printf("check\n");
 	if (i == -1)
 	{
-		printf("minishell: malloc error\n");
+		write(2, "minishell: malloc error\n", 25);
 		ft_free(info);
 		exit(1);
 	}
 	else if (i == -2)
 	{
-		printf("minishell: syntax error: unclosed quote\n");
+		write(2,"minishell: syntax error: unclosed quote\n", 41);
+		ft_free(info);
+		minishell(info);
+	}
+	else if (i == -3)
+	{
+		write(2,"minishell: syntax error: \n", 41);
 		ft_free(info);
 		minishell(info);
 	}

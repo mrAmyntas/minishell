@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 13:13:15 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/28 13:17:13 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,8 +155,11 @@ int	redirect(t_info *info, int type, int i)
 	}
 	if (fd < 0)
 	{
-		set_error(info, 258, info->tokens[i + 1]); // <
-//		return (fd);
+		if (info->tokens[i + 1] == NULL)
+			set_error(info, 258, NULL); // <
+		else
+			set_error(info, 1, info->tokens[i + 1]);
+		return (fd);
 	}
 	if (type == 1)
 		dup2(fd, STDIN_FILENO);
@@ -244,7 +247,7 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	}
 	if (fd[0] < 0)
 	{
-		ft_error(info, 0); // perror
+		ft_error(info, 0); // perror no such file or dir
 		return (1);
 	}
 	if (locations[0] >= 0)
@@ -270,7 +273,10 @@ int	ft_find_command(t_info *info, char **command)
 		return (exec_env(info));
 	if (!ft_strncmp(command[0], "exit", long_str(command[0], "exit")))
 		exit(0);
-	set_error(info, 127, command[0]);
-	ft_error(info, 0);
+	if (command[0])
+	{
+		set_error(info, 127, command[0]);
+		ft_error(info, 0);
+	}
 	return (15);
 }

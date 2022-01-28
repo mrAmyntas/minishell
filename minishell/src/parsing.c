@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 18:00:34 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/28 13:14:51 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	parse_quotes(t_info *info, int i)
 		{
 			ret = check_unclosed(info, i, i + 1); // i is pos quote 1, ret is pos quote 2
 			if (ret == -2)
-				return (ret);
+				ft_error(info, ret);
 			if (check_empty_quotes(info, i, ret) == 1) //removes the empty quotes from tokens
 				continue ;
 			n = check_before_after(info, i, ret); //n == 0: no normal chars before or after quotes  n == 1, only before, n = 2, after & before n = 3 only after
@@ -115,26 +115,36 @@ void	find_dgreater_dlesser(t_info *info)
 // leaks: ???
 // exit status: if it is X -> a call to minishell should NOT reset it, if there is no new command
 // write naar stderr ipv printf met de errors
-// echo | -> syntax error
+// echo | -> geen syntax error
+
+void	unclosed_pipe(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (info->tokens[i] != NULL)
+		i++;
+	if (info->tokens[i] == '|')
+		ft_error(info, -3);
+}
 
 int	parser(t_info *info)
 {
 	int	ret;
 
 	int p = 0;
-//	printf("---------------------------------------------------------------------------------------------\n");
-//	printf("after lex\n");
+	printf("---------------------------------------------------------------------------------------------\n");
+	printf("after lex\n");
 	while (info->tokens[p] != NULL)
 	{
-//		printf("stored = %s\n", info->tokens[p]);
+		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	//----------------------------------------------
 	//            PARSING QUOTES
 	//----------------------------------------------
-	ret = parse_quotes(info, 0);
-	if (ret == -2)
-		ft_error(info, ret);
+	parse_quotes(info, 0);
+	unclosed_pipe(info);
 	find_dgreater_dlesser(info);
 	p = 0;
 //	printf("---------------------------------------------------------------------------------------------\n");
