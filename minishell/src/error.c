@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 18:09:09 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/28 13:09:45 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	set_error(t_info *info, int error_type, char *str)
 
 void	ft_error(t_info *info, int i)
 {
-	printf("check\n");
+	//printf("check\n");
 	if (i == -1)
 	{
 		printf("minishell: malloc error\n");
