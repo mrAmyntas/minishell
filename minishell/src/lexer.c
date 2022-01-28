@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 18:00:23 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/28 15:28:07 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,61 +14,61 @@
 
 #include "../inc/minishell.h"
 
-char	*ft_remove_spaces(t_info *info)
+char	*ft_remove_spaces(t_info *info, char *line_read)
 {
 	int		i;
 	int		j;
 	char	*buff;
 
 	i = 0;
-	while (info->line_read[i] == ' ')
+	while (line_read[i] == ' ')
 		i++;
 	if (i == 0)
-		return (info->line_read);
-	j = ft_strlen(info->line_read);
+		return (line_read);
+	j = ft_strlen(line_read);
 	buff = (char *)malloc((sizeof(char) * j) - i + 1);
 	j = 0;
-	while (info->line_read[i] != '\0')
+	while (line_read[i] != '\0')
 	{
-		buff[j] = info->line_read[i];
+		buff[j] = line_read[i];
 		i++;
 		j++;
 	}
 	buff[j] = '\0';
-	free(info->line_read);
-	info->line_read = NULL;
+	free(line_read);
+	line_read = NULL;
 	return (buff);
 }
 
-int	check_char(t_info *info, int i)
+int	check_char(t_info *info, int i, char *line_read)
 {
-	if (info->line_read[i] == '<')
+	if (line_read[i] == '<')
 	{
-		if (info->line_read[i + 1] == '<')
+		if (line_read[i + 1] == '<')
 			return (C_DLESSER);
 		return (C_LESSER);
 	}
-	if (info->line_read[i] == '>')
+	if (line_read[i] == '>')
 	{
-		if (info->line_read[i + 1] == '>')
+		if (line_read[i + 1] == '>')
 			return (C_DGREATER);
 		return (C_GREATER);
 	}
-	if (info->line_read[i] == '|')
+	if (line_read[i] == '|')
 		return (C_PIPE);
-	if (info->line_read[i] == '$')
+	if (line_read[i] == '$')
 		return (C_DOLLAR);
-//	if (info->line_read[i] == ';')
+//	if (line_read[i] == ';')
 //		return (C_SEMICOLON);
-//	if (info->line_read[i] == '\\')
+//	if (line_read[i] == '\\')
 //		return (C_BACKSLASH);
-	if (info->line_read[i] == '\'')
+	if (line_read[i] == '\'')
 		return (C_QUOTE);
-	if (info->line_read[i] == '\"')
+	if (line_read[i] == '\"')
 		return (C_DQUOTE);
-	if (info->line_read[i] == '\n')
+	if (line_read[i] == '\n')
 		return (C_NEWLINE);
-	if (info->line_read[i] == ' ')
+	if (line_read[i] == ' ')
 		return (C_SPACE);
 	return (C_NORMAL);
 }
@@ -106,7 +106,7 @@ int	check_char_token(t_info *info, int i, int j)
 	return (C_NORMAL);
 }
 
-void	store_char(t_info *info, int i)
+void	store_char(t_info *info, int i, char *line_read)
 {
 	int j;
 	char *temp;
@@ -121,20 +121,20 @@ void	store_char(t_info *info, int i)
 	info->tokens[info->t_pos] = (char *)malloc(sizeof(char) * 2);
 	if (info->tokens[info->t_pos] == NULL)
 		ft_error(info, -1);
-	info->tokens[info->t_pos][0] = info->line_read[i];
+	info->tokens[info->t_pos][0] = line_read[i];
 	info->tokens[info->t_pos][1] = '\0';
 //	printf("store:%c i:%d\n", info->tokens[info->t_pos][0], info->t_pos);
 	info->t_pos++;
 	info->p_pos++;
 }
 
-void	store_string(t_info *info, int i)
+void	store_string(t_info *info, int i, char *line_read)
 {
 	int	j;
 
 	if (i == 0)
-		return (store_char(info, i));
-	if (check_char(info, i - 1) == 0 || info->p_pos == 0)
+		return (store_char(info, i, line_read));
+	if (check_char(info, i - 1, line_read) == 0 || info->p_pos == 0)
 	{
 		info->tokens[info->t_pos] = (char *)malloc(sizeof(char) * (i - info->p_pos + 1));
 		if (info->tokens[info->t_pos] == NULL)
@@ -142,31 +142,31 @@ void	store_string(t_info *info, int i)
 		j = 0;
 		while (info->p_pos < i)
 		{
-			info->tokens[info->t_pos][j] = info->line_read[info->p_pos];
+			info->tokens[info->t_pos][j] = line_read[info->p_pos];
 			info->p_pos++;
 			j++;
 		}
 		info->tokens[info->t_pos][j] = '\0';
 		info->t_pos++;
 	}
-	if (info->line_read[i] != '\0' )
-		store_char(info, i);
+	if (line_read[i] != '\0' )
+		store_char(info, i, line_read);
 }
 
-int	store_input(t_info *info)
+int	store_input(t_info *info, char *line_read)
 {
 	int	i;
 	int j;
 
 	i = 0;
-	while (info->line_read[i] != '\0')
+	while (line_read[i] != '\0')
 	{
-		info->char_type = check_char(info, i);
+		info->char_type = check_char(info, i, line_read);
 		if (info->char_type != 0)
-			store_string(info, i);
+			store_string(info, i, line_read);
 		i++;
 	}
-	store_string(info, i);
+	store_string(info, i, line_read);
 	int p = 0;
 	while (info->tokens[p] != NULL)
 	{
@@ -176,12 +176,12 @@ int	store_input(t_info *info)
 	return (0);
 }
 
-void	lexer(t_info *info)
+void	lexer(t_info *info, char *line_read)
 {
 	int	i;
 
-	info->line_read = ft_remove_spaces(info); // leading spaces are ignored
-	i = ft_strlen(info->line_read);
+	line_read = ft_remove_spaces(info, line_read); // leading spaces are ignored
+	i = ft_strlen(line_read);
 	info->tokens = (char **)malloc(sizeof(char *) * (i + 2)); // could pre-scan inputline to malloc precise amount required
 	if (info->tokens == NULL)									//require +2 for the empty quote removal that jumps 2 in front to not go out of bound
 		ft_error(info, -1);
@@ -194,5 +194,5 @@ void	lexer(t_info *info)
 		info->token_state[i + 1] = -1;
 		i--;
 	}
-	store_input(info); // interpret line_read
+	store_input(info, line_read); // interpret line_read
 }

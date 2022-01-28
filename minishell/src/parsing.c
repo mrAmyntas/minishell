@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 13:14:51 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/28 16:30:00 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,12 @@ void	find_dgreater_dlesser(t_info *info)
 // exit status: if it is X -> a call to minishell should NOT reset it, if there is no new command
 // write naar stderr ipv printf met de errors
 // echo | -> geen syntax error
-
+// cntrl - D werkt niet direct na ctrl-C of cntr-backslash
+// cat infinite loop
+// set SHLVL = 2
+// cd heeft leaks (cd ..)
+// cntrl - L after a up or down?
+// scrambling of terminal with up/down has to do with whatever is that readline color shit
 void	unclosed_pipe(t_info *info)
 {
 	int	i;
@@ -124,20 +129,23 @@ void	unclosed_pipe(t_info *info)
 	i = 0;
 	while (info->tokens[i] != NULL)
 		i++;
-	if (info->tokens[i] == '|')
-		ft_error(info, -3);
+	if (i != 0)
+	{
+		if (info->tokens[i - 1][0] == '|')
+			ft_error(info, -3);
+	}
 }
 
-int	parser(t_info *info)
+void	parser(t_info *info)
 {
 	int	ret;
 
 	int p = 0;
-	printf("---------------------------------------------------------------------------------------------\n");
-	printf("after lex\n");
+//	printf("---------------------------------------------------------------------------------------------\n");
+//	printf("after lex\n");
 	while (info->tokens[p] != NULL)
 	{
-		printf("stored = %s\n", info->tokens[p]);
+//		printf("stored = %s\n", info->tokens[p]);
 		p++;
 	}
 	//----------------------------------------------
@@ -216,7 +224,6 @@ int	parser(t_info *info)
 		p++;
 	}
 //	printf("---------------------------------------------------------------------------------------------\n");
-	return (0);
 }
 
 /*

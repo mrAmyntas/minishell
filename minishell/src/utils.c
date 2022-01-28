@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 13:17:13 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/28 14:11:06 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,7 @@ int ft_pipe(t_info *info, int loc_pipe, int start, int fd[2])
 	if (id)
 	{
 		wait(&id);
-		close(pipefd[1]);
+		close(pipefd[1]); // input redirect 
 		dup2(pipefd[0], 0);
 		return (check_redirect_v2(info, loc_pipe + 1, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]));
 	}
@@ -247,7 +247,7 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	}
 	if (fd[0] < 0)
 	{
-		ft_error(info, 0); // perror no such file or dir
+		ft_error(info, 1); // perror no such file or dir
 		return (1);
 	}
 	if (locations[0] >= 0)

@@ -36,7 +36,7 @@ CPPFLAGS= -I$(HOME)/.brew/opt/readline/include
 all: $(LIBFT_NAME) $(OBJ_DIR) $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT_NAME)
-	$(CC) $(OBJ) $(CFLAGS) -ledit -Llibft -lft -lreadline $(LDFLAGS) $(CPPFLAGS) -o $(NAME)
+	$(CC) $(OBJ) $(CFLAGS) -Llibft -lft -lreadline $(LDFLAGS) $(CPPFLAGS) -o $(NAME)
 
 $(OBJ_DIR):
 	mkdir $@

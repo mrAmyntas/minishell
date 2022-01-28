@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 12:51:55 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/28 18:15:31 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void	ft_free(t_info *info)
 	int	i;
 
 	i = 0;
-	free(info->line_read);
-	info->line_read = NULL;
 	while (info->tokens[i] != NULL)
 	{
 		free(info->tokens[i]);
@@ -60,7 +58,6 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	len = 10;
 	info->av = av;
 	get_env(info, env);
-	info->line_read = NULL;
 	info->cmd = 0;
 	info->redirect = 0;
 	info->ret = 0;
@@ -84,68 +81,56 @@ void	handle_sig(int signum)
 {
 	if (signum == SIGINT)
 	{
-		if (g_sig.sigquit)
-			ft_putstr_fd("\b\b\b   \n\033[0;33mminishell: \033[0m", 1);
-		else if (g_sig.sigint)
-			ft_putstr_fd("\b\b  \n\033[0;33mminishell: \033[0m", 1);
-		else if (!g_sig.sigint)
-			ft_putstr_fd("\b \n\033[0;33mminishell: \033[0m", 1);
+		rl_on_new_line();
+		rl_redisplay();
+		ft_putstr_fd("  \b\b\n\033[0;33mminishell: \033[0m", 1);
 		g_sig.sigint = 1;
 	}
 	if (signum == SIGQUIT)
 	{
-		if (g_sig.sigquit)
-			write(1, "\b\b  \b\b", 6);
+		rl_on_new_line();
+		rl_redisplay();
+		write(1, "  \b\b", 5);
 		g_sig.sigquit = 1;
 	}
 }
 
 int	minishell(t_info *info)
 {
+	static char *line_read = (char *)NULL;
+	
 	while (1 == 1)
 	{
 		signal(SIGINT, &handle_sig);
 		signal(SIGQUIT, &handle_sig);
-		info->line_read = readline("\033[0;33mminishell: \033[0m");
-		if (!info->line_read && !g_sig.sigint && !g_sig.sigquit)
-		{	
-			write(1, "\b\b  \n", 5);
-			break;
-		}
-		if (!info->line_read)
+		g_sig.sigquit = 0;
+		g_sig.sigint = 0;
+		if (line_read)
 		{
-			rl_redisplay();
-			g_sig.sigquit = 0;
-			g_sig.sigint = 0;
-			continue;
+			free(line_read);
+			line_read = (char *)NULL;
 		}
-		if (!info->line_read[0])
+		line_read = readline("\033[0;33mminishell: \033[0m");
+		if (!line_read && !g_sig.sigint && !g_sig.sigquit)
 		{
-			if (g_sig.sigint || g_sig.sigquit)
-			{
-				printf("remove newline ???\n");
-			}
-			g_sig.sigquit = 0;
-			g_sig.sigint = 0;
+			write(1, "exit\n", 6);
+			break ;
+		}
+		if (!line_read || !line_read[0])
 			continue ;
-		}
-		lexer(info);
-		info->ret = parser(info);
-		if (info->ret == -1 || info->tokens[0] == NULL)
+		lexer(info, line_read);
+		parser(info);
+		if (info->tokens[0] == NULL)
 		{
 			ft_free(info);
 			continue ;
 		}
-		//if (!ft_strncmp(info->line_read, "break", 4)) // om leaks te checken
-		//	break ;
 		info->exit_status = 0;
 		info->cmd = check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);//check_redirect(&info);
 		dup2(info->fd_std[0], 0);
 		dup2(info->fd_std[1], 1);
-//		if (info->cmd == 15)
-//			printf("minishell: command not found: %s\n", info->line_read);
-		if (info->line_read && *info->line_read)
-    		add_history(info->line_read);
+		if (line_read && *line_read)
+    		add_history(line_read);
 		ft_free(info);
 	}
 	return (info->cmd);
@@ -157,11 +142,12 @@ int main(int ac, char **av, char **env)
 	g_sig.sigint = 0;
 	g_sig.sigquit = 0;
 	ft_init_struct(&info, av, env);
-	printf("\033[1;33mWelcome! You can exit by pressing Ctrl+D at any time...\033[1;33m\n");
+	//printf("\033[1;33mWelcome! You can exit by pressing Ctrl+D at any time...\033[1;33m\n");
+	printf("\033[1;33mWelcome Milan. History gefixt, ook de newlines na een enter zijn weg cntrl-D stopt nu altijd in 1 keer! Enige verschil is de output van bash met cmd exit en cntrl-D versus onze  ..\033[1;33m\n");
 	minishell(&info);
 	free_info(&info);
 	//system("leaks minishell");
-//	rl_clear_history();
+	rl_clear_history();
 	return (0);
 }
 

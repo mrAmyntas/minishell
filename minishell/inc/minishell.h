@@ -9,11 +9,11 @@
 # include <fcntl.h>
 # include <signal.h>
 # include "../libft/libft.h"
+# include <dirent.h>
 
 typedef	struct	s_info
 {
 	int			ret;
-	char		*line_read;
 	int			cmd;
 	int			redirect;
 	char		**tokens;
@@ -58,14 +58,12 @@ t_sig	g_sig;
 int		ft_find_command(t_info *info, char **command);
 int		ft_find_redirect(t_info *info);
 int		exec(t_info *info, char **command);
-void	lexer(t_info *info);
+void	lexer(t_info *info, char *line_read);
 void	ft_init_struct(t_info *info, char **av, char **env);
 void	ft_error(t_info *info, int i);
-int		store_input(t_info *info);
-int		check_char(t_info *info, int i);
 void    add_env(t_info *info, char *new_var);
 void    sort_export(t_info *info);
-int		parser(t_info *info);
+void	parser(t_info *info);
 int		check_char_token(t_info *info, int i, int j);
 void    get_env(t_info *info, char **env);
 int		exec_cd(t_info *info, char **command);
@@ -114,6 +112,9 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd); // weet n
 char	*expand_buf(t_info *info, char *buf, int i);
 void	check_dollar_in_quotes(t_info *info, int i);
 void	set_error(t_info *info, int error_type, char *str);
+void	check_nosuchdir(t_info *info);
+void	ft_free(t_info *info);
+void	free_info(t_info *info);
 
 
 

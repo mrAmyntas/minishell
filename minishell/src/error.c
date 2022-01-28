@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 13:17:22 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/28 15:53:04 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	set_error(t_info *info, int error_type, char *str)
 {
 	int	i;
 
+//	printf("check set_error\n");
 	i = ft_strlen(str);
 	if (info->exit_msg != NULL)
 	{
@@ -31,7 +32,7 @@ void	set_error(t_info *info, int error_type, char *str)
 
 void	ft_error(t_info *info, int i)
 {
-//	printf("check\n");
+//	printf("check fT_error\n");
 	if (i == -1)
 	{
 		write(2, "minishell: malloc error\n", 25);
@@ -43,12 +44,16 @@ void	ft_error(t_info *info, int i)
 		write(2,"minishell: syntax error: unclosed quote\n", 41);
 		ft_free(info);
 		minishell(info);
+		rl_clear_history();
+		exit(1);
 	}
 	else if (i == -3)
 	{
-		write(2,"minishell: syntax error: \n", 41);
+		write(2,"minishell: syntax error: no process after pipe\n", 48);
 		ft_free(info);
 		minishell(info);
+		rl_clear_history();
+		exit(1);
 	}
 	else if (info->exit_status == 1)
 	{
@@ -64,6 +69,9 @@ void	ft_error(t_info *info, int i)
 	else if (info->exit_status == 258)
 		return;
 	else
+	{
+		printf("check2 i:%d\n", i);
 		info->exit_status = 0;
+	}
 	return ;
 }

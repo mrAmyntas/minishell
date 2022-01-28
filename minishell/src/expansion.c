@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 12:37:41 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/28 15:08:01 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,18 @@ static char	*realloc_token(t_info *info, int i, int len)
 	len = ft_strlen(info->tokens[i]) + len + 1;
 	temp = (char *)malloc(sizeof(char) * len);
 	if (temp == NULL)
+	{
+		printf("test1\n");
 		ft_error(info, -1);
+	}
 	ft_strlcpy(temp, info->tokens[i], ft_strlen(info->tokens[i]) + 1);
 	free (info->tokens[i]);
 	info->tokens[i] = (char *)malloc(sizeof(char) * len);
 	if (info->tokens[i] == NULL)
+	{
+		printf("test2\n");
 		ft_error(info, -1);
+	}
 	ft_strlcpy(info->tokens[i], temp, ft_strlen(temp) + 1);
 //	printf("after realloc_token:\ntemp:%s\ninfo->tokens[i]:%s\n", temp, info->tokens[i]);
 	return (temp);

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 18:00:29 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/28 15:54:33 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ char	*ft_strjoinbas(t_info *info, char *s1, char const *s2)
 	x = ft_strlen(s1) + ft_strlen(s2) + 1;
 	buff = (char*)malloc(sizeof(char) * x);
 	if (buff == NULL)
+	{
+		printf("test8\n");
 		ft_error(info, -1);
+	}
 	x = 0;
 	while (s1[x] != '\0')
 	{
@@ -132,4 +135,30 @@ int	check_name(t_info *info, int i, int j)
 			j++;
 	}
 	return (j);
+}
+
+void	check_nosuchdir(t_info *info)
+{
+	int	i;
+	DIR	*ret;
+
+	i = 0;
+	while (info->tokens[i] != NULL)
+	{
+		if ((ft_strncmp(info->tokens[i], "cd", 2) == 0 && ft_strlen(info->tokens[i]) == 2))
+		{
+			ret = opendir(info->tokens[i + 1]);
+			if (ret == NULL)
+			{
+				set_error(info, 1, info->tokens[i + 1]);
+				ft_error(info, 1);
+				ft_free(info);
+				minishell(info);
+				rl_clear_history();
+				exit(1);
+			}
+			closedir(ret);
+		}
+		i++;
+	}
 }
