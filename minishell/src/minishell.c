@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 12:19:26 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/28 12:27:39 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,11 @@ void	handle_sig(int signum)
 {
 	if (signum == SIGINT)
 	{
-		if (g_sig.sigint)
+		if (g_sig.sigquit)
+			ft_putstr_fd("\b\b\b   \n\033[0;33mminishell: \033[0m", 2);
+		else if (g_sig.sigint)
 			ft_putstr_fd("\b\b  \n\033[0;33mminishell: \033[0m", 2);
-		if (!g_sig.sigint)
+		else if (!g_sig.sigint)
 			ft_putstr_fd("\b \n\033[0;33mminishell: \033[0m", 2);
 		g_sig.sigint = 1;
 	}
@@ -113,7 +115,10 @@ int	minishell(t_info *info)
 		g_sig.sigint = 0;
 		g_sig.sigquit = 0;
 		if (!info->line_read)
+		{
+			rl_redisplay();
 			continue;
+		}
 		if (!info->line_read[0])
 			continue ;
 		lexer(info);
