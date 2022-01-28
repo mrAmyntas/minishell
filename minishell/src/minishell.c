@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 18:09:24 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/01/28 12:14:15 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,15 @@ void	handle_sig(int signum)
 	if (signum == SIGINT)
 	{
 		if (g_sig.sigint)
-			ft_putstr_fd("\b\b  \n\033[0;33mminishell: \033[0m", 1);
+			ft_putstr_fd("\b\b  \n\033[0;33mminishell: \033[0m", 2);
 		if (!g_sig.sigint)
-			ft_putstr_fd("\b \n\033[0;33mminishell: \033[0m", 1);
+			ft_putstr_fd("\b \n\033[0;33mminishell: \033[0m", 2);
 		g_sig.sigint = 1;
 	}
 	if (signum == SIGQUIT)
 	{
 		if (g_sig.sigquit)
-			write(1, "\b\b  \b\b", 6);
+			write(2, "\b\b  \b\b", 6);
 		g_sig.sigquit = 1;
 	}
 }
@@ -105,13 +105,15 @@ int	minishell(t_info *info)
 		signal(SIGINT, &handle_sig);
 		signal(SIGQUIT, &handle_sig);
 		info->line_read = readline("\033[0;33mminishell: \033[0m");
-		g_sig.sigint = 0;
-		g_sig.sigquit = 0;
-		if (!info->line_read)
+		if (!info->line_read && !g_sig.sigint && !g_sig.sigquit)
 		{	
 			write(1, "\b\b  \n", 5);
 			break;
 		}
+		g_sig.sigint = 0;
+		g_sig.sigquit = 0;
+		if (!info->line_read)
+			continue;
 		if (!info->line_read[0])
 			continue ;
 		lexer(info);

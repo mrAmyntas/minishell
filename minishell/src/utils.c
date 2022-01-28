@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/27 17:38:42 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/01/28 12:17:37 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ char	**trim_command(t_info *info, int start, int end)
 	j = 0;
 	if (!ft_strncmp(info->tokens[start], "<", ft_strlen(info->tokens[start])) && info->token_state[start])
 		start += 2;
-	while ((start + i) < end && !info->token_state[start + i])
+	while ((start + i) < end && (!info->token_state[start + i] || info->token_state[start + i] == 3))
 		i++;
 	command = malloc(sizeof(char **) * (i + 1));
 	while (j < i)
@@ -227,15 +227,15 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	locations[1] = 0;
 	while (info->tokens[i] && i <= end)
 	{
-		if (!ft_strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])) && info->token_state[i])
+		if (!ft_strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])) && info->token_state[i] == 1)
 			fd[0] = redirect(info, 1 , i);
-		if (!ft_strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])) && info->token_state[i])
+		if (!ft_strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])) && info->token_state[i] == 1)
 			locations[0] = i;
-		if (!ft_strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])) && info->token_state[i])
+		if (!ft_strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])) && info->token_state[i] == 1)
 			fd[1] = redirect(info, 2 , i);
-		if (!ft_strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")) && info->token_state[i])
+		if (!ft_strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")) && info->token_state[i] == 1)
 			fd[1] = redirect(info, 4 , i);
-		if (!ft_strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")) && info->token_state[i])
+		if (!ft_strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")) && info->token_state[i] == 1)
 			locations[1] = ft_heredoc(info, i);
 		if (fd[1] < 0)
 			return (1);
