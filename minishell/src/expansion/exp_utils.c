@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expansion.c                                        :+:    :+:            */
+/*   exp_utils.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 15:08:01 by bhoitzin      ########   odam.nl         */
+/*   Created: 2022/02/02 14:51:38 by bhoitzin      #+#    #+#                 */
+/*   Updated: 2022/02/02 14:56:40 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 static char	*realloc_token(t_info *info, int i, int len)
 {
@@ -118,23 +118,6 @@ char	*expand_buf(t_info *info, char *buf, int i)
 		reset_token(info, i); // turn info->tokens[i] back into heredoc '<<'
 	}
 	return (buf);
-}
-
-void	remove_dollar(t_info *info, int i)
-{
-	free(info->tokens[i]);
-	info->tokens[i] = NULL;
-	realloc_copy(info, i, 1);
-}
-
-void	expand_exitstatus(t_info *info, int i)
-{
-	free(info->tokens[i]);
-	info->tokens[i] = NULL;
-	info->tokens[i] = ft_itoa(info->exit_status);
-	free(info->tokens[i + 1]);
-	info->tokens[i + 1] = NULL;
-	realloc_copy(info, i + 1, 1);
 }
 
 static size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start)
@@ -322,28 +305,10 @@ void	expand_str_dollar(t_info *info, int i, int pos)
 	if (start <= pos)
 		expand_str_dollar2(info, i, start, pos);
 }
-//3.230 Name
-//In the shell command language, a word consisting solely of underscores, digits, 
-//and alphabetics from the portable character set. The first character of a name is not a digit.
-
-int	check_after_dollar(t_info *info, int i)
-{
-	if (info->tokens[i + 1] != NULL)
-	{
-		if (info->tokens[i + 1][0] == '?')
-			return (1);
-		if (check_char_token(info, i + 1, 0) == C_NORMAL)
-			return (0);
-		if (check_char_token(info, i + 1, 0) == C_QUOTE || check_char_token(info, i + 1, 0) == C_DQUOTE)
-			return (2);
-	}
-	return (-1);
-}
 
 void	check_dollar_in_quotes(t_info *info, int i)
 {
 	int j;
-//	int	k;
 
 	j = 0;
 	while (info->tokens[i][j] != '\0')
@@ -351,7 +316,6 @@ void	check_dollar_in_quotes(t_info *info, int i)
 		if (info->tokens[i][j] == '\"')
 		{
 			j++;
-			//k = j;
 			while (info->tokens[i][j] != '\"')
 			{
 				if (info->tokens[i][j] == '$' && info->tokens[i][j + 1] == '?')
@@ -364,62 +328,3 @@ void	check_dollar_in_quotes(t_info *info, int i)
 		j++;
 	}
 }
-
-void	expansion(t_info *info)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (info->tokens[i] != NULL)
-	{
-		j = 0;
-		while (info->tokens[i][j] != '\0')
-		{
-			if (info->tokens[i][j] == '\"')
-			{
-				check_dollar_in_quotes(info, i);
-				break ;
-			}
-			j++;
-		}
-		if (info->tokens[i][0] == '$')
-		{
-			if (check_after_dollar(info, i) == 0)
-				expand_token_dollar(info, i); // if i+1 == NULL (ret=-1) -> leave $ untouched
-			else if (check_after_dollar(info, i) == 1) // if i+1 == quotes (ret 2) -> remove $
-				expand_exitstatus(info, i);
-			//else if (check_after_dollar(info, i) == -1)
-			//	join_quoted_tokens2(info, i);
-			else if (check_after_dollar(info, i) == 2)
-				remove_dollar(info, i);
-			i = i - join_tokens(info, i);
-		}
-		i++;
-	}
-}
-
-/* void	check_dollar_in_quotes(t_info *info, int i)
-{
-	int j;
-
-	j = 0;
-	printf("check\n");
-	while (info->tokens[i][j] != '\0')
-	{
-		if (info->tokens[i][j] == '\'')
-		{
-			while (info->tokens[i][j] != '\'')
-				j++;
-		}
-		if (info->tokens[i][j] == '\"')
-		{
-			while (info->tokens[i][j + 1] != '$' && info->tokens[i][j + 1] != '\"')
-				j++;
-			printf("j:%d\n", j);
-			if (info->tokens[i][j + 1] == '$')
-				expand_str_dollar(info, i, j);
-		}
-		j++;
-	}
-}*/

@@ -15,16 +15,21 @@ OBJ_DIR =	obj/
 
 SRC =	src/minishell.c\
 		src/exec.c\
-		src/parsing.c\
+		src/parser/parsing.c\
+		src/parser/parse_utils.c\
+		src/parser/parse_utils2.c\
+		src/parser/parse_utils3.c\
+		src/parser/parse_quotes.c\
+		src/lexer/lexer.c\
+		src/lexer/lexer_utils.c\
+		src/expansion/expand.c\
+		src/expansion/exp_utils.c\
+		src/expansion/exp_utils2.c\
+		src/expansion/exp_utils3.c\
 		src/error.c\
-		src/lexer.c\
 		src/utils.c\
 		src/cd.c\
-		src/manage_env.c\
-		src/parse_utils.c\
-		src/parse_utils2.c\
-		src/parse_quotetrim_dollar.c\
-		src/expansion.c
+		src/manage_env.c
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
@@ -49,6 +54,7 @@ $(LIBFT_NAME): $(HEADER_FILES) $(LIBFT_DIR)*.c $(LIBFT_DIR)
 
 clean:
 	rm -f obj/*.o
+	rm -f obj/*/*.o
 	rm -f libft/*.o
 
 fclean: clean
