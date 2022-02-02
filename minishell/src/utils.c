@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 13:49:18 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 15:01:34 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,34 +63,31 @@ void	unset_var(t_info *info, char *var)
 
 void	sort_export(t_info *info)
 {
-	int	i;
-	int	j;
+	int	i[2];
 
-	i = 1;
+	i[0] = 1;
 	info->export = malloc(sizeof(char **)
 			* (ft_strstrlen(info->env, NULL, 0) + 1));
 	info->export[0] = ft_strdup(info->env[0]);
-	while (info->env[i])
+	while (info->env[i[0]])
 	{
-		info->export[i] = NULL;
-		j = ft_strstrlen(info->export, NULL, 0) - 1;
-		while (j >= 0)
+		info->export[i[0]] = NULL;
+		i[1] = ft_strstrlen(info->export, NULL, 0) - 1;
+		while (i[1] >= 0)
 		{
-			if (ft_strncmp(info->env[i], info->export[j]
-					, ft_len_to_char(info->env[i], '=')) > 0)
+			if (ft_strncmp(info->env[i[0]], info->export[i[1]]
+					, ft_len_to_char(info->env[i[0]], '=')) > 0)
 			{
-				put_str(info->env[i], info->export, j + 1);
+				put_str(info->env[i[0]], info->export, i[1] + 1);
 				break ;
 			}
-			else if (!j)
-			{
-				put_str(info->env[i], info->export, 0);
-			}
-			j--;
+			else if (!i[1])
+				put_str(info->env[i[0]], info->export, 0);
+			i[1]--;
 		}
-		i++;
+		i[0]++;
 	}
-	info->export[i] = NULL;
+	info->export[i[0]] = NULL;
 }
 
 void	get_env(t_info *info, char **env)
@@ -147,23 +144,16 @@ int	redirect(t_info *info, int type, int i)
 		fd = open(info->tokens[i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (type == 4)
 		fd = open(info->tokens[i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
-	if (type == 2 || type == 4)
-	{
-		if (fd < 0)
-		{
-			set_error(info, 258, info->tokens[i + 1]);
-			return (fd);
-		}
-		dup2(fd, STDOUT_FILENO);
-	}
 	if (fd < 0)
 	{
-		if (info->tokens[i + 1] == NULL)
-			set_error(info, 258, NULL);
+		if (info->tokens[i + 1] == NULL || !(type % 2))
+			set_error(info, 258, info->tokens[i + 1]);
 		else
 			set_error(info, 1, info->tokens[i + 1]);
 		return (fd);
 	}
+	if (type == 2 || type == 4)
+		dup2(fd, STDOUT_FILENO);
 	if (type == 1)
 		dup2(fd, STDIN_FILENO);
 	close(fd);
@@ -237,20 +227,15 @@ int	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	locations[1] = 0;
 	while (info->tokens[i] && i <= end)
 	{
-		if (!ft_strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i]))
-			&& info->token_state[i] == 1)
+		if (!ft_strncmp(info->tokens[i], "<", 2) && info->token_state[i] == 1)
 			fd[0] = redirect(info, 1, i);
-		if (!ft_strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i]))
-			&& info->token_state[i] == 1)
+		if (!ft_strncmp(info->tokens[i], "|", 2) && info->token_state[i] == 1)
 			locations[0] = i;
-		if (!ft_strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i]))
-			&& info->token_state[i] == 1)
+		if (!ft_strncmp(info->tokens[i], ">", 2) && info->token_state[i] == 1)
 			fd[1] = redirect(info, 2, i);
-		if (!ft_strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>"))
-			&& info->token_state[i] == 1)
+		if (!ft_strncmp(info->tokens[i], ">>", 3) && info->token_state[i] == 1)
 			fd[1] = redirect(info, 4, i);
-		if (!ft_strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<"))
-			&& info->token_state[i] == 1)
+		if (!ft_strncmp(info->tokens[i], "<<", 3) && info->token_state[i] == 1)
 			locations[1] = ft_heredoc(info, i);
 		if (fd[1] < 0)
 			return (1);
