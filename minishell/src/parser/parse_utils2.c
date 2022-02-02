@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 14:45:43 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 15:45:39 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,4 @@ void	join_quoted_tokens(t_info *info, int ret)
 			continue ;
 		i++;
 	}
-}
-
-int	check_name(t_info *info, int i, int j)
-{
-	if ((info->tokens[i][j] >= 'a' && info->tokens[i][j] <= 'z') ||
-		(info->tokens[i][j] >= 'A' && info->tokens[i][j] <= 'Z') ||
-		info->tokens[i][j] == '_')
-	{
-		while ((info->tokens[i][j] >= '0' && info->tokens[i][j] <= '9') ||
-			(info->tokens[i][j] >= 'a' && info->tokens[i][j] <= 'z') ||
-			(info->tokens[i][j] >= 'A' && info->tokens[i][j] <= 'Z') ||
-			info->tokens[i][j] == '_')
-			j++;
-	}
-	return (j);
 }

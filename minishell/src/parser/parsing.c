@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 15:01:08 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 18:04:18 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 // scrambling of terminal with up/down
 // has to do with whatever is that readline color shit
 
+// echo hoi >>> out (voor state = 1 (except |) error bij i = 1 i+1 = 2)
 #include "../../inc/minishell.h"
 
 static void	remove_quotes(t_info *info)
@@ -132,6 +133,12 @@ void	parser(t_info *info)
 	remove_spaces(info);
 	set_token_state(info);
 	remove_quotes(info);
+	int p = 0;
+	while(info->tokens[p] != NULL)
+	{
+		printf("%s   %d\n", info->tokens[p], info->token_state[p]);
+		p++;
+	}
 }
 
 /*
