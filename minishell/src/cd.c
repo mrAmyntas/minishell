@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 15:14:47 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 13:54:57 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	pwd_is_home(t_info *info, char **command)
 	while (info->env[i] && ft_strncmp(info->env[i], "PWD=", 4))
 		i++;
 	if (!info->env[i])
-		add_env(info, info->pwd);
+		add_env(info, ft_strjoin("PWD=", info->pwd));
 	while (info->env[j] && ft_strncmp(info->env[j], "HOME=", 5))
 		j++;
 	free (info->pwd);
@@ -37,15 +37,15 @@ void	pwd_is_home(t_info *info, char **command)
 		info->pwd = ft_strdup(info->env[j] + 5);
 	chdir(info->pwd);
 	info->env[i] = ft_strjoin("PWD=", info->pwd);
+	free_export(info);
 	sort_export(info);
-	free (command[0]);
-	free (command);
 }
 
 void	trim_last_dir(t_info *info, char **command)
 {
-	int	i;
-	int	len;
+	int		i;
+	int		len;
+	char	*temp;
 
 	i = 0;
 	add_env(info, ft_strjoin("OLDPWD=", info->pwd));
@@ -58,11 +58,10 @@ void	trim_last_dir(t_info *info, char **command)
 		len--;
 	info->pwd[len] = '\0';
 	chdir(info->pwd);
-	free (info->env[i]);
+	free(info->env[i]);
 	info->env[i] = ft_strjoin("PWD=", info->pwd);
+	free_export(info);
 	sort_export(info);
-	free (command[0]);
-	free (command);
 }
 
 void	change_pwd(t_info *info, char **command)
@@ -80,28 +79,22 @@ void	change_pwd(t_info *info, char **command)
 	free (info->pwd);
 	info->pwd = ft_strdup(command[1]);
 	chdir(info->pwd);
-	i = 0;
-	while (command[i])
-	{
-		free (command[i]);
-		i++;
-	}
-	free (command);
+	free_export(info);
 	sort_export(info);
 }
 
-int	exec_cd(t_info *info, char **command)
+void	exec_cd(t_info *info, char **command)
 {
 	int		id;
 	int		status;
 	char	*path;
 
-	if (command[1] && !ft_strncmp(command[1], "..", 2))
-		trim_last_dir(info, command);
-	if (command[1] && !ft_strncmp(command[1], "~", 1))
-		pwd_is_home(info, command);
-	if (!command[1] || !ft_strncmp(command[1], "..", 2) || !ft_strncmp(command[1], "~", 1))
-		return (0);
+	if (!command[1])
+		return ;
+	if (command[1] && !ft_strncmp(command[1], "..", 3))
+		return (trim_last_dir(info, command));
+	else if (command[1] && !ft_strncmp(command[1], "~", 2))
+		return (pwd_is_home(info, command));
 	id = fork();
 	if (id == -1)
 		set_error(info, 1, NULL);
@@ -111,12 +104,10 @@ int	exec_cd(t_info *info, char **command)
 			make_dir(info, &command[1]);
 		waitpid(id, &status, 0);
 		if (status)
-			return (0);
+			return ;
 		change_pwd(info, command);
-		return (0);
 	}
 	path = get_path(command[0], info->env);
 	check_nosuchdir(info);
 	execve(path, command, info->env);
-	return (0);
 }

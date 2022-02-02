@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   manage_env.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
+/*   Updated: 2022/02/02 14:00:18 by mgroen        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minishell.h"
 
 char	*get_val(t_info *info, char *var)
@@ -20,7 +32,8 @@ char	*get_val(t_info *info, char *var)
 		{
 			len[1] = ft_strlen(info->env[i]);
 		}
-		if (!info->env[i] || (!ft_strncmp(info->env[i], var, len[0]) && len[0] == len[1]))
+		if (!info->env[i]
+			|| (!ft_strncmp(info->env[i], var, len[0]) && len[0] == len[1]))
 		{
 			break ;
 		}
@@ -74,7 +87,6 @@ void	copy_to_env(t_info *info, char **temp, char *new_var)
 	info->env = malloc(sizeof(char **) * (temp_len + 2));
 	while (i < temp_len)
 	{
-		info->env[i] = malloc(sizeof(char *) * ft_strlen(temp[i]));
 		info->env[i] = ft_strdup(temp[i]);
 		free(temp[i]);
 		i++;
@@ -94,20 +106,18 @@ void	add_env(t_info *info, char *new_var)
 	if (get_val(info, new_var))
 	{
 		if (ft_len_to_char(new_var, '=') == -1)
-		{
 			return ;
-		}
 		while (ft_strncmp(info->env[i], new_var, ft_len_to_char(new_var, '=')))
-		{
 			i++;
-		}
-		free (info->env[i]);
+		free(info->env[i]);
 		info->env[i] = ft_strdup(new_var);
+		free(new_var);
+		free_export(info);
 		sort_export(info);
 		return ;
 	}
 	env_len = ft_strstrlen(info->env, NULL, 0);
-	temp = malloc(sizeof(char **) * env_len + 1);
+	temp = malloc(sizeof(char **) * (env_len + 1));
 	while (i < env_len)
 	{
 		temp[i] = ft_strdup(info->env[i]);
@@ -117,5 +127,6 @@ void	add_env(t_info *info, char *new_var)
 	temp[i] = NULL;
 	free (info->env);
 	copy_to_env(info, temp, new_var);
+	free_export(info);
 	sort_export(info);
 }

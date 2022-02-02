@@ -14,4 +14,4 @@ check control d en c etc.
 
 
 MILAN MOET HET DAN GOED LATEN LOPEN
-waar komen nieuwe variabelen in de env
+

@@ -6,17 +6,16 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 14:11:06 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 13:49:18 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-
 int	long_str(char *str1, char *str2)
 {
-	int len[2];
-	
+	int	len[2];
+
 	len[0] = ft_strlen(str1);
 	len[1] = ft_strlen(str2);
 	if (len[0] > len[1])
@@ -58,6 +57,7 @@ void	unset_var(t_info *info, char *var)
 		info->env[loc] = ft_strdup(info->env[loc + 1]);
 		loc++;
 	}
+	free(info->env[loc]);
 	info->env[loc] = NULL;
 }
 
@@ -67,7 +67,8 @@ void	sort_export(t_info *info)
 	int	j;
 
 	i = 1;
-	info->export = malloc(sizeof(char **) * (ft_strstrlen(info->env, NULL, 0) + 1));
+	info->export = malloc(sizeof(char **)
+			* (ft_strstrlen(info->env, NULL, 0) + 1));
 	info->export[0] = ft_strdup(info->env[0]);
 	while (info->env[i])
 	{
@@ -98,7 +99,7 @@ void	get_env(t_info *info, char **env)
 	int	env_len;
 
 	i = 0;
-	env_len = ft_strstrlen(env, NULL, 0) + 1;
+	env_len = ft_strstrlen(env, NULL, 0);
 	info->env = malloc(sizeof(char **) * env_len);
 	while (env[i])
 	{
@@ -108,7 +109,7 @@ void	get_env(t_info *info, char **env)
 	info->env[i] = NULL;
 }
 
-int		ft_heredoc(t_info *info, int i)
+int	ft_heredoc(t_info *info, int i)
 {
 	char	*buf;
 	int		fd;
@@ -118,7 +119,9 @@ int		ft_heredoc(t_info *info, int i)
 		return (0);
 	dup2(info->fd_std[0], 0);
 	buf = readline("> ");
-	while (buf && ft_strncmp(buf, info->tokens[i + 1], long_str(buf, info->tokens[i + 1])))
+	while (buf
+		&& ft_strncmp(buf, info->tokens[i + 1]
+			, long_str(buf, info->tokens[i + 1])) && !g_sig.sigint)
 	{
 		buf = expand_buf(info, buf, i);
 		write(fd, buf, ft_strlen(buf));
@@ -137,7 +140,7 @@ int		ft_heredoc(t_info *info, int i)
 int	redirect(t_info *info, int type, int i)
 {
 	int	fd;
-	
+
 	if (type == 1)
 		fd = open(info->tokens[i + 1], O_RDONLY);
 	if (type == 2)
@@ -148,7 +151,7 @@ int	redirect(t_info *info, int type, int i)
 	{
 		if (fd < 0)
 		{
-			set_error(info, 258, info->tokens[i + 1]); // >
+			set_error(info, 258, info->tokens[i + 1]);
 			return (fd);
 		}
 		dup2(fd, STDOUT_FILENO);
@@ -156,7 +159,7 @@ int	redirect(t_info *info, int type, int i)
 	if (fd < 0)
 	{
 		if (info->tokens[i + 1] == NULL)
-			set_error(info, 258, NULL); // <
+			set_error(info, 258, NULL);
 		else
 			set_error(info, 1, info->tokens[i + 1]);
 		return (fd);
@@ -175,9 +178,11 @@ char	**trim_command(t_info *info, int start, int end)
 
 	i = 0;
 	j = 0;
-	if (!ft_strncmp(info->tokens[start], "<", ft_strlen(info->tokens[start])) && info->token_state[start])
+	if (!ft_strncmp(info->tokens[start], "<", ft_strlen(info->tokens[start]))
+		&& info->token_state[start])
 		start += 2;
-	while ((start + i) < end && (!info->token_state[start + i] || info->token_state[start + i] == 3))
+	while ((start + i) < end && (!info->token_state[start + i]
+			|| info->token_state[start + i] == 3))
 		i++;
 	command = malloc(sizeof(char **) * (i + 1));
 	while (j < i)
@@ -190,7 +195,7 @@ char	**trim_command(t_info *info, int start, int end)
 	return (command);
 }
 
-int ft_pipe(t_info *info, int loc_pipe, int start, int fd[2])
+int	ft_pipe(t_info *info, int loc_pipe, int start, int fd[2])
 {
 	int		id;
 	int		pipefd[2];
@@ -203,9 +208,10 @@ int ft_pipe(t_info *info, int loc_pipe, int start, int fd[2])
 	if (id)
 	{
 		wait(&id);
-		close(pipefd[1]); // input redirect 
+		close(pipefd[1]);
 		dup2(pipefd[0], 0);
-		return (check_redirect_v2(info, loc_pipe + 1, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]));
+		return (check_redirect_v2(info, loc_pipe + 1
+				, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]));
 	}
 	else
 	{
@@ -218,11 +224,11 @@ int ft_pipe(t_info *info, int loc_pipe, int start, int fd[2])
 	}
 }
 
-int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
+int	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 {
 	int	i;
 	int	fd[2];
-	int locations[2];
+	int	locations[2];
 
 	i = start;
 	fd[0] = 0;
@@ -231,15 +237,20 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	locations[1] = 0;
 	while (info->tokens[i] && i <= end)
 	{
-		if (!ft_strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i])) && info->token_state[i] == 1)
-			fd[0] = redirect(info, 1 , i);
-		if (!ft_strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i])) && info->token_state[i] == 1)
+		if (!ft_strncmp(info->tokens[i], "<", ft_strlen(info->tokens[i]))
+			&& info->token_state[i] == 1)
+			fd[0] = redirect(info, 1, i);
+		if (!ft_strncmp(info->tokens[i], "|", ft_strlen(info->tokens[i]))
+			&& info->token_state[i] == 1)
 			locations[0] = i;
-		if (!ft_strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i])) && info->token_state[i] == 1)
-			fd[1] = redirect(info, 2 , i);
-		if (!ft_strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>")) && info->token_state[i] == 1)
-			fd[1] = redirect(info, 4 , i);
-		if (!ft_strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<")) && info->token_state[i] == 1)
+		if (!ft_strncmp(info->tokens[i], ">", ft_strlen(info->tokens[i]))
+			&& info->token_state[i] == 1)
+			fd[1] = redirect(info, 2, i);
+		if (!ft_strncmp(info->tokens[i], ">>", long_str(info->tokens[i], ">>"))
+			&& info->token_state[i] == 1)
+			fd[1] = redirect(info, 4, i);
+		if (!ft_strncmp(info->tokens[i], "<<", long_str(info->tokens[i], "<<"))
+			&& info->token_state[i] == 1)
 			locations[1] = ft_heredoc(info, i);
 		if (fd[1] < 0)
 			return (1);
@@ -247,7 +258,7 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	}
 	if (fd[0] < 0)
 	{
-		ft_error(info, 1); // perror no such file or dir
+		ft_error(info, 1);
 		return (1);
 	}
 	if (locations[0] >= 0)
@@ -257,26 +268,35 @@ int		check_redirect_v2(t_info *info, int start, int end, int inputfd)
 
 int	ft_find_command(t_info *info, char **command)
 {
+	int	i;
+
+	i = 0;
 	if (!ft_strncmp(command[0], "echo", long_str(command[0], "echo"))
 		|| !ft_strncmp(command[0], "cat", long_str(command[0], "cat"))
 		|| !ft_strncmp(command[0], "grep", long_str(command[0], "grep")))
-		return (exec(info, command));
-	if (!ft_strncmp(command[0], "cd", long_str(command[0], "cd")))
-		return (exec_cd(info, command));
-	if (!ft_strncmp(command[0], "pwd", long_str(command[0], "pwd")))
-		return (exec_pwd(info));
-	if (!ft_strncmp(command[0], "export", long_str(command[0], "export")))
-		return (exec_export(info, command));
-	if (!ft_strncmp(command[0], "unset", long_str(command[0], "unset")))
-		return (exec_unset(info, command));
-	if (!ft_strncmp(command[0], "env", long_str(command[0], "env")))
-		return (exec_env(info));
-	if (!ft_strncmp(command[0], "exit", long_str(command[0], "exit")))
+		exec(info, command);
+	else if (!ft_strncmp(command[0], "cd", long_str(command[0], "cd")))
+		exec_cd(info, command);
+	else if (!ft_strncmp(command[0], "pwd", long_str(command[0], "pwd")))
+		exec_pwd(info, command);
+	else if (!ft_strncmp(command[0], "export", long_str(command[0], "export")))
+		exec_export(info, command);
+	else if (!ft_strncmp(command[0], "unset", long_str(command[0], "unset")))
+		exec_unset(info, command);
+	else if (!ft_strncmp(command[0], "env", long_str(command[0], "env")))
+		exec_env(info, command);
+	else if (!ft_strncmp(command[0], "exit", long_str(command[0], "exit")))
 		exit(0);
-	if (command[0])
+	else if (command[0])
 	{
 		set_error(info, 127, command[0]);
 		ft_error(info, 0);
 	}
-	return (15);
+	while (command[i])
+	{
+		free(command[i]);
+		i++;
+	}
+	free(command);
+	return (0);
 }

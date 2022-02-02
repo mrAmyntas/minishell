@@ -6,11 +6,24 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 18:15:31 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 13:27:07 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	free_export(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (info->export[i])
+	{
+		free (info->export[i]);
+		i++;
+	}
+	free (info->export);
+}
 
 void	ft_free(t_info *info)
 {
@@ -34,13 +47,13 @@ void	free_info(t_info *info)
 	int	i;
 
 	i = 0;
-	//while (info->export[i])
-	//{
-	//	free (info->export[i]);
-	//	i++;
-	//}
-	//free (info->export);
-	//i = 0;
+	while (info->export[i])
+	{
+		free (info->export[i]);
+		i++;
+	}
+	free (info->export);
+	i = 0;
 	while (info->env[i])
 	{
 		free (info->env[i]);
@@ -97,7 +110,7 @@ void	handle_sig(int signum)
 
 int	minishell(t_info *info)
 {
-	static char *line_read = (char *)NULL;
+	char *line_read = (char *)NULL; // static?
 	
 	while (1 == 1)
 	{
@@ -113,7 +126,7 @@ int	minishell(t_info *info)
 		line_read = readline("\033[0;33mminishell: \033[0m");
 		if (!line_read && !g_sig.sigint && !g_sig.sigquit)
 		{
-			write(1, "exit\n", 6);
+			write(1, "exit\n", 5);
 			break ;
 		}
 		if (!line_read || !line_read[0])
@@ -126,12 +139,13 @@ int	minishell(t_info *info)
 			continue ;
 		}
 		info->exit_status = 0;
-		info->cmd = check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);//check_redirect(&info);
+		info->cmd = check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);
 		dup2(info->fd_std[0], 0);
 		dup2(info->fd_std[1], 1);
 		if (line_read && *line_read)
     		add_history(line_read);
 		ft_free(info);
+		//system("leaks minishell");
 	}
 	return (info->cmd);
 }
@@ -142,10 +156,11 @@ int main(int ac, char **av, char **env)
 	g_sig.sigint = 0;
 	g_sig.sigquit = 0;
 	ft_init_struct(&info, av, env);
-	//printf("\033[1;33mWelcome! You can exit by pressing Ctrl+D at any time...\033[1;33m\n");
-	printf("\033[1;33mWelcome Milan. History gefixt, ook de newlines na een enter zijn weg cntrl-D stopt nu altijd in 1 keer! Enige verschil is de output van bash met cmd exit en cntrl-D versus onze  ..\033[1;33m\n");
+	printf("\033[1;33mWelcome! You can exit by pressing Ctrl+D at any time...\033[1;33m\n");
+	//printf("\033[1;33mWelcome Milan. History gefixt, ook de newlines na een enter zijn weg cntrl-D stopt nu altijd in 1 keer! Enige verschil is de output van bash met cmd exit en cntrl-D versus onze  ..\033[1;33m\n");
 	minishell(&info);
 	free_info(&info);
+	//printf("leaks2\n");
 	//system("leaks minishell");
 	rl_clear_history();
 	return (0);
