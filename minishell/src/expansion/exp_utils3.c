@@ -6,14 +6,34 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 15:50:02 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 17:41:45 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 18:12:03 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start)
+{
+	size_t	i;
 
-static void	expand_ex_status_str(t_info *info, int i, int j, int n) // j = pos $ n = j + 2
+	if (src == NULL)
+		return (0);
+	i = 0;
+	if (dstsize > 0)
+	{
+		while ((i < dstsize - 1) && (src[start] != '\0'))
+		{
+			dest[i] = src[start];
+			i++;
+			start++;
+		}
+		dest[i] = '\0';
+	}
+	return (ft_strlen(src));
+}
+
+// j = pos $ n = j + 2
+static void	expand_ex_status_str(t_info *info, int i, int j, int n)
 {
 	char	*temp;
 	char	*str;
@@ -43,7 +63,7 @@ static void	expand_ex_status_str(t_info *info, int i, int j, int n) // j = pos $
 
 void	check_dollar_in_quotes(t_info *info, int i)
 {
-	int j;
+	int	j;
 
 	j = 0;
 	while (info->tokens[i][j] != '\0')

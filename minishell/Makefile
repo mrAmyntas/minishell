@@ -29,6 +29,7 @@ SRC =	src/minishell.c\
 		src/expansion/exp_heredoc.c\
 		src/error.c\
 		src/utils.c\
+		src/free.c\
 		src/execute/cd.c\
 		src/environment/manage_env.c\
 		src/redirect.c\

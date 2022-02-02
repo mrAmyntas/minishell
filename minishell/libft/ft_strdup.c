@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/03 13:19:51 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2020/11/14 15:22:34 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:04:54 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char			*ft_strdup(const char *s1)
+char	*ft_strdup(const char *s1)
 {
 	char	*buff;
 	int		l;

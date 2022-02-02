@@ -6,15 +6,15 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/04 20:20:44 by basz          #+#    #+#                 */
-/*   Updated: 2020/11/14 15:18:48 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:09:43 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		ft_putendl_fd(char *s, int fd)
+void	ft_putendl_fd(char *s, int fd)
 {
-	int i;
+	int	i;
 
 	if (s == NULL)
 		return ;

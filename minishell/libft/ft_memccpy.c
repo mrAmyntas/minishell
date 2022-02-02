@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/27 17:27:44 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2020/11/14 15:17:39 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:10:11 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
 	char			*sorc;
 	unsigned int	i;
 
-	sorc = (char*)src;
-	dest = (char*)dst;
+	sorc = (char *)src;
+	dest = (char *)dst;
 	i = 0;
 	while ((i < n))
 	{

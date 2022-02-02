@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/03 14:03:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/02/19 20:30:32 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 18:58:56 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	if (start >= (unsigned int)ft_strlen(s))
 	{
-		buff = (char*)malloc(1);
+		buff = (char *)malloc(1);
 		buff[0] = '\0';
 		return (buff);
 	}

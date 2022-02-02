@@ -6,7 +6,7 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/04 20:41:54 by basz          #+#    #+#                 */
-/*   Updated: 2021/01/23 18:00:48 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:06:15 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static int	ft_putstr(char *str, int fd)
 {
-	int index;
-	int j;
-	int ret;
+	int	index;
+	int	j;
+	int	ret;
 
 	j = 0;
 	index = 11;
@@ -35,7 +35,7 @@ static int	ft_putstr(char *str, int fd)
 	return (ret);
 }
 
-int			ft_putnbr_fd(int n, int fd)
+int	ft_putnbr_fd(int n, int fd)
 {
 	int		x;
 	long	mod;

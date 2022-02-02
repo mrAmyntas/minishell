@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 16:59:28 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 18:15:17 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	fd[1] = 0;
 	pipeloc = find_redirect(info, start, fd, end);
 	if (fd[0] < 0 || fd[1] < 0)
-		return (ft_error(info, 1));
+		return (ft_error(info, 0));
 	if (pipeloc >= 0)
 		return (ft_pipe(info, pipeloc, start, fd[1]));
 	return (ft_find_command(info, trim_command(info, start, end)));

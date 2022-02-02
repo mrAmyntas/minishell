@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/27 13:31:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/02/20 17:15:49 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 18:58:28 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	ft_checklong(int j)
 		return (-1);
 }
 
-int			ft_atoi(char *str)
+int	ft_atoi(char *str)
 {
 	long long unsigned int	i;
 	int						j;
@@ -30,7 +30,7 @@ int			ft_atoi(char *str)
 	j = 1;
 	n = 0;
 	while (str[i] == '\v' || str[i] == '\f' || str[i] == '\t' || str[i] == '\n'
-	|| str[i] == ' ' || str[i] == '\t' || str[i] == '\r')
+		|| str[i] == ' ' || str[i] == '\t' || str[i] == '\r')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{

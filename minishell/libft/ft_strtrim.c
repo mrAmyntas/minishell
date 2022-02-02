@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/03 17:51:15 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2020/11/14 15:47:05 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 18:59:25 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int			ft_checkprefix(const char *s1, const char *set)
+static int	ft_checkprefix(const char *s1, const char *set)
 {
 	int	i;
 	int	j;
@@ -35,7 +35,7 @@ static int			ft_checkprefix(const char *s1, const char *set)
 	return (i);
 }
 
-static int			ft_checksuffix(const char *s1, const char *set)
+static int	ft_checksuffix(const char *s1, const char *set)
 {
 	int	i;
 	int	j;
@@ -58,7 +58,7 @@ static int			ft_checksuffix(const char *s1, const char *set)
 	return (i);
 }
 
-char				*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char const *set)
 {
 	int		i;
 	int		j;
@@ -68,7 +68,7 @@ char				*ft_strtrim(char const *s1, char const *set)
 		return (NULL);
 	if (ft_strlen(s1) == 0)
 	{
-		ret = (char*)malloc(1);
+		ret = (char *)malloc(1);
 		ret[0] = '\0';
 		return (ret);
 	}

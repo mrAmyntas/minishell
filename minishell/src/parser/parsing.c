@@ -6,15 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 18:04:18 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 20:42:33 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 // to-do:
 
 // crash bij export
-
-// leaks: ???
 
 // exit status: if it is X -> a call to minishell 
 // should NOT reset it, if there is no new command
@@ -37,6 +35,8 @@
 // has to do with whatever is that readline color shit
 
 // echo hoi >>> out (voor state = 1 (except |) error bij i = 1 i+1 = 2)
+
+//cd mini > out
 #include "../../inc/minishell.h"
 
 static void	remove_quotes(t_info *info)
@@ -133,12 +133,6 @@ void	parser(t_info *info)
 	remove_spaces(info);
 	set_token_state(info);
 	remove_quotes(info);
-	int p = 0;
-	while(info->tokens[p] != NULL)
-	{
-		printf("%s   %d\n", info->tokens[p], info->token_state[p]);
-		p++;
-	}
 }
 
 /*

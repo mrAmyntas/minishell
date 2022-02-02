@@ -6,7 +6,7 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/15 12:46:27 by basz          #+#    #+#                 */
-/*   Updated: 2020/11/15 20:37:56 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:08:17 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	t_list *lastelem;
+	t_list	*lastelem;
 
 	if (*lst != NULL && new != NULL)
 	{

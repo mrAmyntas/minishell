@@ -6,15 +6,15 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/30 15:02:37 by basz          #+#    #+#                 */
-/*   Updated: 2021/12/13 20:11:06 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 19:04:19 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t		ft_strlcpy(char *dest, const char *src, size_t dstsize)
+size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
 {
-	size_t i;
+	size_t	i;
 
 	if (src == NULL)
 		return (0);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
+/*   Updated: 2022/02/02 19:29:16 by bhoitzin      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -11,7 +23,7 @@
 # include "../libft/libft.h"
 # include <dirent.h>
 
-typedef	struct	s_info
+typedef struct s_info
 {
 	int			ret;
 	int			redirect;
@@ -37,8 +49,6 @@ enum	e_tokentype
 	C_GREATER = '>',
 	C_PIPE = '|',
 	C_DOLLAR = '$',
-//	C_SEMICOLON = ';',
-//	C_BACKSLASH = '\\',
 	C_SPACE = ' ',
 	C_QUOTE = '\'',
 	C_DQUOTE = '\"',
@@ -47,7 +57,7 @@ enum	e_tokentype
 	C_DGREATER = 130
 };
 
-typedef struct	s_sig
+typedef struct s_sig
 {
 	int				sigint;
 	int				sigquit;
@@ -56,28 +66,24 @@ typedef struct	s_sig
 t_sig	g_sig;
 void	ft_find_command(t_info *info, char **command);
 int		ft_find_redirect(t_info *info);
-//int		exec(t_info *info, char **command);
 void	lexer(t_info *info, char *line_read);
 void	ft_init_struct(t_info *info, char **av, char **env);
 void	ft_error(t_info *info, int i);
-void    add_env(t_info *info, char *new_var);
-void    sort_export(t_info *info);
+void	add_env(t_info *info, char *new_var);
+void	sort_export(t_info *info);
 void	parser(t_info *info);
 int		check_char_token(t_info *info, int i, int j);
-void    get_env(t_info *info, char **env);
+void	get_env(t_info *info, char **env);
 void	exec_cd(t_info *info, char **command);
 int		exec_unset(t_info *info, char **command);
 int		exec_export(t_info *info, char **command);
-//void    unset_var(t_info *info, char *var);
-//int		exec_pwd(t_info *info, char **command);
-void    make_dir(t_info *info, char **command);
+void	make_dir(t_info *info, char **command);
 char	*get_path(char *cmd, char **env);
-char    *get_val(t_info *info, char *var);
-int     ft_strstrlen(char **str, char *c, int i);
-int     ft_len_to_char(char *str, char c);
-void    put_str(char *env, char **export, int j);
+char	*get_val(t_info *info, char *var);
+int		ft_strstrlen(char **str, char *c, int i);
+int		ft_len_to_char(char *str, char c);
+void	put_str(char *env, char **export, int j);
 void	realloc_copy(t_info *info, int start, int incr);
-//int		exec_env(t_info *info, char **command);
 int		parse_quotes(t_info *info, int i);
 char	*ft_strjoinbas(t_info *info, char *s1, char const *s2);
 int		cut_quotes(t_info *info, int pos, char c, int first);
@@ -100,12 +106,13 @@ void	check_redirect_v2(t_info *info, int start, int end, int inputfd);
 char	*expand_buf(t_info *info, char *buf, int i);
 void	check_dollar_in_quotes(t_info *info, int i);
 void	set_error(t_info *info, int error_type, char *str);
-void	check_nosuchdir(t_info *info);
+int		check_nosuchdir(t_info *info);
 void	free_info(t_info *info);
 void	free_strstr(char **str);
 void	find_dgreater_dlesser(t_info *info);
 int		check_char(t_info *info, int i, char *line_read);
 int		ft_heredoc(t_info *info, int i);
 char	*realloc_token(t_info *info, int i, int len);
+size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start);
 
 #endif

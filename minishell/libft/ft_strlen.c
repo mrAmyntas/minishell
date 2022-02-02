@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/27 13:40:01 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/20 16:40:44 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 19:04:11 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	ft_strlen(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str)
