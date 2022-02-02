@@ -6,24 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 15:24:53 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 17:20:09 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-void	free_export(t_info *info)
-{
-	int	i;
-
-	i = 0;
-	while (info->export[i])
-	{
-		free (info->export[i]);
-		i++;
-	}
-	free (info->export);
-}
 
 void	ft_free(t_info *info)
 {
@@ -47,13 +34,7 @@ void	free_info(t_info *info)
 	int	i;
 
 	i = 0;
-	while (info->export[i])
-	{
-		free (info->export[i]);
-		i++;
-	}
-	free (info->export);
-	i = 0;
+	free_strstr(info->export);
 	while (info->env[i])
 	{
 		free (info->env[i]);

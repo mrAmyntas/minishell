@@ -6,11 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 14:20:08 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 17:37:22 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 char	*get_val(t_info *info, char *var)
 {
@@ -36,22 +36,6 @@ char	*get_val(t_info *info, char *var)
 	if (!info->env[i])
 		return (NULL);
 	return (info->env[i] + ft_strlen(var) + 1);
-}
-
-void	make_dir(t_info *info, char **command)
-{
-	int		i;
-	char	*temp;
-
-	i = 0;
-	while (info->env[i] && strncmp(info->env[i], "PWD=", 4))
-		i++;
-	if (!info->env[i])
-		add_env(info, info->pwd);
-	temp = ft_strjoin("/", *command);
-	free (*command);
-	*command = ft_strjoin((info->env[i] + 4), temp);
-	free (temp);
 }
 
 void	put_str(char *env, char **export, int j)
@@ -100,7 +84,7 @@ void	change_val(t_info *info, char *new_var)
 	free(info->env[i]);
 	info->env[i] = ft_strdup(new_var);
 	free(new_var);
-	free_export(info);
+	free_strstr(info->export);
 	sort_export(info);
 }
 
@@ -124,6 +108,6 @@ void	add_env(t_info *info, char *new_var)
 	temp[i] = NULL;
 	free (info->env);
 	copy_to_env(info, temp, new_var);
-	free_export(info);
+	free_strstr(info->export);
 	sort_export(info);
 }

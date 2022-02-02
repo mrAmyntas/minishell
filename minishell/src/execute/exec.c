@@ -6,11 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 14:20:34 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 17:36:10 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 char	*get_path(char *cmd, char **env)
 {
@@ -36,84 +36,6 @@ char	*get_path(char *cmd, char **env)
 	if (dirs[i])
 		return (cmdfile);
 	return (cmd);
-}
-
-int	check_var(char **command, int i)
-{
-	int	j;
-
-	j = 0;
-	if (command[i][j] == '\\' || command[i][j] == '|')
-			j++;
-	if (command[i][j] < 65 || (command[i][j] > 90 && command[i][j] < 95)
-		|| command[i][j] > 122 || command[i][j] == 96)
-		perror(ft_strjoin(command[i], ": not a valid identifier"));
-	else
-	{
-		while (command[i][j] && command[i][j] != '=')
-		{
-			if (command[i][j] < 48
-				|| (command[i][j] > 57 && command[i][j] < 65)
-					|| (command[i][j] > 90 && command[i][j] < 95)
-						|| command[i][j] > 122 || command[i][j] == 96)
-			{
-				perror(ft_strjoin(command[i], ": not a valid identifier"));
-				return (1);
-			}
-			j++;
-		}
-		return (0);
-	}
-	return (1);
-}
-
-int	exec_export(t_info *info, char **command)
-{
-	int		i;
-	int		j;
-
-	i = 1;
-	while (command[i])
-	{
-		if (!check_var(command, i))
-			add_env(info, command[i]);
-		i++;
-	}
-	i = 0;
-	while (info->export[i] && !command[1])
-	{
-		write(1, "declare -x ", 11);
-		write(1, info->export[i], ft_strlen(info->export[i]));
-		write(1, "\n", 1);
-		i++;
-	}
-	return (0);
-}
-
-int	exec_unset(t_info *info, char **command)
-{
-	int		i;
-
-	i = 1;
-	while (command[i])
-	{
-		unset_var(info, command[i]);
-		i++;
-	}
-	free_export(info);
-	sort_export(info);
-	return (0);
-}
-
-int	exec_pwd(t_info *info, char **command)
-{
-	char	*pwd;
-
-	pwd = ft_strjoin("PWD=", info->pwd);
-	write(1, pwd, ft_strlen(pwd));
-	write(1, "\n", 1);
-	free (pwd);
-	return (0);
 }
 
 int	exec_env(t_info *info, char **command)
@@ -151,4 +73,42 @@ int	exec(t_info *info, char **command)
 	set_error(info, 127, NULL);
 	ft_error(info, 0);
 	exit (1);
+}
+
+int	exec_pwd(t_info *info, char **command)
+{
+	char	*pwd;
+
+	pwd = ft_strjoin("PWD=", info->pwd);
+	write(1, pwd, ft_strlen(pwd));
+	write(1, "\n", 1);
+	free (pwd);
+	return (0);
+}
+
+void	ft_find_command(t_info *info, char **command)
+{
+	if (!ft_strncmp(command[0], "echo", 5)
+		|| !ft_strncmp(command[0], "cat", 4)
+		|| !ft_strncmp(command[0], "grep", 5))
+		exec(info, command);
+	else if (!ft_strncmp(command[0], "cd", 3))
+		exec_cd(info, command);
+	else if (!ft_strncmp(command[0], "pwd", 4))
+		exec_pwd(info, command);
+	else if (!ft_strncmp(command[0], "export", 7))
+		exec_export(info, command);
+	else if (!ft_strncmp(command[0], "unset", 6))
+		exec_unset(info, command);
+	else if (!ft_strncmp(command[0], "env", 4))
+		exec_env(info, command);
+	else if (!ft_strncmp(command[0], "exit", 5))
+		exit(0);
+	else if (command[0])
+	{
+		set_error(info, 127, command[0]);
+		ft_error(info, 0);
+	}
+	free_strstr(command);
+	return ;
 }

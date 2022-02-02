@@ -6,11 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 13:54:57 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 17:36:11 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	pwd_is_home(t_info *info, char **command)
 {
@@ -37,7 +37,7 @@ void	pwd_is_home(t_info *info, char **command)
 		info->pwd = ft_strdup(info->env[j] + 5);
 	chdir(info->pwd);
 	info->env[i] = ft_strjoin("PWD=", info->pwd);
-	free_export(info);
+	free_strstr(info->export);
 	sort_export(info);
 }
 
@@ -60,7 +60,7 @@ void	trim_last_dir(t_info *info, char **command)
 	chdir(info->pwd);
 	free(info->env[i]);
 	info->env[i] = ft_strjoin("PWD=", info->pwd);
-	free_export(info);
+	free_strstr(info->export);
 	sort_export(info);
 }
 
@@ -79,7 +79,7 @@ void	change_pwd(t_info *info, char **command)
 	free (info->pwd);
 	info->pwd = ft_strdup(command[1]);
 	chdir(info->pwd);
-	free_export(info);
+	free_strstr(info->export);
 	sort_export(info);
 }
 

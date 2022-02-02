@@ -56,7 +56,7 @@ typedef struct	s_sig
 t_sig	g_sig;
 void	ft_find_command(t_info *info, char **command);
 int		ft_find_redirect(t_info *info);
-int		exec(t_info *info, char **command);
+//int		exec(t_info *info, char **command);
 void	lexer(t_info *info, char *line_read);
 void	ft_init_struct(t_info *info, char **av, char **env);
 void	ft_error(t_info *info, int i);
@@ -68,8 +68,8 @@ void    get_env(t_info *info, char **env);
 void	exec_cd(t_info *info, char **command);
 int		exec_unset(t_info *info, char **command);
 int		exec_export(t_info *info, char **command);
-void    unset_var(t_info *info, char *var);
-int		exec_pwd(t_info *info, char **command);
+//void    unset_var(t_info *info, char *var);
+//int		exec_pwd(t_info *info, char **command);
 void    make_dir(t_info *info, char **command);
 char	*get_path(char *cmd, char **env);
 char    *get_val(t_info *info, char *var);
@@ -77,7 +77,7 @@ int     ft_strstrlen(char **str, char *c, int i);
 int     ft_len_to_char(char *str, char c);
 void    put_str(char *env, char **export, int j);
 void	realloc_copy(t_info *info, int start, int incr);
-int		exec_env(t_info *info, char **command);
+//int		exec_env(t_info *info, char **command);
 int		parse_quotes(t_info *info, int i);
 char	*ft_strjoinbas(t_info *info, char *s1, char const *s2);
 int		cut_quotes(t_info *info, int pos, char c, int first);
@@ -102,11 +102,10 @@ char	*expand_buf(t_info *info, char *buf, int i);
 void	check_dollar_in_quotes(t_info *info, int i);
 void	set_error(t_info *info, int error_type, char *str);
 void	check_nosuchdir(t_info *info);
-void	ft_free(t_info *info);
 void	free_info(t_info *info);
-void	free_export(t_info *info);
+void	free_strstr(char **str);
 void	find_dgreater_dlesser(t_info *info);
 int		check_char(t_info *info, int i, char *line_read);
-
+int		ft_heredoc(t_info *info, int i);
 
 #endif

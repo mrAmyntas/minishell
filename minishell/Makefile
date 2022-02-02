@@ -14,7 +14,7 @@ LIBFT_DIR =	libft/
 OBJ_DIR =	obj/
 
 SRC =	src/minishell.c\
-		src/exec.c\
+		src/execute/exec.c\
 		src/parser/parsing.c\
 		src/parser/parse_utils.c\
 		src/parser/parse_utils2.c\
@@ -28,8 +28,11 @@ SRC =	src/minishell.c\
 		src/expansion/exp_utils3.c\
 		src/error.c\
 		src/utils.c\
-		src/cd.c\
-		src/manage_env.c
+		src/execute/cd.c\
+		src/environment/manage_env.c\
+		src/redirect.c\
+		src/execute/exec_utils.c\
+		src//environment/manage_env_utils.c
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
@@ -44,7 +47,7 @@ $(NAME): $(OBJ) $(LIBFT_NAME)
 	$(CC) $(OBJ) $(CFLAGS) -Llibft -lft -lreadline $(LDFLAGS) $(CPPFLAGS) -o $(NAME)
 
 $(OBJ_DIR):
-	mkdir $@ obj/expansion obj/lexer obj/parser
+	mkdir $@ obj/expansion obj/lexer obj/parser obj/execute obj/environment
 
 $(OBJ): $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER_FILES)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
