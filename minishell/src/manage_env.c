@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 14:00:18 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 14:20:08 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,32 +17,24 @@ char	*get_val(t_info *info, char *var)
 	int	i;
 	int	len[2];
 
-	if (var == NULL)
+	if (!var)
 		return (NULL);
 	i = 0;
 	len[0] = ft_len_to_char(var, '=');
 	if (len[0] < 0)
-	{
 		len[0] = ft_strlen(var);
-	}
 	while (info->env[i])
 	{
 		len[1] = ft_len_to_char(info->env[i], '=');
 		if (len[1] == -1)
-		{
 			len[1] = ft_strlen(info->env[i]);
-		}
 		if (!info->env[i]
 			|| (!ft_strncmp(info->env[i], var, len[0]) && len[0] == len[1]))
-		{
 			break ;
-		}
 		i++;
 	}
 	if (!info->env[i])
-	{
 		return (NULL);
-	}
 	return (info->env[i] + ft_strlen(var) + 1);
 }
 
@@ -96,6 +88,22 @@ void	copy_to_env(t_info *info, char **temp, char *new_var)
 	info->env[i + 1] = NULL;
 }
 
+void	change_val(t_info *info, char *new_var)
+{
+	int	i;
+
+	i = 0;
+	if (ft_len_to_char(new_var, '=') == -1)
+		return ;
+	while (ft_strncmp(info->env[i], new_var, ft_len_to_char(new_var, '=')))
+		i++;
+	free(info->env[i]);
+	info->env[i] = ft_strdup(new_var);
+	free(new_var);
+	free_export(info);
+	sort_export(info);
+}
+
 void	add_env(t_info *info, char *new_var)
 {
 	int		i;
@@ -104,18 +112,7 @@ void	add_env(t_info *info, char *new_var)
 
 	i = 0;
 	if (get_val(info, new_var))
-	{
-		if (ft_len_to_char(new_var, '=') == -1)
-			return ;
-		while (ft_strncmp(info->env[i], new_var, ft_len_to_char(new_var, '=')))
-			i++;
-		free(info->env[i]);
-		info->env[i] = ft_strdup(new_var);
-		free(new_var);
-		free_export(info);
-		sort_export(info);
-		return ;
-	}
+		return (change_val(info, new_var));
 	env_len = ft_strstrlen(info->env, NULL, 0);
 	temp = malloc(sizeof(char **) * (env_len + 1));
 	while (i < env_len)

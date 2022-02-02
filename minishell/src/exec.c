@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 13:58:56 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 14:20:34 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,35 @@ char	*get_path(char *cmd, char **env)
 	return (cmd);
 }
 
+int	check_var(char **command, int i)
+{
+	int	j;
+
+	j = 0;
+	if (command[i][j] == '\\' || command[i][j] == '|')
+			j++;
+	if (command[i][j] < 65 || (command[i][j] > 90 && command[i][j] < 95)
+		|| command[i][j] > 122 || command[i][j] == 96)
+		perror(ft_strjoin(command[i], ": not a valid identifier"));
+	else
+	{
+		while (command[i][j] && command[i][j] != '=')
+		{
+			if (command[i][j] < 48
+				|| (command[i][j] > 57 && command[i][j] < 65)
+					|| (command[i][j] > 90 && command[i][j] < 95)
+						|| command[i][j] > 122 || command[i][j] == 96)
+			{
+				perror(ft_strjoin(command[i], ": not a valid identifier"));
+				return (1);
+			}
+			j++;
+		}
+		return (0);
+	}
+	return (1);
+}
+
 int	exec_export(t_info *info, char **command)
 {
 	int		i;
@@ -46,29 +75,8 @@ int	exec_export(t_info *info, char **command)
 	i = 1;
 	while (command[i])
 	{
-		j = 0;
-		if (command[i][j] == '\\' || command[i][j] == '|')
-			j++;
-		if (command[i][j] < 65 || (command[i][j] > 90 && command[i][j] < 95)
-			|| command[i][j] > 122 || command[i][j] == 96)
-			perror(ft_strjoin(command[i], ": not a valid identifier"));
-		else
-		{
-			while (command[i][j] && command[i][j] != '=')
-			{
-				if (command[i][j] < 48
-					|| (command[i][j] > 57 && command[i][j] < 65)
-						|| (command[i][j] > 90 && command[i][j] < 95)
-							|| command[i][j] > 122 || command[i][j] == 96)
-				{
-					perror(ft_strjoin(command[i], ": not a valid identifier"));
-					break ;
-				}
-				j++;
-				if (!command[i][j] || command[i][j] == '=')
-					add_env(info, command[i]);
-			}
-		}
+		if (!check_var(command, i))
+			add_env(info, command[i]);
 		i++;
 	}
 	i = 0;
