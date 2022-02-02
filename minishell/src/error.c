@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/01/28 15:53:04 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 15:39:04 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,30 @@ void	ft_error(t_info *info, int i)
 		info->exit_status = 0;
 	}
 	return ;
+}
+
+void	check_nosuchdir(t_info *info)
+{
+	int	i;
+	DIR	*ret;
+
+	i = 0;
+	while (info->tokens[i] != NULL)
+	{
+		if ((ft_strncmp(info->tokens[i], "cd", 2) == 0 && ft_strlen(info->tokens[i]) == 2))
+		{
+			ret = opendir(info->tokens[i + 1]);
+			if (ret == NULL)
+			{
+				set_error(info, 1, info->tokens[i + 1]);
+				ft_error(info, 1);
+				ft_free(info);
+				minishell(info);
+				rl_clear_history();
+				exit(1);
+			}
+			closedir(ret);
+		}
+		i++;
+	}
 }
