@@ -44,7 +44,7 @@ $(NAME): $(OBJ) $(LIBFT_NAME)
 	$(CC) $(OBJ) $(CFLAGS) -Llibft -lft -lreadline $(LDFLAGS) $(CPPFLAGS) -o $(NAME)
 
 $(OBJ_DIR):
-	mkdir $@
+	mkdir $@ obj/expansion obj/lexer obj/parser
 
 $(OBJ): $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER_FILES)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 13:27:07 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 15:24:53 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	len = 10;
 	info->av = av;
 	get_env(info, env);
-	info->cmd = 0;
 	info->redirect = 0;
 	info->ret = 0;
 	info->t_pos = 0;
@@ -108,7 +107,7 @@ void	handle_sig(int signum)
 	}
 }
 
-int	minishell(t_info *info)
+void	minishell(t_info *info)
 {
 	char *line_read = (char *)NULL; // static?
 	
@@ -139,7 +138,7 @@ int	minishell(t_info *info)
 			continue ;
 		}
 		info->exit_status = 0;
-		info->cmd = check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);
+		check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);
 		dup2(info->fd_std[0], 0);
 		dup2(info->fd_std[1], 1);
 		if (line_read && *line_read)
@@ -147,7 +146,6 @@ int	minishell(t_info *info)
 		ft_free(info);
 		//system("leaks minishell");
 	}
-	return (info->cmd);
 }
 int main(int ac, char **av, char **env)
 {

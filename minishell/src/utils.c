@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 15:01:34 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 15:21:55 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ char	**trim_command(t_info *info, int start, int end)
 	return (command);
 }
 
-int	ft_pipe(t_info *info, int loc_pipe, int start, int fd[2])
+void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 {
 	int		id;
 	int		pipefd[2];
@@ -206,7 +206,7 @@ int	ft_pipe(t_info *info, int loc_pipe, int start, int fd[2])
 	else
 	{
 		close(pipefd[0]);
-		if (!fd[1])
+		if (!fdout)
 			dup2(pipefd[1], 1);
 		command = trim_command(info, start, loc_pipe);
 		ft_find_command(info, command);
@@ -214,44 +214,38 @@ int	ft_pipe(t_info *info, int loc_pipe, int start, int fd[2])
 	}
 }
 
-int	check_redirect_v2(t_info *info, int start, int end, int inputfd)
+void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 {
 	int	i;
 	int	fd[2];
-	int	locations[2];
+	int	pipeloc;
 
 	i = start;
 	fd[0] = 0;
 	fd[1] = 0;
-	locations[0] = -1;
-	locations[1] = 0;
+	pipeloc = -1;
 	while (info->tokens[i] && i <= end)
 	{
 		if (!ft_strncmp(info->tokens[i], "<", 2) && info->token_state[i] == 1)
 			fd[0] = redirect(info, 1, i);
 		if (!ft_strncmp(info->tokens[i], "|", 2) && info->token_state[i] == 1)
-			locations[0] = i;
+			pipeloc = i;
 		if (!ft_strncmp(info->tokens[i], ">", 2) && info->token_state[i] == 1)
 			fd[1] = redirect(info, 2, i);
 		if (!ft_strncmp(info->tokens[i], ">>", 3) && info->token_state[i] == 1)
 			fd[1] = redirect(info, 4, i);
 		if (!ft_strncmp(info->tokens[i], "<<", 3) && info->token_state[i] == 1)
-			locations[1] = ft_heredoc(info, i);
-		if (fd[1] < 0)
-			return (1);
+			ft_heredoc(info, i);
 		i++;
 	}
-	if (fd[0] < 0)
-	{
-		ft_error(info, 1);
-		return (1);
-	}
-	if (locations[0] >= 0)
-		return (ft_pipe(info, locations[0], start, fd));
+	if (fd[0] < 0 || fd[1] < 0)
+		return (ft_error(info, 1));
+	if (pipeloc >= 0)
+		return (ft_pipe(info, pipeloc, start, fd[1]));
 	return (ft_find_command(info, trim_command(info, start, end)));
 }
 
-int	ft_find_command(t_info *info, char **command)
+void	ft_find_command(t_info *info, char **command)
 {
 	int	i;
 
@@ -283,5 +277,5 @@ int	ft_find_command(t_info *info, char **command)
 		i++;
 	}
 	free(command);
-	return (0);
+	return ;
 }
