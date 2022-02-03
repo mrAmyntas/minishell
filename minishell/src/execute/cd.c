@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 16:44:08 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/03 17:24:38 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,26 +71,18 @@ void	trim_last_dir(t_info *info)
 	char	*temp;
 
 	i = 0;
-	printf("test1\n");
 	add_env(info, ft_strjoin("OLDPWD=", info->pwd));
-	printf("test2\n");
 	while (info->env[i] && ft_strncmp(info->env[i], "PWD=", 4))
 		i++;
-	printf("test3\n");
 	if (!info->env[i])
 		add_env(info, ft_strjoin("PWD=", info->pwd));
-	printf("test4\n");
 	len = ft_strlen(info->pwd);
-	printf("test5\n");
 	while (info->pwd[len] != '/' && len != 5)
 		len--;
-	printf("test6\n");
 	info->pwd[len] = '\0';
 	chdir(info->pwd);
-	printf("test7\n");
 	free(info->env[i]);
 	info->env[i] = ft_strjoin("PWD=", info->pwd);
-	printf("test8\n");
 	free_strstr(info->export);
 	sort_export(info);
 }
@@ -143,7 +135,7 @@ void	exec_cd(t_info *info, char **command)
 
 	directions = ft_split(command[1], '/');
 	i = 0;
-	while (directions[i])
+	while (directions[i] && !check_nosuchdir(info))
 	{
 		exec_cd2(info, ft_strdup(directions[i]), i);
 		free (directions[i]);
