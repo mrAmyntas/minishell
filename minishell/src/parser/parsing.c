@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 15:25:41 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 16:11:35 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 
 // < SDD > abc |
 // echo hoi >> abc (token ??)
+
+// echo cho hoi >> abc >   HANGS
 #include "../../inc/minishell.h"
 
 static void	remove_quotes(t_info *info)
