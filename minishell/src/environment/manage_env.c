@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 17:37:22 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/03 16:36:41 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*get_val(t_info *info, char *var)
 	}
 	if (!info->env[i])
 		return (NULL);
-	return (info->env[i] + ft_strlen(var) + 1);
+	return (info->env[i] + len[0] + 1); // ft_strlen?!?!?!?!?!
 }
 
 void	put_str(char *env, char **export, int j)
