@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 12:58:25 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 14:51:46 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,28 +102,16 @@ static int	exec_cd_special(t_info *info, char **command)
 
 void	exec_cd(t_info *info, char **command)
 {
-	int		id;
-	int		status;
 	char	*path;
 
 	if (exec_cd_special(info, command) == 1)
 		return ;
-	id = fork();
-	if (id == -1)
-		set_error(info, 1, NULL, 0);
-	if (id)
+	if (command[1][0] != '/')
+		make_dir(info, &command[1]);
+	if (!check_nosuchdir(info))
 	{
-		if (command[1][0] != '/')
-			make_dir(info, &command[1]);
-		waitpid(id, &status, 0);
-		if (status)
-		{
-			info->exit_status = 1;
-			return ;
-		}
-		change_pwd(info, command);
+		info->exit_status = 1;
+		return ;
 	}
-	path = get_path(command[0], info->env);
-	if (!id && check_nosuchdir(info) == 0)
-		execve(path, command, info->env);
+	change_pwd(info, command);
 }
