@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 13:38:51 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 13:46:17 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 // cd inc -> leaks
 
-// cat/grep infinite loop
+// cat/grep infinite loop op eind er maar uit flikkeren
 
 // set SHLVL = 2
 
