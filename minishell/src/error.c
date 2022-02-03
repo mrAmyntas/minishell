@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 17:48:30 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 18:22:49 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	syntax_error(t_info *info, int token)
 {
-	char	c;
+	int	c;
 
 	write(2, "minishell: syntax error near unexpected", 40);
 	if (token == 0)
@@ -23,6 +23,13 @@ void	syntax_error(t_info *info, int token)
 	{
 		c = check_char_token(info, token, 0);
 		write(2, " token `", 8);
+		if (c == 129 || c == 130)
+		{
+			c = check_char(info, 0, "<");
+			if (check_char_token(info, token, 0) == 130)
+				c = check_char(info, 0, ">");
+			write(2, &c, 1);
+		}
 		write(2, &c, 1);
 		write(2, "`\n", 2);
 		ft_free(info);
