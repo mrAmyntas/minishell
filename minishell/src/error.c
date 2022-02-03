@@ -6,12 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 15:42:15 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 17:48:30 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
 
 void	syntax_error(t_info *info, int token)
 {
@@ -122,6 +121,8 @@ int	check_nosuchdir(t_info *info)
 				set_error(info, 1, info->tokens[i + 1], 0);
 				ft_error(info, 0);
 				ft_free(info);
+				minishell(info);
+				rl_clear_history();
 				exit(1);
 			}
 			closedir(ret);

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 18:02:06 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/03 18:03:29 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,12 +123,6 @@ void	exec_cd2(t_info *info, char *command, int i)
 		return ;
 	if (command[0] != '/')
 		command = make_dir(info, command);
-	if (check_nosuchdir(info))
-	{
-		info->exit_status = 1;
-		return ;
-	}
-	printf("%s\n", command);
 	change_pwd(info, command);
 	free (command);
 }
@@ -140,8 +134,10 @@ void	exec_cd(t_info *info, char **command)
 	int		i;
 
 	directions = ft_split(command[1], '/');
+	if (check_nosuchdir(info) == 1)
+		return ;
 	i = 0;
-	while (directions[i] && !check_nosuchdir(info))
+	while (directions[i])
 	{
 		//comm = ft_strdup(directions[i]);
 		free (directions[i]);

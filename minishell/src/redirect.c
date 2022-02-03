@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 15:43:56 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 17:49:25 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ int	redirect(t_info *info, int type, int i)
 		fd = open(info->tokens[i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (fd < 0)
 	{
-		if ((info->tokens[i + 1] == NULL || !(type % 2)) && access(info->tokens[i + 1], F_OK) == -1)
+		if ((info->tokens[i + 1] == NULL || !(type % 2))
+			&& access(info->tokens[i + 1], F_OK) == -1)
 			set_error(info, 258, info->tokens[i + 1], 0);
 		else
 			set_error(info, 1, info->tokens[i + 1], 0);
@@ -106,13 +107,10 @@ int	find_redirect(t_info *info, int i, int fd[2], int end)
 		if (!ft_strncmp(info->tokens[i], ">", 2) && info->token_state[i] == 1)
 			fd[1] = redirect(info, 2, i);
 		if (!ft_strncmp(info->tokens[i], ">>", 3) && info->token_state[i] == 1)
-        {
-            printf("test: %s\n", info->tokens[i]);
-        	fd[1] = redirect(info, 4, i);
-        }
-        if (!ft_strncmp(info->tokens[i], "<<", 3) && info->token_state[i] == 1)
+			fd[1] = redirect(info, 4, i);
+		if (!ft_strncmp(info->tokens[i], "<<", 3) && info->token_state[i] == 1)
 			ft_heredoc(info, i);
-		if (fd[0] < 0 || fd[1] < 0)
+		if ((fd[0] < 0 || fd[1] < 0) && info->exit_status == 1)
 			return (-1);
 		i++;
 	}
