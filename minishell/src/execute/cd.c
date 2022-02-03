@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 17:48:02 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 17:51:48 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void	exec_cd(t_info *info, char **command)
 	if (check_nosuchdir(info) == 1)
 		return ;
 	i = 0;
-	while (directions[i])
+	while (directions[i] && !check_nosuchdir(info))
 	{
 		exec_cd2(info, ft_strdup(directions[i]), i);
 		free (directions[i]);
