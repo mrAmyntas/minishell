@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 14:22:31 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/03 15:08:18 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int	find_redirect(t_info *info, int i, int fd[2], int end)
         }
         if (!ft_strncmp(info->tokens[i], "<<", 3) && info->token_state[i] == 1)
 			ft_heredoc(info, i);
+		if (fd[0] < 0 || fd[1] < 0)
+			return (-1);
 		i++;
 	}
 	return (pipeloc);
