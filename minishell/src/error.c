@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 18:22:49 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 18:50:08 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	ft_error2(t_info *info, int i)
 	if (i == -1)
 	{
 		write(2, "minishell: malloc error\n", 25);
+		info->exit_status = -1;
 		ft_free(info);
 		exit(1);
 	}
@@ -71,6 +72,7 @@ void	ft_error2(t_info *info, int i)
 	{
 		write(2, "minishell: syntax error: unclosed quote\n", 41);
 		ft_free(info);
+		info->exit_status = 258;
 		minishell(info);
 		rl_clear_history();
 		exit(1);
@@ -79,16 +81,27 @@ void	ft_error2(t_info *info, int i)
 	{
 		write(2, "minishell: syntax error: no process after pipe\n", 48);
 		ft_free(info);
+		info->exit_status = 258;
 		minishell(info);
 		rl_clear_history();
 		exit(1);
 	}
 }
 
+void	invalid_identifier(t_info *info)
+{
+	write(2, "minishell: export: '", 20);
+	write(2, info->exit_msg, ft_strlen(info->exit_msg));
+	write(2, "': not a valid identifier\n", 26);
+	info->exit_status = 1;
+}
+
 void	ft_error(t_info *info, int i)
 {
 	if (i < 0)
 		ft_error2(info, i);
+	else if (info->exit_status == 2)
+		invalid_identifier(info);
 	else if (info->exit_status == 1)
 	{
 		write(2, "minishell: ", 12);

@@ -6,16 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 16:11:35 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 18:31:20 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 // to-do:
-
-// cd ../minishell werkt neit (pwd update niet goed)
-// cd . gaat naar .
-
-// cd inc -> leaks
 
 // cat/grep infinite loop op eind er maar uit flikkeren
 
@@ -26,15 +21,9 @@
 // should reset exit status to 0 after all succesfull commands
 // so also when piping so not re-looping in minishell
 
-// Search and launch the right executable (based on the PATH variable or using a
-// relative or an absolute path). e.g. /bin/pwd shoul work 
 
-// echo hoi > abc (no rights)
 
-// < SDD > abc |
-// echo hoi >> abc (token ??)
 
-// echo cho hoi >> abc >   HANGS
 #include "../../inc/minishell.h"
 
 static void	remove_quotes(t_info *info)

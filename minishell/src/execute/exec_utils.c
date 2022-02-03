@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 14:45:09 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 18:46:45 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	check_var(char **command, int i)
+int	check_var(char **command, int i, t_info *info)
 {
 	int	j;
 
@@ -21,7 +21,10 @@ int	check_var(char **command, int i)
 			j++;
 	if (command[i][j] < 65 || (command[i][j] > 90 && command[i][j] < 95)
 		|| command[i][j] > 122 || command[i][j] == 96)
-		perror(ft_strjoin(command[i], ": not a valid identifier"));
+		{
+			set_error(info, 2, command[i], 0);
+			ft_error(info, 0);
+		}
 	else
 	{
 		while (command[i][j] && command[i][j] != '=')
@@ -31,7 +34,8 @@ int	check_var(char **command, int i)
 					|| (command[i][j] > 90 && command[i][j] < 95)
 						|| command[i][j] > 122 || command[i][j] == 96)
 			{
-				perror(ft_strjoin(command[i], ": not a valid identifier"));
+				set_error(info, 2, command[i], 0);
+				ft_error(info, 0);
 				return (1);
 			}
 			j++;
@@ -68,7 +72,7 @@ int	exec_export(t_info *info, char **command)
 	i = 1;
 	while (command[i])
 	{
-		if (!check_var(command, i))
+		if (!check_var(command, i, info))
 			add_env(info, command[i]);
 		i++;
 	}
