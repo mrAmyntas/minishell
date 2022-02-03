@@ -6,37 +6,31 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 20:42:33 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:31:03 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 // to-do:
 
-// crash bij export
+// cd ../minishell werkt neit 
 
-// exit status: if it is X -> a call to minishell 
-// should NOT reset it, if there is no new command
-
-// write naar stderr ipv printf met de errors
+// cd inc -> leaks
 
 // echo | -> geen syntax error
-
-// cntrl - D werkt niet direct na ctrl-C of cntr-backslash
 
 // cat infinite loop
 
 // set SHLVL = 2
 
-// cd heeft leaks (cd ..)
-
-// cntrl - L after a up or down?
-
-// scrambling of terminal with up/down
-// has to do with whatever is that readline color shit
-
 // echo hoi >>> out (voor state = 1 (except |) error bij i = 1 i+1 = 2)
+// <--- moet de token die achter staat weegeven in write
 
 //cd mini > out
+
+// protect all mallocs
+
+//echo << >
+
 #include "../../inc/minishell.h"
 
 static void	remove_quotes(t_info *info)
@@ -133,6 +127,7 @@ void	parser(t_info *info)
 	remove_spaces(info);
 	set_token_state(info);
 	remove_quotes(info);
+	find_syntax_error(info);
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 18:15:17 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:26:26 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int	redirect(t_info *info, int type, int i)
 	if (fd < 0)
 	{
 		if (info->tokens[i + 1] == NULL || !(type % 2))
-			set_error(info, 258, info->tokens[i + 1]);
+			set_error(info, 258, info->tokens[i + 1], 0);
 		else
-			set_error(info, 1, info->tokens[i + 1]);
+			set_error(info, 1, info->tokens[i + 1], 0);
 		return (fd);
 	}
 	if (type == 2 || type == 4)
@@ -72,7 +72,7 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 	pipe(pipefd);
 	id = fork();
 	if (id == -1)
-		set_error(info, 13, NULL);
+		set_error(info, 13, NULL, 0);
 	if (id)
 	{
 		wait(&id);

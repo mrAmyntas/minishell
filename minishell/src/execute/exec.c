@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 19:41:26 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:11:55 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	exec(t_info *info, char **command)
 	}
 	path = get_path(command[0], info->env);
 	execve(path, command, info->env);
-	set_error(info, 127, NULL);
+	set_error(info, 127, NULL, 0);
 	ft_error(info, 0);
 	exit (1);
 }
@@ -106,7 +106,7 @@ void	ft_find_command(t_info *info, char **command)
 		exit(0);
 	else if (command[0])
 	{
-		set_error(info, 127, command[0]);
+		set_error(info, 127, command[0], 0);
 		ft_error(info, 0);
 	}
 	free_strstr(command);

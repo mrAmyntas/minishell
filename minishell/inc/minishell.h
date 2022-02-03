@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 19:29:16 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:24:41 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	ft_free(t_info *info);
 void	check_redirect_v2(t_info *info, int start, int end, int inputfd);
 char	*expand_buf(t_info *info, char *buf, int i);
 void	check_dollar_in_quotes(t_info *info, int i);
-void	set_error(t_info *info, int error_type, char *str);
+void	set_error(t_info *info, int error_type, char *str, int token);
 int		check_nosuchdir(t_info *info);
 void	free_info(t_info *info);
 void	free_strstr(char **str);
@@ -114,5 +114,6 @@ int		check_char(t_info *info, int i, char *line_read);
 int		ft_heredoc(t_info *info, int i);
 char	*realloc_token(t_info *info, int i, int len);
 size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start);
+void	find_syntax_error(t_info *info);
 
 #endif

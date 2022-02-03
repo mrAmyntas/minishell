@@ -6,15 +6,35 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 20:24:58 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:34:33 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	set_error(t_info *info, int error_type, char *str)
+void	syntax_error(t_info *info, int token)
 {
-	int	i;
+	char	c;
+
+	write(2, "minishell: syntax error near unexpected", 40);
+	if (token == 0)
+		write(2, " token `newline'\n", 18);
+	else
+	{
+		c = check_char_token(info, token, 0);
+		write(2, " token `", 8);
+		write(2, &c, 1);
+		write(2, "`\n", 2);
+		ft_free(info);
+		minishell(info);
+		rl_clear_history();
+		exit(1);
+	}
+}
+
+void	set_error(t_info *info, int error_type, char *str, int token)
+{
+	int		i;
 
 	i = ft_strlen(str);
 	if (info->exit_msg != NULL)
@@ -23,13 +43,12 @@ void	set_error(t_info *info, int error_type, char *str)
 		info->exit_msg = NULL;
 	}
 	info->exit_msg = (char *)malloc(sizeof(char) * (i + 1));
+	if (info->exit_msg == NULL)
+		ft_error(info, -1);
 	ft_strlcpy(info->exit_msg, str, i + 1);
 	info->exit_status = error_type;
 	if (error_type == 258)
-	{
-		write(2, "minishell: syntax error near ", 30);
-		write(2, "near unexpected token `newline'\n", 33);
-	}
+		syntax_error(info, token);
 }
 
 void	ft_error2(t_info *info, int i)
@@ -66,11 +85,15 @@ void	ft_error(t_info *info, int i)
 	{
 		write(2, "minishell: ", 12);
 		perror(info->exit_msg);
+		free(info->exit_msg);
+		info->exit_msg = NULL;
 	}
 	else if (info->exit_status == 127)
 	{
 		write(2, "minishell: ", 12);
 		write(2, info->exit_msg, ft_strlen(info->exit_msg));
+		free(info->exit_msg);
+		info->exit_msg = NULL;
 		write(2, ": command not found\n", 20);
 	}
 	else if (info->exit_status == 258)
@@ -94,7 +117,7 @@ int	check_nosuchdir(t_info *info)
 			ret = opendir(info->tokens[i + 1]);
 			if (ret == NULL)
 			{
-				set_error(info, 1, info->tokens[i + 1]);
+				set_error(info, 1, info->tokens[i + 1], 0);
 				ft_error(info, 0);
 				ft_free(info);
 				exit(1);
