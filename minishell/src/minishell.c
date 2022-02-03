@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 14:23:16 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/03 15:44:01 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ void	minishell_cont(t_info *info, char *line_read)
 	check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);
 	dup2(info->fd_std[0], 0);
 	dup2(info->fd_std[1], 1);
-	if (line_read && *line_read)
-		add_history(line_read);
 	ft_free(info);
 }
 
@@ -62,6 +60,8 @@ void	minishell(t_info *info)
 	while (1 == 1)
 	{
 		line_read = minishell_readline(info, line_read);
+		if (line_read && *line_read)
+			add_history(line_read);
 		if ((!line_read && (!g_sig.sigint || !g_sig.sigquit))
 			|| (!line_read && g_sig.sigint && g_sig.sigquit))
 		{
