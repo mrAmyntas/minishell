@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 18:03:29 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/03 18:30:20 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,5 +146,5 @@ void	exec_cd(t_info *info, char **command)
 		i++;
 	}
 	free (directions);
-	printf("%s\n", info->pwd);
+//	printf("%s\n", info->pwd);
 }

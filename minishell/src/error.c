@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 17:48:30 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 18:50:08 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	syntax_error(t_info *info, int token)
 {
-	char	c;
+	int	c;
 
 	write(2, "minishell: syntax error near unexpected", 40);
 	if (token == 0)
@@ -23,6 +23,13 @@ void	syntax_error(t_info *info, int token)
 	{
 		c = check_char_token(info, token, 0);
 		write(2, " token `", 8);
+		if (c == 129 || c == 130)
+		{
+			c = check_char(info, 0, "<");
+			if (check_char_token(info, token, 0) == 130)
+				c = check_char(info, 0, ">");
+			write(2, &c, 1);
+		}
 		write(2, &c, 1);
 		write(2, "`\n", 2);
 		ft_free(info);
@@ -57,6 +64,7 @@ void	ft_error2(t_info *info, int i)
 	if (i == -1)
 	{
 		write(2, "minishell: malloc error\n", 25);
+		info->exit_status = -1;
 		ft_free(info);
 		exit(1);
 	}
@@ -64,6 +72,7 @@ void	ft_error2(t_info *info, int i)
 	{
 		write(2, "minishell: syntax error: unclosed quote\n", 41);
 		ft_free(info);
+		info->exit_status = 258;
 		minishell(info);
 		rl_clear_history();
 		exit(1);
@@ -72,16 +81,27 @@ void	ft_error2(t_info *info, int i)
 	{
 		write(2, "minishell: syntax error: no process after pipe\n", 48);
 		ft_free(info);
+		info->exit_status = 258;
 		minishell(info);
 		rl_clear_history();
 		exit(1);
 	}
 }
 
+void	invalid_identifier(t_info *info)
+{
+	write(2, "minishell: export: '", 20);
+	write(2, info->exit_msg, ft_strlen(info->exit_msg));
+	write(2, "': not a valid identifier\n", 26);
+	info->exit_status = 1;
+}
+
 void	ft_error(t_info *info, int i)
 {
 	if (i < 0)
 		ft_error2(info, i);
+	else if (info->exit_status == 2)
+		invalid_identifier(info);
 	else if (info->exit_status == 1)
 	{
 		write(2, "minishell: ", 12);
