@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 16:59:28 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 17:52:18 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,11 @@ int	find_redirect(t_info *info, int i, int fd[2], int end)
 		if (!ft_strncmp(info->tokens[i], ">", 2) && info->token_state[i] == 1)
 			fd[1] = redirect(info, 2, i);
 		if (!ft_strncmp(info->tokens[i], ">>", 3) && info->token_state[i] == 1)
-			fd[1] = redirect(info, 4, i);
-		if (!ft_strncmp(info->tokens[i], "<<", 3) && info->token_state[i] == 1)
+        {
+            printf("test: %s\n", info->tokens[i]);
+        	fd[1] = redirect(info, 4, i);
+        }
+        if (!ft_strncmp(info->tokens[i], "<<", 3) && info->token_state[i] == 1)
 			ft_heredoc(info, i);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 17:20:09 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/02 18:08:57 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,9 @@ void	minishell(t_info *info)
 		//system("leaks minishell");
 	}
 }
+
+// echo bonjour > test\ 1 !!!
+
 int main(int ac, char **av, char **env)
 {
 	t_info	info;
