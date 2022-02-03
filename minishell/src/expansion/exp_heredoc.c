@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 15:51:11 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:50:04 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static void	add_dquotes(t_info *info, char *buf, int len, int i)
 	free(info->tokens[i]);
 	info->tokens[i] = NULL;
 	info->tokens[i] = (char *)malloc(sizeof(char) * len + 3);
+	if (info->tokens[i] == NULL)
+		ft_error(info, -1);
 	info->tokens[i][0] = '\"';
 	info->tokens[i][len + 1] = '\"';
 	info->tokens[i][len + 2] = '\0';
@@ -37,6 +39,8 @@ static void	reset_token(t_info *info, int i)
 	free(info->tokens[i]);
 	info->tokens[i] = NULL;
 	info->tokens[i] = (char *)malloc(sizeof(char) * 3);
+	if (info->tokens[i] == NULL)
+		ft_error(info, -1);
 	info->tokens[i][0] = '<';
 	info->tokens[i][1] = '<';
 	info->tokens[i][2] = '\0';
@@ -54,6 +58,8 @@ char	*expand_buf(t_info *info, char *buf, int i)
 		free(buf);
 		buf = NULL;
 		buf = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) - 1));
+		if (buf == NULL)
+			ft_error(info, -1);
 		j = 0;
 		while (info->tokens[i][j + 2] != '\0')
 		{

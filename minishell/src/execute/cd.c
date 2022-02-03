@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 12:11:59 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:58:25 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	exec_cd(t_info *info, char **command)
 	int		status;
 	char	*path;
 
-	if (exec_cd_special(info, command))
+	if (exec_cd_special(info, command) == 1)
 		return ;
 	id = fork();
 	if (id == -1)

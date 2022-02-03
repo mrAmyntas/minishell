@@ -6,31 +6,30 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 12:31:03 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 13:38:51 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 // to-do:
 
-// cd ../minishell werkt neit 
+// cd ../minishell werkt neit (pwd update niet goed)
+// cd . gaat naar .
+// cd ~/minishellrepo no such file
+// cd - moet naar OLDPWD
 
 // cd inc -> leaks
 
-// echo | -> geen syntax error
-
-// cat infinite loop
+// cat/grep infinite loop
 
 // set SHLVL = 2
 
-// echo hoi >>> out (voor state = 1 (except |) error bij i = 1 i+1 = 2)
-// <--- moet de token die achter staat weegeven in write
-
-//cd mini > out
-
 // protect all mallocs
 
-//echo << >
+// should reset exit status to 0 after all succesfull commands
+// so also when piping so not re-looping in minishell
 
+// Search and launch the right executable (based on the PATH variable or using a
+// relative or an absolute path). e.g. /bin/pwd shoul work 
 #include "../../inc/minishell.h"
 
 static void	remove_quotes(t_info *info)

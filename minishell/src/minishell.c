@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 19:29:42 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 13:17:30 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	minishell(t_info *info)
 		if ((!line_read && (!g_sig.sigint || !g_sig.sigquit))
 			|| (!line_read && g_sig.sigint && g_sig.sigquit))
 		{
-			write(1, "\033[0;33mexit: thanks for using minishell\033[0m\n", 45);
+			write(0, "\033[0;33mexit: thanks for using minishell\033[0m\n", 45);
 			break ;
 		}
 		if (!line_read || !line_read[0])

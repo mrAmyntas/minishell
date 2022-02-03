@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 18:54:15 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:52:16 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,16 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	info->fd_std[1] = dup(1);
 	info->home = ft_strdup(getenv("HOME"));
 	info->pwd = malloc(sizeof(char *) * len);
+	if (info->pwd == NULL)
+		ft_error(info, -1);
 	info->exit_status = 0;
 	while (!getcwd(info->pwd, len))
 	{
 		len += 10;
 		free (info->pwd);
 		info->pwd = malloc(sizeof(char *) * len);
+		if (info->pwd == NULL)
+			ft_error(info, -1);
 	}
 	sort_export(info);
 }

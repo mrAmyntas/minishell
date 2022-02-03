@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 18:10:55 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:51:24 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	*get_name(t_info *info, int i, int j)
 	if (k == j)
 		return (NULL);
 	str = (char *)malloc(k - j + 1);
+	if (str == NULL)
+		ft_error(info, -1);
 	ft_strlcpy2(str, info->tokens[i], k - j + 1, j);
 	return (str);
 }
@@ -32,6 +34,8 @@ char	*get_rest(t_info *info, int i, int j)
 
 	k = check_name(info, i, j);
 	str = (char *)malloc(ft_strlen(info->tokens[i]) + 2);
+	if (str == NULL)
+		ft_error(info, -1);
 	ft_strlcpy2(str, info->tokens[i], ft_strlen(info->tokens[i]) - k + 1, k);
 	if (j != 0)
 	{
@@ -57,6 +61,8 @@ static void	remove_dollar_and_name(t_info *info, char *rest, int i)
 	if (rest != NULL)
 	{
 		info->tokens[i] = (char *)malloc(sizeof(char) * ft_strlen(rest) + 1);
+		if (info->tokens[i] == NULL)
+			ft_error(info, -1);
 		ft_strlcpy(info->tokens[i], rest, ft_strlen(rest) + 1);
 		free(rest);
 	}
@@ -68,6 +74,8 @@ static void	expand_and_merge(t_info *info, char *name, char *rest, int i)
 {
 	free(info->tokens[i]);
 	info->tokens[i] = (char *)malloc(ft_strlen(name) + 1);
+	if (info->tokens[i] == NULL)
+		ft_error(info, -1);
 	ft_strlcpy(info->tokens[i], name, ft_strlen(name) + 1);
 	if (rest != NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 12:11:55 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 13:16:04 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,10 @@ void	ft_find_command(t_info *info, char **command)
 	else if (!ft_strncmp(command[0], "env", 4))
 		exec_env(info, command);
 	else if (!ft_strncmp(command[0], "exit", 5))
+	{
+		write(1, "exit\n", 5);
 		exit(0);
+	}
 	else if (command[0])
 	{
 		set_error(info, 127, command[0], 0);
