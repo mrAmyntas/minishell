@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 17:24:38 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/03 18:02:06 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	pwd_is_home(t_info *info)
+void	pwd_is_home(t_info *info, char *command)
 {
 	int	i;
 	int	j;
@@ -39,9 +39,10 @@ void	pwd_is_home(t_info *info)
 	info->env[i] = ft_strjoin("PWD=", info->pwd);
 	free_strstr(info->export);
 	sort_export(info);
+	free (command);
 }
 
-void	pwd_is_old(t_info *info)
+void	pwd_is_old(t_info *info, char *command)
 {
 	int	i;
 
@@ -62,9 +63,10 @@ void	pwd_is_old(t_info *info)
 	chdir(info->pwd);
 	free_strstr(info->export);
 	sort_export(info);
+	free (command);
 }
 
-void	trim_last_dir(t_info *info)
+void	trim_last_dir(t_info *info, char *command)
 {
 	int		i;
 	int		len;
@@ -85,6 +87,7 @@ void	trim_last_dir(t_info *info)
 	info->env[i] = ft_strjoin("PWD=", info->pwd);
 	free_strstr(info->export);
 	sort_export(info);
+	free (command);
 }
 
 void	change_pwd(t_info *info, char *command)
@@ -111,35 +114,41 @@ void	exec_cd2(t_info *info, char *command, int i)
 	char	*path;
 
 	if (command && !ft_strncmp(command, "..", 3))
-		return (trim_last_dir(info));
+		return (trim_last_dir(info, command));
 	else if (command && !ft_strncmp(command, "~", 2) && !i)
-		return (pwd_is_home(info));
+		return (pwd_is_home(info, command));
 	else if (command && !ft_strncmp(command, "-", 2) && !i)
-		return (pwd_is_old(info));
+		return (pwd_is_old(info, command));
 	if (!command || !ft_strncmp(command, ".", 2))
 		return ;
 	if (command[0] != '/')
-		make_dir(info, &command);
+		command = make_dir(info, command);
 	if (check_nosuchdir(info))
 	{
 		info->exit_status = 1;
 		return ;
 	}
+	printf("%s\n", command);
 	change_pwd(info, command);
+	free (command);
 }
 
 void	exec_cd(t_info *info, char **command)
 {
 	char	**directions;
+	char	*comm;
 	int		i;
 
 	directions = ft_split(command[1], '/');
 	i = 0;
 	while (directions[i] && !check_nosuchdir(info))
 	{
-		exec_cd2(info, ft_strdup(directions[i]), i);
+		//comm = ft_strdup(directions[i]);
 		free (directions[i]);
+		exec_cd2(info, ft_strdup(directions[i]), i);// exec_cd2(info, comm, i);
+		//free (comm);
 		i++;
 	}
 	free (directions);
+	printf("%s\n", info->pwd);
 }

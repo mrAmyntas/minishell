@@ -6,26 +6,25 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 12:48:18 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 18:00:17 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	make_dir(t_info *info, char **command)
+char	*make_dir(t_info *info, char *command)
 {
 	int		i;
 	char	*temp;
 
 	i = 0;
-	while (info->env[i] && strncmp(info->env[i], "PWD=", 4))
-		i++;
-	if (!info->env[i])
-		add_env(info, info->pwd);
-	temp = ft_strjoin("/", *command);
-	free (*command);
-	*command = ft_strjoin((info->env[i] + 4), temp);
-	free (temp);
+	if (!get_val(info, "PWD"))
+		add_env(info, ft_strjoin("PWD=", info->pwd));
+	temp = ft_strjoin("/", command);
+	free (command);
+	command = ft_strjoin(get_val(info, "PWD"), temp);
+	free(temp);
+	return (command);
 }
 
 void	free_strstr(char **str)

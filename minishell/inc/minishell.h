@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 12:24:41 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 17:52:58 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	get_env(t_info *info, char **env);
 void	exec_cd(t_info *info, char **command);
 int		exec_unset(t_info *info, char **command);
 int		exec_export(t_info *info, char **command);
-void	make_dir(t_info *info, char **command);
+char	*make_dir(t_info *info, char *command);
 char	*get_path(char *cmd, char **env);
 char	*get_val(t_info *info, char *var);
 int		ft_strstrlen(char **str, char *c, int i);

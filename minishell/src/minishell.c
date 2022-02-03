@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 15:44:01 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 17:25:44 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	minishell(t_info *info)
 			continue ;
 		}
 		minishell_cont(info, line_read);
+		system("leaks minishell");
 	}
 }
 
