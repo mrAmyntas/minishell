@@ -6,13 +6,13 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/15 16:30:31 by basz          #+#    #+#                 */
-/*   Updated: 2021/02/19 20:16:55 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:07:38 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void		*ft_free(void *ptr, void *ptr2)
+static void	*ft_free(void *ptr, void *ptr2)
 {
 	if (ptr != NULL)
 		free(ptr);
@@ -23,7 +23,7 @@ static void		*ft_free(void *ptr, void *ptr2)
 
 static	t_list	*ft_lstnewelem(void *content)
 {
-	t_list *new;
+	t_list	*new;
 
 	new = (t_list *)malloc(sizeof(t_list));
 	if (new == NULL)
@@ -33,8 +33,8 @@ static	t_list	*ft_lstnewelem(void *content)
 	return (new);
 }
 
-t_list			*ft_lstmap(t_list *lst, void *(*f)(void *),
-				void (*ft_del)(void *))
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *),
+		void (*ft_del)(void *))
 {
 	t_list	*newlist;
 	t_list	*newlist2;

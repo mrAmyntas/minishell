@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 17:36:11 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/03 12:58:25 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,31 +83,47 @@ void	change_pwd(t_info *info, char **command)
 	sort_export(info);
 }
 
+static int	exec_cd_special(t_info *info, char **command)
+{
+	if (!command[1])
+		return (1);
+	if (command[1] && !ft_strncmp(command[1], "..", 3))
+	{
+		trim_last_dir(info, command);
+		return (1);
+	}
+	else if (command[1] && !ft_strncmp(command[1], "~", 2))
+	{
+		pwd_is_home(info, command);
+		return (1);
+	}
+	return (0);
+}
+
 void	exec_cd(t_info *info, char **command)
 {
 	int		id;
 	int		status;
 	char	*path;
 
-	if (!command[1])
+	if (exec_cd_special(info, command) == 1)
 		return ;
-	if (command[1] && !ft_strncmp(command[1], "..", 3))
-		return (trim_last_dir(info, command));
-	else if (command[1] && !ft_strncmp(command[1], "~", 2))
-		return (pwd_is_home(info, command));
 	id = fork();
 	if (id == -1)
-		set_error(info, 1, NULL);
+		set_error(info, 1, NULL, 0);
 	if (id)
 	{
 		if (command[1][0] != '/')
 			make_dir(info, &command[1]);
 		waitpid(id, &status, 0);
 		if (status)
+		{
+			info->exit_status = 1;
 			return ;
+		}
 		change_pwd(info, command);
 	}
 	path = get_path(command[0], info->env);
-	check_nosuchdir(info);
-	execve(path, command, info->env);
+	if (!id && check_nosuchdir(info) == 0)
+		execve(path, command, info->env);
 }

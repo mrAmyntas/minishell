@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 14:45:43 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:36:56 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,16 @@ void	join_quoted_tokens(t_info *info, int ret)
 	}
 }
 
-int	check_name(t_info *info, int i, int j)
+void	find_syntax_error(t_info *info)
 {
-	if ((info->tokens[i][j] >= 'a' && info->tokens[i][j] <= 'z') ||
-		(info->tokens[i][j] >= 'A' && info->tokens[i][j] <= 'Z') ||
-		info->tokens[i][j] == '_')
+	int	i;
+
+	i = 0;
+	while (info->tokens[i] != NULL && info->tokens[i + 1] != NULL)
 	{
-		while ((info->tokens[i][j] >= '0' && info->tokens[i][j] <= '9') ||
-			(info->tokens[i][j] >= 'a' && info->tokens[i][j] <= 'z') ||
-			(info->tokens[i][j] >= 'A' && info->tokens[i][j] <= 'Z') ||
-			info->tokens[i][j] == '_')
-			j++;
+		if (info->token_state[i] == 1 && check_char_token(info, i, 0)
+			!= C_PIPE && info->token_state[i + 1] == 1)
+			set_error(info, 258, NULL, i + 1);
+		i++;
 	}
-	return (j);
 }

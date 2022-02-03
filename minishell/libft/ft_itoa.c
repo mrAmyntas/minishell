@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/03 19:27:16 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2021/01/24 16:58:55 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:08:41 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char		*ft_reverse_buff(char *buff)
+static char	*ft_reverse_buff(char *buff)
 {
 	int		i;
 	int		j;
@@ -36,14 +36,14 @@ static char		*ft_reverse_buff(char *buff)
 	return (buff);
 }
 
-static char		*ft_allocmem(long int z, int n)
+static char	*ft_allocmem(long int z, int n)
 {
-	char *buff;
+	char	*buff;
 
 	if (n < 0)
-		buff = (char*)malloc(sizeof(char) * (z + 2));
+		buff = (char *)malloc(sizeof(char) * (z + 2));
 	else
-		buff = (char*)malloc(sizeof(char) * (z + 1));
+		buff = (char *)malloc(sizeof(char) * (z + 1));
 	return (buff);
 }
 
@@ -57,7 +57,7 @@ static long int	ft_determine_len(long int str, long int y, long int z)
 	return (z);
 }
 
-static char		*ft_fillbuff(int n, char *buff, long int z, long int str)
+static char	*ft_fillbuff(int n, char *buff, long int z, long int str)
 {
 	int			i;
 	long int	y;
@@ -80,7 +80,7 @@ static char		*ft_fillbuff(int n, char *buff, long int z, long int str)
 	return (buff);
 }
 
-char			*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char		*buff;
 	long int	y;

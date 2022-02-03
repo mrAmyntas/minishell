@@ -6,15 +6,15 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/09 17:43:42 by basz          #+#    #+#                 */
-/*   Updated: 2020/11/14 15:20:05 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:05:44 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char			**ft_freebuff(int j, char **buff)
+static char	**ft_freebuff(int j, char **buff)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (j >= i)
@@ -26,10 +26,10 @@ static char			**ft_freebuff(int j, char **buff)
 	return (NULL);
 }
 
-static int			ft_wordlength(int j, const char *s, char c)
+static int	ft_wordlength(int j, const char *s, char c)
 {
-	int i;
-	int x;
+	int	i;
+	int	x;
 
 	i = 0;
 	while (j >= 0)
@@ -44,10 +44,10 @@ static int			ft_wordlength(int j, const char *s, char c)
 	return (i - x);
 }
 
-static int			ft_wordcount(char const *s, char c, int x)
+static int	ft_wordcount(char const *s, char c, int x)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	j = 0;
 	i = 0;
@@ -72,14 +72,14 @@ static int			ft_wordcount(char const *s, char c, int x)
 	return (j);
 }
 
-char				**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char	**buff;
 	int		j;
 
 	if (s == NULL)
 		return (NULL);
-	buff = (char **)malloc(sizeof(char*) * (1 + ft_wordcount(s, c, -1)));
+	buff = (char **)malloc(sizeof(char *) * (1 + ft_wordcount(s, c, -1)));
 	if (buff == NULL)
 		return (NULL);
 	j = 0;

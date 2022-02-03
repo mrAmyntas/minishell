@@ -6,15 +6,15 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/04 20:02:26 by basz          #+#    #+#                 */
-/*   Updated: 2020/11/14 15:15:43 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:06:03 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		ft_putstr_fd(char *s, int fd)
+void	ft_putstr_fd(char *s, int fd)
 {
-	int i;
+	int	i;
 
 	if (s == NULL)
 		return ;

@@ -6,13 +6,13 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/29 18:38:46 by basz          #+#    #+#                 */
-/*   Updated: 2020/11/14 15:44:18 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:04:35 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t		ft_strlcat(char *dst, const char *src, size_t size)
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
 	int					i;
 	int					j;
@@ -33,7 +33,7 @@ size_t		ft_strlcat(char *dst, const char *src, size_t size)
 	if (size >= y)
 	{
 		dst[j] = '\0';
-		return (y + ft_strlen((char*)src));
+		return (y + ft_strlen((char *)src));
 	}
-	return (size + ft_strlen((char*)src));
+	return (size + ft_strlen((char *)src));
 }

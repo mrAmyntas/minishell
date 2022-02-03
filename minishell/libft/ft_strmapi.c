@@ -6,13 +6,13 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/04 17:18:05 by basz          #+#    #+#                 */
-/*   Updated: 2020/11/14 15:44:48 by basz          ########   odam.nl         */
+/*   Updated: 2022/02/02 19:04:01 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char		*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
 	char			*buff;
 	int				i;

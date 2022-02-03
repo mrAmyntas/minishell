@@ -6,36 +6,30 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 15:01:08 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 13:46:17 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 // to-do:
 
-// crash bij export
+// cd ../minishell werkt neit (pwd update niet goed)
+// cd . gaat naar .
+// cd ~/minishellrepo no such file
+// cd - moet naar OLDPWD
 
-// leaks: ???
+// cd inc -> leaks
 
-// exit status: if it is X -> a call to minishell 
-// should NOT reset it, if there is no new command
-
-// write naar stderr ipv printf met de errors
-
-// echo | -> geen syntax error
-
-// cntrl - D werkt niet direct na ctrl-C of cntr-backslash
-
-// cat infinite loop
+// cat/grep infinite loop op eind er maar uit flikkeren
 
 // set SHLVL = 2
 
-// cd heeft leaks (cd ..)
+// protect all mallocs
 
-// cntrl - L after a up or down?
+// should reset exit status to 0 after all succesfull commands
+// so also when piping so not re-looping in minishell
 
-// scrambling of terminal with up/down
-// has to do with whatever is that readline color shit
-
+// Search and launch the right executable (based on the PATH variable or using a
+// relative or an absolute path). e.g. /bin/pwd shoul work 
 #include "../../inc/minishell.h"
 
 static void	remove_quotes(t_info *info)
@@ -132,6 +126,7 @@ void	parser(t_info *info)
 	remove_spaces(info);
 	set_token_state(info);
 	remove_quotes(info);
+	find_syntax_error(info);
 }
 
 /*

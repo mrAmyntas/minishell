@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 13:57:56 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 14:49:32 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/02 18:14:49 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	parse_quotes(t_info *info, int i)
 		{
 			ret = check_unclosed(info, i, i + 1);
 			if (ret == -2)
-				ft_error(info, ret);
+				ft_error(info, -2);
 			if (check_empty_quotes(info, i, ret) == 1)
 				continue ;
 			n = check_before_after(info, i, ret, 0);

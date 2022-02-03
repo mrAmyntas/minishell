@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:22:30 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 14:47:04 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/03 12:53:28 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ static void	merge_tokens(t_info *info, int i, char c)
 {
 	free(info->tokens[i]);
 	info->tokens[i] = (char *)malloc(sizeof(char) * 3);
+	if (info->tokens[i] == NULL)
+		ft_error(info, -1);
 	info->tokens[i][0] = c;
 	info->tokens[i][1] = c;
 	info->tokens[i][2] = '\0';
