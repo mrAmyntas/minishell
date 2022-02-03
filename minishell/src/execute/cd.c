@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 14:51:46 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/03 15:36:52 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,29 @@ void	pwd_is_home(t_info *info, char **command)
 		info->pwd = ft_strdup(info->env[j] + 5);
 	chdir(info->pwd);
 	info->env[i] = ft_strjoin("PWD=", info->pwd);
+	free_strstr(info->export);
+	sort_export(info);
+}
+
+void	pwd_is_old(t_info *info, char **command)
+{
+	int	i;
+
+	i = 0;
+	if (!get_val(info, "OLDPWD"))
+		return ;
+	while (info->env[i] && ft_strncmp(info->env[i], "PWD=", 4))
+		i++;
+	if (info->env[i])
+		add_env(info, ft_strjoin("PWD=", info->pwd));
+	add_env(info, ft_strjoin("PWD=", get_val(info, "OLDPWD")));
+	i = 0;
+	while (info->env[i] && ft_strncmp(info->env[i], "OLDPWD=", 7))
+		i++;
+	add_env(info, ft_strjoin("OLDPWD=", info->pwd));
+	free (info->pwd);
+	info->pwd = get_val(info, "PWD");
+	chdir(info->pwd);
 	free_strstr(info->export);
 	sort_export(info);
 }
@@ -83,28 +106,17 @@ void	change_pwd(t_info *info, char **command)
 	sort_export(info);
 }
 
-static int	exec_cd_special(t_info *info, char **command)
-{
-	if (!command[1])
-		return (1);
-	if (command[1] && !ft_strncmp(command[1], "..", 3))
-	{
-		trim_last_dir(info, command);
-		return (1);
-	}
-	else if (command[1] && !ft_strncmp(command[1], "~", 2))
-	{
-		pwd_is_home(info, command);
-		return (1);
-	}
-	return (0);
-}
-
 void	exec_cd(t_info *info, char **command)
 {
 	char	*path;
 
-	if (exec_cd_special(info, command) == 1)
+	if (command[1] && !ft_strncmp(command[1], "..", 3))
+		return (trim_last_dir(info, command));
+	else if (command[1] && !ft_strncmp(command[1], "~", 2))
+		return (pwd_is_home(info, command));
+	else if (command[1] && !ft_strncmp(command[1], "-", 2))
+		return (pwd_is_old(info, command));
+	if (!command[1])
 		return ;
 	if (command[1][0] != '/')
 		make_dir(info, &command[1]);
