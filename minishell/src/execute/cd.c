@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 18:30:20 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/04 11:39:03 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,12 +139,9 @@ void	exec_cd(t_info *info, char **command)
 	i = 0;
 	while (directions[i])
 	{
-		//comm = ft_strdup(directions[i]);
 		free (directions[i]);
-		exec_cd2(info, ft_strdup(directions[i]), i);// exec_cd2(info, comm, i);
-		//free (comm);
+		exec_cd2(info, ft_strdup(directions[i]), i);
 		i++;
 	}
 	free (directions);
-//	printf("%s\n", info->pwd);
 }

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 16:53:19 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/04 11:33:00 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,4 @@ void	ft_find_command(t_info *info, char **command)
 		ft_error(info, 0);
 	}
 	free_strstr(command);
-	return ;
 }

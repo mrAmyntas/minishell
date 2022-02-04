@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 17:49:25 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/04 15:08:56 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,32 @@ int	redirect(t_info *info, int type, int i)
 	return (1);
 }
 
+char	*check_path(char *command)
+{
+	int		loc;
+	int		i;
+	char	*new;
+	
+	i = ft_strlen(command) - 2;
+	while (command[i] != '/' && i > 0)
+		i--;
+	if (!i)
+		return (command);
+	if (access(command, X_OK))
+		write(1, "error\n", 6);
+	loc = i + 1;
+	new = malloc(sizeof(char *) * (ft_strlen(command) - loc + 1));
+	i = 0;
+	while (command[loc + i])
+	{
+		new[i] = command[loc + i];
+		i++;
+	}
+	new[i] = '\0';
+	free(command);
+	return (new);
+}
+
 void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 {
 	int		id;
@@ -88,6 +114,7 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 		if (!fdout)
 			dup2(pipefd[1], 1);
 		command = trim_command(info, start, loc_pipe);
+		command[0] = check_path(command[0]);
 		ft_find_command(info, command);
 		exit(0);
 	}
@@ -119,8 +146,9 @@ int	find_redirect(t_info *info, int i, int fd[2], int end)
 
 void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 {
-	int	fd[2];
-	int	pipeloc;
+	int		fd[2];
+	int		pipeloc;
+	char	**command;
 
 	fd[0] = 0;
 	fd[1] = 0;
@@ -129,5 +157,7 @@ void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 		return (ft_error(info, 0));
 	if (pipeloc >= 0)
 		return (ft_pipe(info, pipeloc, start, fd[1]));
-	return (ft_find_command(info, trim_command(info, start, end)));
+	command = trim_command(info, start, end);
+	command[0] = check_path(command[0]);
+	return (ft_find_command(info, command));
 }
