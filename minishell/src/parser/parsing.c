@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 19:01:04 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/04 21:05:46 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 
 // '> a' -> LEAKS
 
+// nog iets met die filenames met spaties? 'test 1'?
 #include "../../inc/minishell.h"
 
 static void	remove_quotes(t_info *info)
