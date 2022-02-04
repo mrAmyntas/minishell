@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 12:36:56 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/04 20:54:46 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,21 @@ void	find_syntax_error(t_info *info)
 	int	i;
 
 	i = 0;
-	while (info->tokens[i] != NULL && info->tokens[i + 1] != NULL)
+	while (info->tokens[i] != NULL)
 	{
-		if (info->token_state[i] == 1 && check_char_token(info, i, 0)
+		if ((info->token_state[i] == 1 && check_char_token(info, i, 0)
 			!= C_PIPE && info->token_state[i + 1] == 1)
-			set_error(info, 258, NULL, i + 1);
+				|| (check_char_token(info, i, 0) == C_GREATER && info->tokens[i + 1] == NULL))
+		{
+			if (info->tokens[i + 1] == NULL)
+				set_error(info, 258, NULL, 0);
+			else
+				set_error(info, 258, NULL, i + 1);
+			ft_free(info);
+			minishell(info);
+			rl_clear_history();
+			exit(1);
+		}
 		i++;
 	}
 }

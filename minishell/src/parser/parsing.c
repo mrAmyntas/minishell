@@ -6,36 +6,33 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 15:14:20 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/04 19:01:04 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 // to-do:
 
-// cd ../minishell werkt neit (pwd update niet goed)
-// cd . gaat naar .
-
-// cd inc -> leaks
-
 // cat/grep infinite loop op eind er maar uit flikkeren
 
-// set SHLVL = 2
+// set SHLVL = 2 ?
 
 // protect all mallocs
 
 // should reset exit status to 0 after all succesfull commands
-// so also when piping so not re-looping in minishell
+// so also when piping so not re-looping in minishell ?
 
+// tekstbestand hoi heeft permissions en 'echo hoi' als line
+// /Users/bhoitzin/minishellrepo/minishell/hoi -> bash execute echo hoi
+// zouden we hoi als een executable moeten uitvoeren als hij bestaat? denk het niet
 
+// path invoeren e.g. /Users/bhoi/Users/bhoitzin/minishellrepo/minishell/obj  -> LEAKS
 
+// cd /Users/bhoitzin/minishellrepo/minishell/testdir (testdir met 0 permissions)
+// dit copies path achter pwd and leaks
+// als path wel naar een directory gaat -> dan plakt hij de hele path achter pwd (niet enkel nieuwe stukje)
 
-// Search and launch the right executable (based on the PATH variable or using a
-// relative or an absolute path). e.g. /bin/pwd shoul work 
+// '> a' -> LEAKS
 
-// echo hoi > abc (no rights)
-
-// < SDD > abc |
-// echo hoi >> abc (token ??)
 #include "../../inc/minishell.h"
 
 static void	remove_quotes(t_info *info)
