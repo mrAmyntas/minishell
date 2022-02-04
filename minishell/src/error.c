@@ -6,11 +6,12 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 18:50:08 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/04 15:14:04 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
 
 void	syntax_error(t_info *info, int token)
 {

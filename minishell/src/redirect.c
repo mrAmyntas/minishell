@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 15:08:56 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/04 15:16:37 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ int	redirect(t_info *info, int type, int i)
 		fd = open(info->tokens[i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (fd < 0)
 	{
-		if ((info->tokens[i + 1] == NULL || !(type % 2))
-			&& access(info->tokens[i + 1], F_OK) == -1)
+		if ((info->tokens[i + 1] == NULL || !(type % 2)) && access(info->tokens[i + 1], F_OK) == -1)
 			set_error(info, 258, info->tokens[i + 1], 0);
 		else
 			set_error(info, 1, info->tokens[i + 1], 0);
