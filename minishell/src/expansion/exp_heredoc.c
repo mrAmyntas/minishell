@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 12:50:04 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/04 20:17:34 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,13 @@ static void	reset_token(t_info *info, int i)
 char	*expand_buf(t_info *info, char *buf, int i)
 {
 	int	j;
+	int	x;
 
 	if (info->token_state[i + 1] == 0)
 	{
 		add_dquotes(info, buf, ft_strlen(buf), i);
+		x = info->exit_status;
+		info->exit_status = info->exit_status2;
 		check_dollar_in_quotes(info, i);
 		free(buf);
 		buf = NULL;
@@ -69,5 +72,6 @@ char	*expand_buf(t_info *info, char *buf, int i)
 		buf[j] = '\0';
 		reset_token(info, i);
 	}
+	info->exit_status = x;
 	return (buf);
 }

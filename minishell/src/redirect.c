@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 15:31:12 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/07 17:23:52 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,10 @@ int	redirect(t_info *info, int type, int i)
 		fd = open(info->tokens[i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (fd < 0)
 	{
-		if ((info->tokens[i + 1] == NULL || !(type % 2))
-			&& access(info->tokens[i + 1], F_OK) == -1)
+		if ((info->tokens[i + 1] == NULL || !(type % 2)) && access(info->tokens[i + 1], F_OK) == -1)
 			set_error(info, 258, info->tokens[i + 1], 0);
 		else
-			set_error(info, 1, info->tokens[i + 1], 0);
+			set_error(info, 1, info->tokens[i + 1], 4);
 		return (fd);
 	}
 	if (type == 2 || type == 4)
@@ -64,19 +63,35 @@ int	redirect(t_info *info, int type, int i)
 	return (1);
 }
 
-char	*check_path(char *command)
+char	*check_path(t_info *info, char *command)
 {
 	int		loc;
 	int		i;
 	char	*new;
-	
+	DIR		*ret;
+
+	if (!command)
+		return (NULL);
 	i = ft_strlen(command) - 2;
 	while (command[i] != '/' && i > 0)
 		i--;
-	if (!i)
+	if (i <= 0)
 		return (command);
+	ret = opendir(command);
+	if (ret != NULL)
+	{
+		set_error(info, 126, command, -5); // is a directory
+		closedir(ret);
+		return (NULL);
+	}
 	if (access(command, X_OK))
-		write(1, "error\n", 6);
+	{
+		if (access(command, F_OK) == 0)
+			set_error(info, 126, command, -5); // exists -> no permission
+		else  // doesnt exist
+			set_error(info, 127, command, -5);
+		return (NULL);
+	}
 	loc = i + 1;
 	new = malloc(sizeof(char *) * (ft_strlen(command) - loc + 1));
 	if (!new)
@@ -101,7 +116,7 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 	pipe(pipefd);
 	id = fork();
 	if (id == -1)
-		set_error(info, 13, NULL, 0);
+		set_error(info, 13, NULL, 4);
 	if (id)
 	{
 		wait(&id);
@@ -116,7 +131,9 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 		if (!fdout)
 			dup2(pipefd[1], 1);
 		command = trim_command(info, start, loc_pipe);
-		command[0] = check_path(command[0]);
+		command[0] = check_path(info, command[0]);
+		if (command[0] == NULL)
+			exit(1);
 		ft_find_command(info, command);
 		exit(0);
 	}
@@ -156,10 +173,12 @@ void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	fd[1] = 0;
 	pipeloc = find_redirect(info, start, fd, end);
 	if (fd[0] < 0 || fd[1] < 0)
-		return (ft_error(info, 0));
+		return (ft_error(info, -4));
 	if (pipeloc >= 0)
 		return (ft_pipe(info, pipeloc, start, fd[1]));
 	command = trim_command(info, start, end);
-	command[0] = check_path(command[0]);
+	command[0] = check_path(info, command[0]);
+	if (command[0] == NULL)
+		return ;
 	return (ft_find_command(info, command));
 }
