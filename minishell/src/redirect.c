@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 15:08:56 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/04 15:31:12 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ char	*check_path(char *command)
 		write(1, "error\n", 6);
 	loc = i + 1;
 	new = malloc(sizeof(char *) * (ft_strlen(command) - loc + 1));
+	if (!new)
+		return (NULL);
 	i = 0;
 	while (command[loc + i])
 	{
