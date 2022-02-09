@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:26:51 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 18:42:55 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,33 +40,39 @@ void	free_strstr(char **str)
 	free(str);
 }
 
+void	find_loc(t_info *info, int j, int i)
+{
+	while (j >= 0)
+	{
+		if (ft_strncmp(info->env[i], info->export[j]
+				, ft_len_to_char(info->env[i], '=')) > 0)
+		{
+			put_str(info->env[i], info->export, j + 1);
+			return ;
+		}
+		else if (!j)
+			put_str(info->env[i], info->export, 0);
+		j--;
+	}
+}
+
 void	sort_export(t_info *info)
 {
-	int	i[2];
+	int	i;
+	int	j;
 
-	i[0] = 1;
+	i = 1;
 	info->export = malloc(sizeof(char **)
 			* (ft_strstrlen(info->env, NULL, 0) + 1));
 	if (info->export == NULL)
 		ft_error(info, -1);
 	info->export[0] = ft_strdup(info->env[0]);
-	while (info->env[i[0]])
+	while (info->env[i])
 	{
-		info->export[i[0]] = NULL;
-		i[1] = ft_strstrlen(info->export, NULL, 0) - 1;
-		while (i[1] >= 0)
-		{
-			if (ft_strncmp(info->env[i[0]], info->export[i[1]]
-					, ft_len_to_char(info->env[i[0]], '=')) > 0)
-			{
-				put_str(info->env[i[0]], info->export, i[1] + 1);
-				break ;
-			}
-			else if (!i[1])
-				put_str(info->env[i[0]], info->export, 0);
-			i[1]--;
-		}
-		i[0]++;
+		info->export[i] = NULL;
+		j = ft_strstrlen(info->export, NULL, 0) - 1;
+		find_loc(info, j, i);
+		i++;
 	}
-	info->export[i[0]] = NULL;
+	info->export[i] = NULL;
 }

@@ -6,13 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:01:24 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 18:28:08 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 // to-do:
-
-// /Users/bhoitzin/minishellrepo/minishell/inc    leaks
 
 #include "../../inc/minishell.h"
 

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:26:45 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 18:49:35 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	ft_len_to_char(char *str, char c)
 	i = 0;
 	while (str[i] != c && str[i])
 		i++;
-	//if (!str[i])
-	//	return (-1);
+	if (!str[i])
+		return (-1);
 	return (i);
 }
 
