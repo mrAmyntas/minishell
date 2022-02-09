@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:56:10 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 20:09:20 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,12 @@ static char	*minishell_readline(t_info *info, char *line_read)
 
 void	minishell_cont(t_info *info, char *line_read)
 {
+	int	set_fd[2];
+
+	set_fd[0] = 0;
+	set_fd[1] = 0;
 	g_sig.exit_status = 0;
-	check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), 0);
+	check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), set_fd);
 	dup2(info->fd_std[0], 0);
 	dup2(info->fd_std[1], 1);
 	free_stuff(info);
