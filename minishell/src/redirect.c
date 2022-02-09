@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 19:56:52 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 20:38:01 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,45 +61,34 @@ int	redirect(t_info *info, int type, int i)
 		dup2(fd, STDOUT_FILENO);
 	else if (type == 1)
 		dup2(fd, STDIN_FILENO);
-	fd = close(fd);
-	if (fd == -1)
-		perror("in redirect 66: ");
+	close(fd);
 	return (1);
 }
 
-void	ft_pipe(t_info *info, int start, int val[3], int inputfd)
+void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 {
 	int		id;
 	int		pipefd[2];
 	char	**command;
-	int		ret;
 
 	pipe(pipefd);
-	dprintf(2, "fd:%d %d\n", pipefd[0], pipefd[1]);
 	id = fork();
 	if (id == -1)
 		set_error(info, 13, NULL, 4);
 	if (!id)
 	{
-		ret = close(pipefd[0]);
-		if (ret == -1)
-			perror("in redirect 86: ");
+		close(pipefd[0]);
 		if (!val[1])
 			dup2(pipefd[1], 1);
 		command = trim_command(info, start, val[2]);
 		command[0] = check_path(info, command[0]);
 		if (command[0] == NULL)
 			exit(1);
-		ft_find_command(info, command);
-		ret = close(pipefd[1]);
-		if (ret == -1)
-			perror("in redirect 96: ");
+		ft_find_command(info, command, 0);
 		exit(0);
 	}
 	wait(&id);
-	ret = close(inputfd);
-	if (ret == -1)
-		perror("in redirect 102: ");
+	close(oldfd[0]);
 	parent_process(info, pipefd, val[2], id);
 }
 
@@ -127,7 +116,7 @@ int	find_redirect(t_info *info, int i, int fd[3], int end)
 	return (pipeloc);
 }
 
-void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
+void	check_redirect_v2(t_info *info, int start, int end, int oldfd[2])
 {
 	int		fd[3];
 	char	**command;
@@ -138,8 +127,8 @@ void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	if (fd[0] < 0 || fd[1] < 0)
 		return (ft_error(info, -4));
 	if (fd[2] >= 0)
-		return (ft_pipe(info, start, fd, inputfd));
+		return (ft_pipe(info, start, fd, oldfd));
 	command = trim_command(info, start, end);
 	command[0] = check_path(info, command[0]);
-	return (ft_find_command(info, command));
+	return (ft_find_command(info, command, oldfd[0]));
 }
