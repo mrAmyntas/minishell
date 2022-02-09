@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 15:57:47 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 21:15:53 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,6 @@ static char	*ft_remove_spaces(t_info *info, char *line_read)
 
 static void	store_char(t_info *info, int i, char *line_read)
 {
-	int		j;
-	char	*temp;
-
 	info->tokens[info->t_pos] = (char *)malloc(sizeof(char) * 2);
 	if (info->tokens[info->t_pos] == NULL)
 		ft_error(info, -1);
@@ -60,7 +57,7 @@ static void	store_string(t_info *info, int i, char *line_read)
 
 	if (i == 0)
 		return (store_char(info, i, line_read));
-	if (check_char(info, i - 1, line_read) == 0 || info->p_pos == 0)
+	if (check_char(i - 1, line_read) == 0 || info->p_pos == 0)
 	{
 		info->tokens[info->t_pos] = (char *)malloc(sizeof(char)
 				* (i - info->p_pos + 1));
@@ -83,12 +80,11 @@ static void	store_string(t_info *info, int i, char *line_read)
 static int	store_input(t_info *info, char *line_read)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	while (line_read[i] != '\0')
 	{
-		info->char_type = check_char(info, i, line_read);
+		info->char_type = check_char(i, line_read);
 		if (info->char_type != 0)
 			store_string(info, i, line_read);
 		i++;

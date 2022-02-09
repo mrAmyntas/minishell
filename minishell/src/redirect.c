@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:01:42 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 21:13:46 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	redirect(t_info *info, int type, int i)
 		fd = open(info->tokens[i + 1], O_RDONLY);
 	else if (type == 2)
 		fd = open(info->tokens[i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
-	else if (type == 4)
+	else
 		fd = open(info->tokens[i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (fd < 0)
 	{
@@ -90,7 +90,7 @@ void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 	}
 	wait(&id);
 	close(oldfd[0]);
-	parent_process(info, pipefd, val[2], id);
+	parent_process(info, pipefd, val[2]);
 }
 
 int	find_redirect(t_info *info, int i, int fd[3], int end)

@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 13:37:25 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 13:47:04 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 21:14:50 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	check_char(t_info *info, int i, char *line_read)
+int	check_char(int i, char *line_read)
 {
 	if (line_read[i] == '<')
 	{

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 13:57:56 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 18:14:49 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 21:20:19 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,21 @@ static int	check_empty_quotes(t_info *info, int first_q, int last_q)
 
 static int	check_before_after(t_info *info, int first_q, int last_q, int ret)
 {
-	int	i;
-
 	if (first_q != 0)
 	{
 		if (info->tokens[first_q - 1] != NULL
 			&& check_char_token(info, first_q - 1, 0) == C_NORMAL)
 		{
 			ret++;
-			if (last_q != i)
-			{
-				if (info->tokens[last_q + 1] != NULL
-					&& check_char_token(info, last_q + 1, 0) == C_NORMAL)
-					ret++;
-				return (ret);
-			}
+			if (info->tokens[last_q + 1] != NULL
+				&& check_char_token(info, last_q + 1, 0) == C_NORMAL)
+				ret++;
+			return (ret);
 		}
 	}
-	if (last_q != i)
-	{
-		if (info->tokens[last_q + 1] != NULL
-			&& check_char_token(info, last_q + 1, 0) == C_NORMAL)
-			ret = 3;
-	}
+	if (info->tokens[last_q + 1] != NULL
+		&& check_char_token(info, last_q + 1, 0) == C_NORMAL)
+		ret = 3;
 	return (ret);
 }
 

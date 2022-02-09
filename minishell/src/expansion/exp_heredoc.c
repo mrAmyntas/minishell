@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 20:58:01 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 21:22:57 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	*expand_buf(t_info *info, char *buf, int i)
 		}
 		buf[j] = '\0';
 		reset_token(info, i);
+		g_sig.exit_status = x;
 	}
-	g_sig.exit_status = x;
 	return (buf);
 }

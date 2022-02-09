@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:28:08 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 21:16:15 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ static void	set_token_state(t_info *info)
 
 void	parser(t_info *info)
 {
-	int	ret;
-
 	parse_quotes(info, 0);
 	unclosed_pipe(info);
 	find_dgreater_dlesser(info);

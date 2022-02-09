@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 20:09:20 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 21:12:13 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	handle_sig(int signum)
 	}
 }
 
-static char	*minishell_readline(t_info *info, char *line_read)
+static char	*minishell_readline(char *line_read)
 {
 	signal(SIGINT, &handle_sig);
 	signal(SIGQUIT, &handle_sig);
@@ -44,7 +44,7 @@ static char	*minishell_readline(t_info *info, char *line_read)
 	return (readline("\033[0;33mminishell: \033[0m"));
 }
 
-void	minishell_cont(t_info *info, char *line_read)
+void	minishell_cont(t_info *info)
 {
 	int	set_fd[2];
 
@@ -63,7 +63,7 @@ void	minishell(t_info *info)
 
 	while (1 == 1)
 	{
-		line_read = minishell_readline(info, line_read);
+		line_read = minishell_readline(line_read);
 		if (line_read && *line_read)
 			add_history(line_read);
 		if ((!line_read && (!g_sig.sigint || !g_sig.sigquit))
@@ -81,7 +81,7 @@ void	minishell(t_info *info)
 			free_stuff(info);
 			continue ;
 		}
-		minishell_cont(info, line_read);
+		minishell_cont(info);
 	}
 }
 
@@ -89,6 +89,8 @@ int	main(int ac, char **av, char **env)
 {
 	t_info	info;
 
+	if (ac != 1)
+		return (1);
 	g_sig.sigint = 0;
 	g_sig.sigquit = 0;
 	g_sig.exit_status = 0;

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:30:46 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 21:26:58 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	unset_var(t_info *info, char *var)
 int	exec_export(t_info *info, char **command)
 {
 	int		i;
-	int		j;
 
 	i = 1;
 	while (command[i])

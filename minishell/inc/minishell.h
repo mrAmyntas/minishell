@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 20:22:56 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 21:23:58 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void	exec_cd(t_info *info, char **command);
 int		exec_unset(t_info *info, char **command);
 int		exec_export(t_info *info, char **command);
 char	*make_dir(t_info *info, char *command);
-char	*get_path(t_info *info, char *cmd, char **env);
 char	*get_val(t_info *info, char *var);
 int		ft_strstrlen(char **str, char *c, int i);
 int		ft_len_to_char(char *str, char c);
@@ -111,7 +110,7 @@ int		check_nosuchdir(t_info *info);
 void	free_info(t_info *info);
 void	free_strstr(char **str);
 void	find_dgreater_dlesser(t_info *info);
-int		check_char(t_info *info, int i, char *line_read);
+int		check_char(int i, char *line_read);
 int		ft_heredoc(t_info *info, int i);
 char	*realloc_token(t_info *info, int i, int len);
 size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start);
@@ -119,6 +118,6 @@ void	find_syntax_error(t_info *info);
 void	update_expand_exit_status(t_info *info);
 char	*check_path(t_info *info, char *command);
 void	change_pwd(t_info *info, char *command);
-void	parent_process(t_info *info, int pipefd[2], int loc_pipe, int id);
+void	parent_process(t_info *info, int pipefd[2], int loc_pipe);
 
 #endif

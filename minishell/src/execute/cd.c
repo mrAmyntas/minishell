@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:57:45 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 21:26:45 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void	trim_last_dir(t_info *info, char *command)
 {
 	int		i;
 	int		len;
-	char	*temp;
 
 	i = 0;
 	add_env(info, ft_strjoin("OLDPWD=", info->pwd));
@@ -91,8 +90,6 @@ void	trim_last_dir(t_info *info, char *command)
 
 void	exec_cd2(t_info *info, char *command, int i, int x)
 {
-	char	*path;
-
 	if (command && !ft_strncmp(command, "..", 3))
 		return (trim_last_dir(info, command));
 	else if (command && !ft_strncmp(command, "~", 2) && !i)
@@ -110,7 +107,6 @@ void	exec_cd2(t_info *info, char *command, int i, int x)
 void	exec_cd(t_info *info, char **command)
 {
 	char	**directions;
-	char	*comm;
 	int		i;
 	int		x;
 

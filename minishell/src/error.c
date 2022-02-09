@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 19:42:58 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 21:15:36 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	syntax_error(t_info *info, int token)
 		write(2, " token `", 8);
 		if (c == 129 || c == 130)
 		{
-			c = check_char(info, 0, "<");
+			c = check_char(0, "<");
 			if (check_char_token(info, token, 0) == 130)
-				c = check_char(info, 0, ">");
+				c = check_char(0, ">");
 			write(2, &c, 1);
 		}
 		write(2, &c, 1);

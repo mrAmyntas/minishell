@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:03:11 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 21:26:04 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	*get_path(t_info *info, char *cmd, char **env)
+static char	*get_path(char *cmd)
 {
 	char	*path;
 	char	**dirs;
@@ -41,7 +41,7 @@ char	*get_path(t_info *info, char *cmd, char **env)
 	return (cmd);
 }
 
-int	exec_env(t_info *info, char **command)
+int	exec_env(t_info *info)
 {
 	int	i;
 
@@ -71,13 +71,13 @@ int	exec(t_info *info, char **command)
 		wait(&id);
 		return (0);
 	}
-	path = get_path(info, command[0], info->env);
+	path = get_path(command[0]);
 	execve(path, command, info->env);
 	set_error(info, 127, NULL, -4);
 	exit (1);
 }
 
-int	exec_pwd(t_info *info, char **command)
+int	exec_pwd(t_info *info)
 {
 	char	*pwd;
 
@@ -97,13 +97,13 @@ void	ft_find_command(t_info *info, char **command, int oldfd)
 	else if (!ft_strncmp(command[0], "cd", 3))
 		exec_cd(info, command);
 	else if (!ft_strncmp(command[0], "pwd", 4))
-		exec_pwd(info, command);
+		exec_pwd(info);
 	else if (!ft_strncmp(command[0], "export", 7))
 		exec_export(info, command);
 	else if (!ft_strncmp(command[0], "unset", 6))
 		exec_unset(info, command);
 	else if (!ft_strncmp(command[0], "env", 4))
-		exec_env(info, command);
+		exec_env(info);
 	else if (!ft_strncmp(command[0], "exit", 5))
 	{
 		write(1, "exit\n", 5);
@@ -112,6 +112,6 @@ void	ft_find_command(t_info *info, char **command, int oldfd)
 	else if (command[0] && g_sig.exit_status != 127 && g_sig.exit_status != 126)
 		set_error(info, 127, command[0], -4);
 	if (oldfd)
-		close(oldfd)
+		close(oldfd);
 	free_strstr(command);
 }

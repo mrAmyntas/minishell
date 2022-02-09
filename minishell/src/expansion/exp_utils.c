@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:38 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 14:36:05 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 21:21:42 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	expand_str_dollar3(t_info *info, int i, char *name, int end)
 void	expand_str_dollar2(t_info *info, int i, int start, int pos)
 {
 	char	*name;
-	char	*rest;
 	char	*temp;
 
 	temp = get_name(info, i, start);
