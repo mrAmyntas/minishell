@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 20:57:28 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 21:03:11 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,12 @@ char	*get_path(t_info *info, char *cmd, char **env)
 		free(cmdfile);
 		i++;
 	}
-	free(dirs);
 	if (dirs[i])
+	{
+		free(dirs);
 		return (cmdfile);
+	}
+	free(dirs);
 	return (cmd);
 }
 
