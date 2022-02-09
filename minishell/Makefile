@@ -39,7 +39,7 @@ SRC =	src/minishell.c\
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
-CFLAGS = #-fsanitize=address #-Wall -Werror -Wextra 
+CFLAGS = -Wall -Werror -Wextra #-fsanitize=address #
 
 LDFLAGS = -L$(HOME)/.brew/opt/readline/lib
 CPPFLAGS= -I$(HOME)/.brew/opt/readline/include
