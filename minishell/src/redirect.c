@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 14:41:12 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 14:53:24 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,30 @@ char	*check_path(t_info *info, char *command)
 	return (new);
 }
 
+void	update_exit_status(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (info->tokens[i] != NULL)
+	{
+		if (info->token_state[i] == 2)
+		{
+			free(info->tokens[i]);
+			info->tokens[i] = NULL;
+			info->tokens[i] = ft_itoa(info->exit_status);
+		}
+		i++;
+	}
+}
+
 void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 {
 	int		id;
 	int		pipefd[2];
 	char	**command;
 
+	update_exit_status(info);
 	pipe(pipefd);
 	id = fork();
 	if (id == -1)

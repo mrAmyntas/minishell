@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 15:50:02 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 18:12:03 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 14:37:36 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static void	expand_ex_status_str(t_info *info, int i, int j, int n)
 		j++;
 	}
 	info->tokens[i][j] = '\0';
+	info->token_state[i] = 2;
 	free(str);
 	str = NULL;
 	free(temp);

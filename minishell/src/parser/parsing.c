@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 14:48:55 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 14:53:26 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,11 @@ static void	set_token_state(t_info *info)
 	i = 0;
 	while (info->tokens[i] != NULL)
 	{
+		if (info->token_state[i] == 2)
+		{
+			i++;
+			continue ;
+		}
 		if (info->tokens[i][0] == '\'' || info->tokens[i][0] == '\"')
 			info->token_state[i] = 3;
 		else if (check_char_token(info, i, 0) != C_NORMAL

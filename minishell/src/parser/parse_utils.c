@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:17:21 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/02 14:27:07 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 14:41:46 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ void	realloc_copy(t_info *info, int start, int incr)
 			1 + ft_strlen(info->tokens[start + incr]));
 		info->token_state[start] = info->token_state[start + incr];
 		free(info->tokens[start + incr]);
+		info->token_state[start] = info->token_state[start + incr];
+		info->token_state[start + incr] = 0;
 		info->tokens[start + incr] = NULL;
 		start = start + incr;
 	}
