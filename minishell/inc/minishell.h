@@ -6,11 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-<<<<<<< HEAD
-/*   Updated: 2022/02/09 18:58:06 by mgroen        ########   odam.nl         */
-=======
-/*   Updated: 2022/02/09 19:02:24 by bhoitzin      ########   odam.nl         */
->>>>>>> 8e082130be593cc170cb622e8a0372d20ba6370b
+/*   Updated: 2022/02/09 19:29:09 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +118,7 @@ size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start);
 void	find_syntax_error(t_info *info);
 void	update_expand_exit_status(t_info *info);
 char	*check_path(t_info *info, char *command);
-<<<<<<< HEAD
 void	change_pwd(t_info *info, char *command);
-=======
 void	parent_process(t_info *info, int pipefd[2], int loc_pipe, int id);
->>>>>>> 8e082130be593cc170cb622e8a0372d20ba6370b
 
 #endif

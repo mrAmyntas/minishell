@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 19:23:54 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 19:31:42 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	redirect(t_info *info, int type, int i)
 	return (1);
 }
 
-void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout, int inputfd)
+void	ft_pipe(t_info *info, int start, int val[3], int inputfd)
 {
 	int		id;
 	int		pipefd[2];
@@ -73,17 +73,14 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout, int inputfd)
 
 	pipe(pipefd);
 	id = fork();
-	dprintf(2, "%i, %i\n", pipefd[0], pipefd[1]);
 	if (id == -1)
 		set_error(info, 13, NULL, 4);
-	if (id)
-		parent_process(info, pipefd, loc_pipe, id);
-	else
+	if (!id)
 	{
 		close(pipefd[0]);
-		if (!fdout)
+		if (!val[1])
 			dup2(pipefd[1], 1);
-		command = trim_command(info, start, loc_pipe);
+		command = trim_command(info, start, val[2]);
 		command[0] = check_path(info, command[0]);
 		if (command[0] == NULL)
 			exit(1);
@@ -91,9 +88,12 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout, int inputfd)
 		close(pipefd[1]);
 		exit(0);
 	}
+	wait(&id);
+	close(inputfd);
+	parent_process(info, pipefd, val[2], id);
 }
 
-int	find_redirect(t_info *info, int i, int fd[2], int end)
+int	find_redirect(t_info *info, int i, int fd[3], int end)
 {
 	int	pipeloc;
 
@@ -119,17 +119,16 @@ int	find_redirect(t_info *info, int i, int fd[2], int end)
 
 void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 {
-	int		fd[2];
-	int		pipeloc;
+	int		fd[3];
 	char	**command;
 
 	fd[0] = 0;
 	fd[1] = 0;
-	pipeloc = find_redirect(info, start, fd, end);
+	fd[2] = find_redirect(info, start, fd, end);
 	if (fd[0] < 0 || fd[1] < 0)
 		return (ft_error(info, -4));
-	if (pipeloc >= 0)
-		return (ft_pipe(info, pipeloc, start, fd[1], inputfd));
+	if (fd[2] >= 0)
+		return (ft_pipe(info, start, fd, inputfd));
 	command = trim_command(info, start, end);
 	command[0] = check_path(info, command[0]);
 	return (ft_find_command(info, command));
