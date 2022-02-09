@@ -6,13 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 21:05:46 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 14:48:55 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 // to-do:
-
-// cat/grep infinite loop op eind er maar uit flikkeren
 
 // set SHLVL = 2 ?
 
@@ -21,19 +19,6 @@
 // should reset exit status to 0 after all succesfull commands
 // so also when piping so not re-looping in minishell ?
 
-// tekstbestand hoi heeft permissions en 'echo hoi' als line
-// /Users/bhoitzin/minishellrepo/minishell/hoi -> bash execute echo hoi
-// zouden we hoi als een executable moeten uitvoeren als hij bestaat? denk het niet
-
-// path invoeren e.g. /Users/bhoi/Users/bhoitzin/minishellrepo/minishell/obj  -> LEAKS
-
-// cd /Users/bhoitzin/minishellrepo/minishell/testdir (testdir met 0 permissions)
-// dit copies path achter pwd and leaks
-// als path wel naar een directory gaat -> dan plakt hij de hele path achter pwd (niet enkel nieuwe stukje)
-
-// '> a' -> LEAKS
-
-// nog iets met die filenames met spaties? 'test 1'?
 #include "../../inc/minishell.h"
 
 static void	remove_quotes(t_info *info)

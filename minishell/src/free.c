@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 20:07:13 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/07 18:04:40 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,35 @@ void	free_info(t_info *info)
 	free (info->home);
 }
 
+void	set_shlvl(t_info *info)
+{
+	int		num;
+	char	*lvl;
+	
+	return ;
+	printf("test\n");
+	lvl = get_val(info, "SHLVL");
+	if (!lvl)
+		add_env(info, "SHLVL=1");
+	else
+	{
+		printf("test\n");
+		num = ft_atoi(lvl);
+		printf("test\n");
+		num += 1;
+		printf("test\n");
+		add_env(info, ft_strjoin("SHLVL=", ft_itoa(num)));
+		printf("test\n");
+	}
+	free(lvl);
+}
+
 void	ft_init_struct(t_info *info, char **av, char **env)
 {
 	size_t	len;
 
 	len = 10;
+	set_shlvl(info);
 	info->av = av;
 	get_env(info, env);
 	info->redirect = 0;

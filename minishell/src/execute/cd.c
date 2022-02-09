@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 11:39:03 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 14:48:41 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	change_pwd(t_info *info, char *command)
 	sort_export(info);
 }
 
-void	exec_cd2(t_info *info, char *command, int i)
+void	exec_cd2(t_info *info, char *command, int i, int x)
 {
 	char	*path;
 
@@ -121,7 +121,7 @@ void	exec_cd2(t_info *info, char *command, int i)
 		return (pwd_is_old(info, command));
 	if (!command || !ft_strncmp(command, ".", 2))
 		return ;
-	if (command[0] != '/')
+	if (i || (!x && !i))
 		command = make_dir(info, command);
 	change_pwd(info, command);
 	free (command);
@@ -132,15 +132,22 @@ void	exec_cd(t_info *info, char **command)
 	char	**directions;
 	char	*comm;
 	int		i;
-
+	int		x;
+	
+	x = 0;
+	if (command[1][0] == '/')
+		x = 1;
 	directions = ft_split(command[1], '/');
 	if (check_nosuchdir(info) == 1)
+	{
+		free_strstr(directions);
 		return ;
+	}
 	i = 0;
 	while (directions[i])
 	{
-		free (directions[i]);
-		exec_cd2(info, ft_strdup(directions[i]), i);
+		exec_cd2(info, ft_strdup(directions[i]), i, x);
+		free (directions[i]); // hier of voor exec_cd2???
 		i++;
 	}
 	free (directions);

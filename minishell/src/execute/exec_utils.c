@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 19:53:43 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 14:49:07 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,10 @@ int	check_nosuchdir(t_info *info)
 		{
 			ret = opendir(info->tokens[i + 1]);
 			if (ret == NULL)
+			{
 				set_error(info, 1, info->tokens[i + 1], -4);
+				return (1);
+			}
 			else
 				closedir(ret);
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/07 17:23:52 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 14:41:12 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,5 @@ void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 		return (ft_pipe(info, pipeloc, start, fd[1]));
 	command = trim_command(info, start, end);
 	command[0] = check_path(info, command[0]);
-	if (command[0] == NULL)
-		return ;
 	return (ft_find_command(info, command));
 }
