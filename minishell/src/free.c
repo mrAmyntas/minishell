@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:27:26 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 19:23:29 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,15 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	}
 	sort_export(info);
 	set_shlvl(info);
+}
+
+void	parent_process(t_info *info, int pipefd[2], int loc_pipe, int id)
+{
+	wait(&id);
+	close(inputfd);
+	close(pipefd[1]);
+	dup2(pipefd[0], 0);
+	update_expand_exit_status(info);
+	check_redirect_v2(info, loc_pipe + 1, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]);
+	close(pipefd[0]);
 }

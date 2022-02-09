@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 19:18:14 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 19:23:54 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,7 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout, int inputfd)
 	if (id == -1)
 		set_error(info, 13, NULL, 4);
 	if (id)
-	{
-		wait(&id);
-		close(inputfd);
-		close(pipefd[1]);
-		dup2(pipefd[0], 0);
-		update_expand_exit_status(info);
-		check_redirect_v2(info, loc_pipe + 1, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]);
-		close(pipefd[0]);
-	}
+		parent_process(info, pipefd, loc_pipe, id);
 	else
 	{
 		close(pipefd[0]);
