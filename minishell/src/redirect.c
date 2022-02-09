@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 19:35:07 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 20:22:12 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	ft_pipe(t_info *info, int start, int val[3], int inputfd)
 	char	**command;
 
 	pipe(pipefd);
+	printf("%i, %i\n", pipefd[0], pipefd[1]);
 	id = fork();
 	if (id == -1)
 		set_error(info, 13, NULL, 4);
