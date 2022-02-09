@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:42:36 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 17:55:20 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	set_shlvl(t_info *info)
 {
 	int		num;
 	char	*lvl;
-	
+
 	lvl = get_val(info, "SHLVL");
 	if (!lvl)
 		add_env(info, "SHLVL=1");
@@ -80,7 +80,6 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	info->pwd = malloc(sizeof(char *) * len);
 	if (info->pwd == NULL)
 		ft_error(info, -1);
-	g_sig.exit_status = 0;
 	while (!getcwd(info->pwd, len))
 	{
 		len += 10;

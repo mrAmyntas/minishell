@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:42:41 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 17:56:10 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	minishell(t_info *info)
 			continue ;
 		}
 		minishell_cont(info, line_read);
-		//system("leaks minishell");
 	}
 }
 
@@ -88,6 +87,7 @@ int	main(int ac, char **av, char **env)
 
 	g_sig.sigint = 0;
 	g_sig.sigquit = 0;
+	g_sig.exit_status = 0;
 	ft_init_struct(&info, av, env);
 	write(1, "\033[1;33mWelcome! You can exit by", 32);
 	write(1, " pressing Ctrl+D at any time...\033[1;33m\n", 40);

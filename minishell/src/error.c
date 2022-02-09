@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:23:40 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 18:06:17 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ void	set_error(t_info *info, int error_type, char *str, int token)
 {
 	int		i;
 
-//	printf("status_set_error:%d error type%d\n", g_sig.exit_status, error_type);
-//	if (g_sig.exit_status == 258)
-//		return ;
+	if (g_sig.exit_status == 258)
+		return ;
 	i = ft_strlen(str);
 	if (info->exit_msg != NULL)
 	{
@@ -58,7 +57,6 @@ void	set_error(t_info *info, int error_type, char *str, int token)
 	ft_strlcpy(info->exit_msg, str, i + 1);
 	g_sig.exit_status = error_type;
 	g_sig.exit_status2 = error_type;
-//	dprintf(2, "set_error: exst:%d\n", g_sig.exit_status);
 	if (error_type == 258)
 		syntax_error(info, token);
 	else if (token < 4)
@@ -95,16 +93,15 @@ void	invalid_identifier(t_info *info)
 
 void	ft_error(t_info *info, int i)
 {
-//	printf("i:%d exit_status:%d\n", i, g_sig.exit_status);
 	if (i <= -1 && i >= -3)
 		ft_error2(info, i);
 	else if (g_sig.exit_status == 258)
 		return ;
 	if (g_sig.exit_status == 2)
 		invalid_identifier(info);
-	else if (g_sig.exit_status == 1 || g_sig.exit_status == 126)
+	write(2, "minishell: ", 12);
+	if (g_sig.exit_status == 1 || g_sig.exit_status == 126)
 	{
-		write(2, "minishell: ", 12);
 		if (g_sig.exit_status == 1)
 			write(2, "cd: ", 4);
 		write(2, info->exit_msg, ft_strlen(info->exit_msg));
@@ -113,14 +110,12 @@ void	ft_error(t_info *info, int i)
 		if (i == -5)
 			write(2, ": Permission denied or is a directory\n", 39);
 	}
-	else if (g_sig.exit_status == 127)
+	if (g_sig.exit_status == 127)
 	{
-		write(2, "minishell: ", 12);
 		write(2, info->exit_msg, ft_strlen(info->exit_msg));
 		if (i == -4)
 			write(2, ": command not found\n", 20);
 		if (i == -5)
 			write(2, ": No such file or directory\n", 29);
 	}
-	return ;
 }
