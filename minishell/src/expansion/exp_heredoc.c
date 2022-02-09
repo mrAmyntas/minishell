@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 15:32:01 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 20:55:24 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,56 @@ static void	reset_token(t_info *info, int i)
 	j = 0;
 }
 
+static void	expand_ex_status_str(t_info *info, int i, int j, int n)
+{
+	char	*temp;
+	char	*str;
+	int		k;
+
+	temp = realloc_token(info, i, 10);
+	str = ft_itoa(g_sig.exit_status);
+	k = 0;
+	while (str[k] != '\0')
+	{
+		info->tokens[i][j] = str[k];
+		k++;
+		j++;
+	}
+	while (temp[n] != '\0')
+	{
+		info->tokens[i][j] = temp[n];
+		n++;
+		j++;
+	}
+	info->tokens[i][j] = '\0';
+	free(str);
+	str = NULL;
+	free(temp);
+	temp = NULL;
+}
+
+static void	check_dollar_in_quote(t_info *info, int i)
+{
+	int	j;
+
+	j = 0;
+	while (info->tokens[i][j] != '\0')
+	{
+		if (info->tokens[i][j] == '\"')
+		{
+			j++;
+			while (info->tokens[i][j] != '\"')
+			{
+				if (info->tokens[i][j] == '$' && info->tokens[i][j + 1] == '?')
+					expand_ex_status_str(info, i, j, j + 2);
+				if (info->tokens[i][j] == '$')
+					expand_str_dollar(info, i, j);
+				j++;
+			}
+		}
+		j++;
+	}
+}
 char	*expand_buf(t_info *info, char *buf, int i)
 {
 	int	j;
@@ -57,7 +107,7 @@ char	*expand_buf(t_info *info, char *buf, int i)
 		add_dquotes(info, buf, ft_strlen(buf), i);
 		x = g_sig.exit_status;
 		g_sig.exit_status = g_sig.exit_status2;
-		check_dollar_in_quotes(info, i);
+		check_dollar_in_quote(info, i);
 		free(buf);
 		buf = NULL;
 		buf = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) - 1));
