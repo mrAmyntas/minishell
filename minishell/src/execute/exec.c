@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 15:32:29 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 17:35:15 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	*get_path(char *cmd, char **env)
+char	*get_path(t_info *info, char *cmd, char **env)
 {
 	char	*path;
 	char	**dirs;
@@ -68,7 +68,7 @@ int	exec(t_info *info, char **command)
 		wait(&id);
 		return (0);
 	}
-	path = get_path(command[0], info->env);
+	path = get_path(info, command[0], info->env);
 	execve(path, command, info->env);
 	set_error(info, 127, NULL, -4);
 	exit (1);

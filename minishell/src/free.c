@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 16:12:10 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 17:24:19 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	ft_free(t_info *info)
+void	free_stuff(t_info *info)
 {
 	int	i;
 

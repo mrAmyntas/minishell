@@ -6,13 +6,13 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/09 17:43:42 by basz          #+#    #+#                 */
-/*   Updated: 2022/02/02 19:05:44 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 17:34:32 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	**ft_freebuff(int j, char **buff)
+static void	ft_freebuff(int j, char **buff)
 {
 	int	i;
 
@@ -23,7 +23,7 @@ static char	**ft_freebuff(int j, char **buff)
 		j--;
 	}
 	free(buff);
-	return (NULL);
+	ft_error(NULL, -1);
 }
 
 static int	ft_wordlength(int j, const char *s, char c)
@@ -81,13 +81,13 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	buff = (char **)malloc(sizeof(char *) * (1 + ft_wordcount(s, c, -1)));
 	if (buff == NULL)
-		return (NULL);
+		ft_error(NULL, -1);
 	j = 0;
 	while (j < ft_wordcount(s, c, -1))
 	{
 		buff[j] = ft_substr(s, ft_wordcount(s, c, j), ft_wordlength(j, s, c));
 		if (buff[j] == NULL)
-			return (ft_freebuff(j, buff));
+			ft_freebuff(j, buff);
 		j++;
 	}
 	buff[j] = NULL;
