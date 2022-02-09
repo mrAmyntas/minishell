@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 20:56:15 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 16:11:27 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	set_error(t_info *info, int error_type, char *str, int token)
 {
 	int		i;
 
-//	printf("status_set_error:%d error type%d\n", info->exit_status, error_type);
-//	if (info->exit_status == 258)
+//	printf("status_set_error:%d error type%d\n", g_sig.exit_status, error_type);
+//	if (g_sig.exit_status == 258)
 //		return ;
 	i = ft_strlen(str);
 	if (info->exit_msg != NULL)
@@ -60,8 +60,9 @@ void	set_error(t_info *info, int error_type, char *str, int token)
 	if (info->exit_msg == NULL)
 		ft_error(info, -1);
 	ft_strlcpy(info->exit_msg, str, i + 1);
-	info->exit_status = error_type;
-	info->exit_status2 = error_type;
+	g_sig.exit_status = error_type;
+	g_sig.exit_status2 = error_type;
+//	dprintf(2, "set_error: exst:%d\n", g_sig.exit_status);
 	if (error_type == 258)
 		syntax_error(info, token);
 	else if (token < 4)
@@ -77,8 +78,8 @@ void	ft_error2(t_info *info, int i)
 	}
 	if (i == -2 || i == -3)
 	{
-		info->exit_status = 258;
-		info->exit_status2 = 258;
+		g_sig.exit_status = 258;
+		g_sig.exit_status2 = 258;
 		write(2, "minishell: syntax error: ", 26);
 		if (i == -2)
 			write(2, "unclosed quote\n", 16);
@@ -96,20 +97,20 @@ void	invalid_identifier(t_info *info)
 	write(2, "minishell: export: '", 20);
 	write(2, info->exit_msg, ft_strlen(info->exit_msg));
 	write(2, "': not a valid identifier\n", 26);
-	info->exit_status = 1;
-	info->exit_status2 = 1;
+	g_sig.exit_status = 1;
+	g_sig.exit_status2 = 1;
 }
 
 void	ft_error(t_info *info, int i)
 {
-//	printf("i:%d exit_status:%d\n", i, info->exit_status);
+//	printf("i:%d exit_status:%d\n", i, g_sig.exit_status);
 	if (i <= -1 && i >= -3)
 		ft_error2(info, i);
-	else if (info->exit_status == 258)
+	else if (g_sig.exit_status == 258)
 		return ;
-	if (info->exit_status == 2)
+	if (g_sig.exit_status == 2)
 		invalid_identifier(info);
-	else if (info->exit_status == 1 || info->exit_status == 126)
+	else if (g_sig.exit_status == 1 || g_sig.exit_status == 126)
 	{
 		write(2, "minishell: ", 12);
 		write(2, info->exit_msg, ft_strlen(info->exit_msg));
@@ -118,7 +119,7 @@ void	ft_error(t_info *info, int i)
 		if (i == -5)
 			write(2, ": Permission denied or is a directory\n", 39);
 	}
-	else if (info->exit_status == 127)
+	else if (g_sig.exit_status == 127)
 	{
 		write(2, "minishell: ", 12);
 		write(2, info->exit_msg, ft_strlen(info->exit_msg));

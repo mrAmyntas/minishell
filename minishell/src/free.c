@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/07 18:04:40 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 15:32:34 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	info->pwd = malloc(sizeof(char *) * len);
 	if (info->pwd == NULL)
 		ft_error(info, -1);
-	info->exit_status = 0;
+	g_sig.exit_status = 0;
 	while (!getcwd(info->pwd, len))
 	{
 		len += 10;

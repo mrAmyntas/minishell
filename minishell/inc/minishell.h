@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 20:11:11 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 15:28:59 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ typedef struct s_info
 	char		*pwd;
 	int			fd_std[2];
 	int			*token_state;
-	int			exit_status;
-	int			exit_status2;
 	char		*exit_msg;
 }				t_info;
 
@@ -60,6 +58,8 @@ enum	e_tokentype
 
 typedef struct s_sig
 {
+	int				exit_status;
+	int				exit_status2;
 	int				sigint;
 	int				sigquit;
 }				t_sig;

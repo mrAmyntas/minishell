@@ -6,11 +6,28 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 14:53:24 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 16:05:38 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	update_expand_exit_status(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (info->tokens[i] != NULL)
+	{
+		if (info->token_state[i] == 2)
+		{
+			free(info->tokens[i]);
+			info->tokens[i] = NULL;
+			info->tokens[i] = ft_itoa(g_sig.exit_status);
+		}
+		i++;
+	}
+}
 
 char	**trim_command(t_info *info, int start, int end)
 {
@@ -23,8 +40,7 @@ char	**trim_command(t_info *info, int start, int end)
 	if (!ft_strncmp(info->tokens[start], "<", ft_strlen(info->tokens[start]))
 		&& info->token_state[start])
 		start += 2;
-	while ((start + i) < end && (!info->token_state[start + i]
-			|| info->token_state[start + i] == 3))
+	while ((start + i) < end && info->token_state[start + i] != 1)
 		i++;
 	command = malloc(sizeof(char **) * (i + 1));
 	while (j < i)
@@ -107,30 +123,12 @@ char	*check_path(t_info *info, char *command)
 	return (new);
 }
 
-void	update_exit_status(t_info *info)
-{
-	int	i;
-
-	i = 0;
-	while (info->tokens[i] != NULL)
-	{
-		if (info->token_state[i] == 2)
-		{
-			free(info->tokens[i]);
-			info->tokens[i] = NULL;
-			info->tokens[i] = ft_itoa(info->exit_status);
-		}
-		i++;
-	}
-}
-
 void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 {
 	int		id;
 	int		pipefd[2];
 	char	**command;
 
-	update_exit_status(info);
 	pipe(pipefd);
 	id = fork();
 	if (id == -1)
@@ -148,6 +146,7 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 		close(pipefd[0]);
 		if (!fdout)
 			dup2(pipefd[1], 1);
+		update_expand_exit_status(info);
 		command = trim_command(info, start, loc_pipe);
 		command[0] = check_path(info, command[0]);
 		if (command[0] == NULL)
@@ -174,7 +173,7 @@ int	find_redirect(t_info *info, int i, int fd[2], int end)
 			fd[1] = redirect(info, 4, i);
 		if (!ft_strncmp(info->tokens[i], "<<", 3) && info->token_state[i] == 1)
 			ft_heredoc(info, i);
-		if ((fd[0] < 0 || fd[1] < 0) && info->exit_status == 1)
+		if ((fd[0] < 0 || fd[1] < 0) && g_sig.exit_status == 1)
 			return (-1);
 		i++;
 	}
