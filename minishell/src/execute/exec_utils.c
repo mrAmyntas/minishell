@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 14:49:07 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 17:30:46 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	unset_var(t_info *info, char *var)
 	int	loc;
 
 	loc = 0;
-	while (info->env[loc] && ft_strncmp(info->env[loc], var, ft_strlen(var)))
+	while (info->env[loc] && (ft_strncmp(info->env[loc], var, ft_strlen(var))
+			|| ft_len_to_char(info->env[loc], '=') != ft_strlen(var)))
 		loc++;
 	if (!info->env[loc])
 		return ;

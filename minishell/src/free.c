@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 16:12:10 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 17:17:59 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,8 @@ void	set_shlvl(t_info *info)
 	{
 		num = ft_atoi(lvl);
 		num += 1;
-		//free(lvl);
-		lvl = ft_strdup(ft_itoa(num));
+		lvl = ft_itoa(num);
 		add_env(info, ft_strjoin("SHLVL=", lvl));
-		//printf("%s\n", ft_itoa(num));
 	}
 	free(lvl);
 }
