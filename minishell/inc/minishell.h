@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:27:26 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 18:41:15 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,7 @@ int		ft_heredoc(t_info *info, int i);
 char	*realloc_token(t_info *info, int i, int len);
 size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start);
 void	find_syntax_error(t_info *info);
+void	update_expand_exit_status(t_info *info);
+char	*check_path(t_info *info, char *command);
 
 #endif

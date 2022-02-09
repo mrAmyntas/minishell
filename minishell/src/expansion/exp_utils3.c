@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 15:50:02 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:15:48 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 18:39:06 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,22 @@ void	check_dollar_in_quotes(t_info *info, int i)
 			}
 		}
 		j++;
+	}
+}
+
+void	update_expand_exit_status(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (info->tokens[i] != NULL)
+	{
+		if (info->token_state[i] == 2)
+		{
+			free(info->tokens[i]);
+			info->tokens[i] = NULL;
+			info->tokens[i] = ft_itoa(g_sig.exit_status);
+		}
+		i++;
 	}
 }

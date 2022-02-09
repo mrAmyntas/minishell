@@ -6,28 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:27:29 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 18:39:56 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-void	update_expand_exit_status(t_info *info)
-{
-	int	i;
-
-	i = 0;
-	while (info->tokens[i] != NULL)
-	{
-		if (info->token_state[i] == 2)
-		{
-			free(info->tokens[i]);
-			info->tokens[i] = NULL;
-			info->tokens[i] = ft_itoa(g_sig.exit_status);
-		}
-		i++;
-	}
-}
 
 char	**trim_command(t_info *info, int start, int end)
 {
@@ -81,51 +64,6 @@ int	redirect(t_info *info, int type, int i)
 	return (1);
 }
 
-char	*check_path(t_info *info, char *command)
-{
-	int		loc;
-	int		i;
-	char	*new;
-	DIR		*ret;
-
-	if (!command)
-		return (NULL);
-	i = ft_strlen(command) - 2;
-	while (command[i] != '/' && i > 0)
-		i--;
-	if (i <= 0)
-		return (command);
-	ret = opendir(command);
-	if (ret != NULL)
-	{
-		set_error(info, 126, command, -5); // is a directory
-		closedir(ret);
-		free(command);
-		return (NULL);
-	}
-	if (access(command, X_OK))
-	{
-		if (access(command, F_OK) == 0)
-			set_error(info, 126, command, -5); // exists -> no permission
-		else  // doesnt exist
-			set_error(info, 127, command, -5);
-		free(command);
-		return (NULL);
-	}
-	loc = i + 1;
-	new = malloc(sizeof(char *) * (ft_strlen(command) - loc + 1));
-	if (!new)
-		ft_error(info, -1);
-	i = 0;
-	while (command[loc + i])
-	{
-		new[i] = command[loc + i];
-		i++;
-	}
-	new[i] = '\0';
-	free(command);
-	return (new);
-}
 
 void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 {

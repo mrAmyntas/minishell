@@ -14,27 +14,28 @@ LIBFT_DIR =	libft/
 OBJ_DIR =	obj/
 
 SRC =	src/minishell.c\
-		src/execute/exec.c\
+		src/error.c\
+		src/utils.c\
+		src/free.c\
+		src/check_path.c\
+		src/redirect.c\
+		src/lexer/lexer.c\
+		src/lexer/lexer_utils.c\
 		src/parser/parsing.c\
 		src/parser/parse_utils.c\
 		src/parser/parse_utils2.c\
 		src/parser/parse_utils3.c\
 		src/parser/parse_quotes.c\
-		src/lexer/lexer.c\
-		src/lexer/lexer_utils.c\
 		src/expansion/expand.c\
 		src/expansion/exp_utils.c\
 		src/expansion/exp_utils2.c\
 		src/expansion/exp_utils3.c\
 		src/expansion/exp_heredoc.c\
-		src/error.c\
-		src/utils.c\
-		src/free.c\
-		src/execute/cd.c\
 		src/environment/manage_env.c\
-		src/redirect.c\
+		src/environment/manage_env_utils.c\
+		src/execute/exec.c\
+		src/execute/cd.c\
 		src/execute/exec_utils.c\
-		src//environment/manage_env_utils.c
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
