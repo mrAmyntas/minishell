@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 20:55:24 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 20:58:01 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ static void	check_dollar_in_quote(t_info *info, int i)
 		j++;
 	}
 }
+
 char	*expand_buf(t_info *info, char *buf, int i)
 {
 	int	j;
