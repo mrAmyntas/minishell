@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 19:33:50 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 19:36:26 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	set_shlvl(info);
 }
 
-void	parent_process(t_info *info, int pipefd[2], int loc_pipe, int id, int inputfd)
+void	parent_process(t_info *info, int pipefd[2], int loc_pipe, int id)
 {
 	close(pipefd[1]);
 	dup2(pipefd[0], 0);

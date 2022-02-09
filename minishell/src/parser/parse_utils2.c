@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:49:23 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 19:43:17 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	find_syntax_error(t_info *info)
 			free_stuff(info);
 			minishell(info);
 			rl_clear_history();
-			exit(1);
+			exit(0);
 		}
 		i++;
 	}
