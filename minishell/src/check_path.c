@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:51:53 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 18:55:57 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*check_errors(t_info *info, DIR *ret, char *command)
 
 static char	*make_new(t_info *info, char *command, int loc, int i)
 {
-	char *new;
+	char	*new;
 
 	new = malloc(sizeof(char *) * (ft_strlen(command) - loc + 1));
 	if (!new)
