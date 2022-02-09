@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/07 18:04:40 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 15:38:44 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,17 @@ void	set_shlvl(t_info *info)
 	int		num;
 	char	*lvl;
 	
-	return ;
-	printf("test\n");
 	lvl = get_val(info, "SHLVL");
 	if (!lvl)
 		add_env(info, "SHLVL=1");
 	else
 	{
-		printf("test\n");
 		num = ft_atoi(lvl);
-		printf("test\n");
 		num += 1;
-		printf("test\n");
-		add_env(info, ft_strjoin("SHLVL=", ft_itoa(num)));
-		printf("test\n");
+		//free(lvl);
+		lvl = ft_strdup(ft_itoa(num));
+		add_env(info, ft_strjoin("SHLVL=", lvl));
+		//printf("%s\n", ft_itoa(num));
 	}
 	free(lvl);
 }
@@ -73,7 +70,6 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 	size_t	len;
 
 	len = 10;
-	set_shlvl(info);
 	info->av = av;
 	get_env(info, env);
 	info->redirect = 0;
@@ -96,4 +92,5 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 			ft_error(info, -1);
 	}
 	sort_export(info);
+	set_shlvl(info);
 }
