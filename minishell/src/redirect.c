@@ -6,7 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2022/02/09 20:22:12 by mgroen        ########   odam.nl         */
+=======
+/*   Updated: 2022/02/09 20:56:32 by bhoitzin      ########   odam.nl         */
+>>>>>>> dd75aee75d82c6d50375887504f0c63bdb91a5b6
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +69,7 @@ int	redirect(t_info *info, int type, int i)
 	return (1);
 }
 
-void	ft_pipe(t_info *info, int start, int val[3], int inputfd)
+void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 {
 	int		id;
 	int		pipefd[2];
@@ -85,12 +89,11 @@ void	ft_pipe(t_info *info, int start, int val[3], int inputfd)
 		command[0] = check_path(info, command[0]);
 		if (command[0] == NULL)
 			exit(1);
-		ft_find_command(info, command);
-		close(pipefd[1]);
+		ft_find_command(info, command, 0);
 		exit(0);
 	}
 	wait(&id);
-	close(inputfd);
+	close(oldfd[0]);
 	parent_process(info, pipefd, val[2], id);
 }
 
@@ -118,7 +121,7 @@ int	find_redirect(t_info *info, int i, int fd[3], int end)
 	return (pipeloc);
 }
 
-void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
+void	check_redirect_v2(t_info *info, int start, int end, int oldfd[2])
 {
 	int		fd[3];
 	char	**command;
@@ -129,8 +132,8 @@ void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	if (fd[0] < 0 || fd[1] < 0)
 		return (ft_error(info, -4));
 	if (fd[2] >= 0)
-		return (ft_pipe(info, start, fd, inputfd));
+		return (ft_pipe(info, start, fd, oldfd));
 	command = trim_command(info, start, end);
 	command[0] = check_path(info, command[0]);
-	return (ft_find_command(info, command));
+	return (ft_find_command(info, command, oldfd[0]));
 }

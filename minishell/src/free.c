@@ -6,7 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2022/02/09 20:17:59 by mgroen        ########   odam.nl         */
+=======
+/*   Updated: 2022/02/09 20:37:44 by bhoitzin      ########   odam.nl         */
+>>>>>>> dd75aee75d82c6d50375887504f0c63bdb91a5b6
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +98,15 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 
 void	parent_process(t_info *info, int pipefd[2], int loc_pipe, int id)
 {
+	int	ret;
+
 	close(pipefd[1]);
 	dup2(pipefd[0], 0);
 	update_expand_exit_status(info);
 	check_redirect_v2(info, loc_pipe + 1,
+<<<<<<< HEAD
 		ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]);
+=======
+		ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd);
+>>>>>>> dd75aee75d82c6d50375887504f0c63bdb91a5b6
 }
