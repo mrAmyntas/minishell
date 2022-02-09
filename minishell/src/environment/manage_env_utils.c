@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:42:31 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 18:26:51 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ void	sort_export(t_info *info)
 		{
 			if (ft_strncmp(info->env[i[0]], info->export[i[1]]
 					, ft_len_to_char(info->env[i[0]], '=')) > 0)
-			//if (ft_strncmp(info->env[i[0]], info->export[i[1]]
-			//		, ft_strlen(info->env[i[0]])) > 0)
 			{
 				put_str(info->env[i[0]], info->export, i[1] + 1);
 				break ;

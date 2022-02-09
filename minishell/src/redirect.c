@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:15:57 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 18:14:15 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ char	*check_path(t_info *info, char *command)
 	{
 		set_error(info, 126, command, -5); // is a directory
 		closedir(ret);
+		free(command);
 		return (NULL);
 	}
 	if (access(command, X_OK))
@@ -108,6 +109,7 @@ char	*check_path(t_info *info, char *command)
 			set_error(info, 126, command, -5); // exists -> no permission
 		else  // doesnt exist
 			set_error(info, 127, command, -5);
+		free(command);
 		return (NULL);
 	}
 	loc = i + 1;

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:02:25 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 18:26:45 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	ft_len_to_char(char *str, char c)
 	i = 0;
 	while (str[i] != c && str[i])
 		i++;
-	if (!str[i])
-		return (-1);
+	//if (!str[i])
+	//	return (-1);
 	return (i);
 }
 
@@ -49,7 +49,7 @@ void	get_env(t_info *info, char **env)
 
 	i = 0;
 	env_len = ft_strstrlen(env, NULL, 0);
-	info->env = malloc(sizeof(char **) * env_len);
+	info->env = malloc(sizeof(char **) * (env_len + 1));
 	if (info->env == NULL)
 		ft_error(info, -1);
 	while (env[i])
