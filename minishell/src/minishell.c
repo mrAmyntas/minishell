@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:12:13 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 21:53:43 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int	main(int ac, char **av, char **env)
 	write(1, " pressing Ctrl+D at any time...\033[1;33m\n", 40);
 	minishell(&info);
 	free_info(&info);
-	system("leaks minishell");
 	rl_clear_history();
 	return (0);
 }
