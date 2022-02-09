@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 19:23:54 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 19:30:55 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout, int inputfd)
 	if (id == -1)
 		set_error(info, 13, NULL, 4);
 	if (id)
-		parent_process(info, pipefd, loc_pipe, id);
+		parent_process(info, pipefd, loc_pipe, id, inputfd);
 	else
 	{
 		close(pipefd[0]);
