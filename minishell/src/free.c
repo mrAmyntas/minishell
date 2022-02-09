@@ -6,11 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-<<<<<<< HEAD
-/*   Updated: 2022/02/09 20:17:59 by mgroen        ########   odam.nl         */
-=======
-/*   Updated: 2022/02/09 20:37:44 by bhoitzin      ########   odam.nl         */
->>>>>>> dd75aee75d82c6d50375887504f0c63bdb91a5b6
+/*   Updated: 2022/02/09 21:03:56 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
