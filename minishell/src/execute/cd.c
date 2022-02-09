@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:35:19 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 18:49:56 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,28 @@
 
 void	pwd_is_home(t_info *info, char *command)
 {
-	int	i;
-	int	j;
+	int	i[2];
 
-	i = 0;
-	j = 0;
+	i[0] = 0;
+	i[1] = 0;
 	add_env(info, ft_strjoin("OLDPWD=", info->pwd));
-	while (info->env[i] && ft_strncmp(info->env[i], "PWD=", 4))
-		i++;
-	if (!info->env[i])
+	while (info->env[i[0]] && ft_strncmp(info->env[i[0]], "PWD=", 4))
+		i[0]++;
+	if (!info->env[i[0]])
 		add_env(info, ft_strjoin("PWD=", info->pwd));
-	while (info->env[j] && ft_strncmp(info->env[j], "HOME=", 5))
-		j++;
+	while (info->env[i[1]] && ft_strncmp(info->env[i[1]], "HOME=", 5))
+		i[1]++;
 	free (info->pwd);
-	free (info->env[i]);
-	if (!info->env[j])
+	free (info->env[i[0]]);
+	if (!info->env[i[1]])
 	{
 		add_env(info, ft_strjoin("HOME=", info->home));
 		info->pwd = ft_strdup(info->home);
 	}
 	else
-		info->pwd = ft_strdup(info->env[j] + 5);
+		info->pwd = ft_strdup(info->env[i[1]] + 5);
 	chdir(info->pwd);
-	info->env[i] = ft_strjoin("PWD=", info->pwd);
+	info->env[i[0]] = ft_strjoin("PWD=", info->pwd);
 	free_strstr(info->export);
 	sort_export(info);
 	free (command);
@@ -133,7 +132,7 @@ void	exec_cd(t_info *info, char **command)
 	char	*comm;
 	int		i;
 	int		x;
-	
+
 	x = 0;
 	if (command[1][0] == '/')
 		x = 1;
@@ -147,8 +146,8 @@ void	exec_cd(t_info *info, char **command)
 	while (directions[i])
 	{
 		exec_cd2(info, ft_strdup(directions[i]), i, x);
-		free (directions[i]); // hier of voor exec_cd2???
+		free (directions[i]);
 		i++;
 	}
-	free (directions);
+	free(directions);
 }
