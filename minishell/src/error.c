@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 16:11:27 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 16:31:18 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,11 @@ void	ft_error(t_info *info, int i)
 	else if (g_sig.exit_status == 1 || g_sig.exit_status == 126)
 	{
 		write(2, "minishell: ", 12);
+		if (g_sig.exit_status == 1)
+			write(2, "cd: ", 4);
 		write(2, info->exit_msg, ft_strlen(info->exit_msg));
 		if (i == -4)
-			perror(": ");
+			perror(" ");
 		if (i == -5)
 			write(2, ": Permission denied or is a directory\n", 39);
 	}

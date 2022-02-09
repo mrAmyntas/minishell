@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 15:07:18 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 16:25:38 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 // should reset exit status to 0 after all succesfull commands
 // so also when piping so not re-looping in minishell ?
+
+// cd t1 -> no 'cd' in error msg
 
 #include "../../inc/minishell.h"
 
