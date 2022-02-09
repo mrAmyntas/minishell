@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 19:35:07 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 19:56:52 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ int	redirect(t_info *info, int type, int i)
 		dup2(fd, STDOUT_FILENO);
 	else if (type == 1)
 		dup2(fd, STDIN_FILENO);
-	close(fd);
+	fd = close(fd);
+	if (fd == -1)
+		perror("in redirect 66: ");
 	return (1);
 }
 
@@ -70,14 +72,18 @@ void	ft_pipe(t_info *info, int start, int val[3], int inputfd)
 	int		id;
 	int		pipefd[2];
 	char	**command;
+	int		ret;
 
 	pipe(pipefd);
+	dprintf(2, "fd:%d %d\n", pipefd[0], pipefd[1]);
 	id = fork();
 	if (id == -1)
 		set_error(info, 13, NULL, 4);
 	if (!id)
 	{
-		close(pipefd[0]);
+		ret = close(pipefd[0]);
+		if (ret == -1)
+			perror("in redirect 86: ");
 		if (!val[1])
 			dup2(pipefd[1], 1);
 		command = trim_command(info, start, val[2]);
@@ -85,11 +91,15 @@ void	ft_pipe(t_info *info, int start, int val[3], int inputfd)
 		if (command[0] == NULL)
 			exit(1);
 		ft_find_command(info, command);
-		close(pipefd[1]);
+		ret = close(pipefd[1]);
+		if (ret == -1)
+			perror("in redirect 96: ");
 		exit(0);
 	}
 	wait(&id);
-	close(inputfd);
+	ret = close(inputfd);
+	if (ret == -1)
+		perror("in redirect 102: ");
 	parent_process(info, pipefd, val[2], id);
 }
 

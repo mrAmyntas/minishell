@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:49:35 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 20:27:08 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,13 @@ int	ft_heredoc(t_info *info, int i)
 		buf = readline("> ");
 	}
 	free(buf);
-	close(fd);
+	int ret = close(fd);
+	if (ret == -1)
+		perror("in utils 86: ");
 	fd = open("/tmp/minishell_heredoc", O_RDONLY);
 	dup2(fd, STDIN_FILENO);
-	close(fd);
+	ret = close(fd);
+	if (ret == -1)
+		perror("in utils 91");
 	return (1);
 }

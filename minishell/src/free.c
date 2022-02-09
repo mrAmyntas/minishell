@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 19:36:26 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 20:27:56 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,16 @@ void	ft_init_struct(t_info *info, char **av, char **env)
 
 void	parent_process(t_info *info, int pipefd[2], int loc_pipe, int id)
 {
-	close(pipefd[1]);
+	int	ret;
+
+	ret = close(pipefd[1]);
+	if (ret == -1)
+		perror("in parent_process:");
 	dup2(pipefd[0], 0);
 	update_expand_exit_status(info);
 	check_redirect_v2(info, loc_pipe + 1,
 		ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]);
-	close(pipefd[0]);
+	ret = close(pipefd[0]);
+	if (ret == -1)
+		perror("HIERO2:");
 }
