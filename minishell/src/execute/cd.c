@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:49:56 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 18:57:45 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,25 +87,6 @@ void	trim_last_dir(t_info *info, char *command)
 	free_strstr(info->export);
 	sort_export(info);
 	free (command);
-}
-
-void	change_pwd(t_info *info, char *command)
-{
-	int	i;
-
-	i = 0;
-	add_env(info, ft_strjoin("OLDPWD=", info->pwd));
-	while (info->env[i] && ft_strncmp(info->env[i], "PWD=", 4))
-		i++;
-	if (!info->env[i])
-		return (add_env(info, ft_strjoin("PWD=", command)));
-	free (info->env[i]);
-	info->env[i] = ft_strjoin("PWD=", command);
-	free (info->pwd);
-	info->pwd = ft_strdup(command);
-	chdir(info->pwd);
-	free_strstr(info->export);
-	sort_export(info);
 }
 
 void	exec_cd2(t_info *info, char *command, int i, int x)

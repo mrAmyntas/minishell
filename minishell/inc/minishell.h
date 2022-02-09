@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:41:15 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 18:58:06 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,6 @@ size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start);
 void	find_syntax_error(t_info *info);
 void	update_expand_exit_status(t_info *info);
 char	*check_path(t_info *info, char *command);
+void	change_pwd(t_info *info, char *command);
 
 #endif

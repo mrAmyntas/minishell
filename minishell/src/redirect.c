@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:55:06 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 19:18:14 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	redirect(t_info *info, int type, int i)
 	return (1);
 }
 
-void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
+void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout, int inputfd)
 {
 	int		id;
 	int		pipefd[2];
@@ -73,16 +73,18 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 
 	pipe(pipefd);
 	id = fork();
+	dprintf(2, "%i, %i\n", pipefd[0], pipefd[1]);
 	if (id == -1)
 		set_error(info, 13, NULL, 4);
 	if (id)
 	{
 		wait(&id);
+		close(inputfd);
 		close(pipefd[1]);
 		dup2(pipefd[0], 0);
 		update_expand_exit_status(info);
-		return (check_redirect_v2(info, loc_pipe + 1
-				, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]));
+		check_redirect_v2(info, loc_pipe + 1, ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd[0]);
+		close(pipefd[0]);
 	}
 	else
 	{
@@ -94,6 +96,7 @@ void	ft_pipe(t_info *info, int loc_pipe, int start, int fdout)
 		if (command[0] == NULL)
 			exit(1);
 		ft_find_command(info, command);
+		close(pipefd[1]);
 		exit(0);
 	}
 }
@@ -134,7 +137,7 @@ void	check_redirect_v2(t_info *info, int start, int end, int inputfd)
 	if (fd[0] < 0 || fd[1] < 0)
 		return (ft_error(info, -4));
 	if (pipeloc >= 0)
-		return (ft_pipe(info, pipeloc, start, fd[1]));
+		return (ft_pipe(info, pipeloc, start, fd[1], inputfd));
 	command = trim_command(info, start, end);
 	command[0] = check_path(info, command[0]);
 	return (ft_find_command(info, command));

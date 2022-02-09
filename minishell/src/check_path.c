@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:55:57 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 18:57:55 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,26 @@
 // checks whether it is a directory (when it shouldnt)
 // whether it has permissions
 // and whether it exists at all
+
+void	change_pwd(t_info *info, char *command)
+{
+	int	i;
+
+	i = 0;
+	add_env(info, ft_strjoin("OLDPWD=", info->pwd));
+	while (info->env[i] && ft_strncmp(info->env[i], "PWD=", 4))
+		i++;
+	if (!info->env[i])
+		return (add_env(info, ft_strjoin("PWD=", command)));
+	free (info->env[i]);
+	info->env[i] = ft_strjoin("PWD=", command);
+	free (info->pwd);
+	info->pwd = ft_strdup(command);
+	chdir(info->pwd);
+	free_strstr(info->export);
+	sort_export(info);
+}
+
 static char	*check_errors(t_info *info, DIR *ret, char *command)
 {
 	if (ret != NULL)
