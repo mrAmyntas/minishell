@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 15:38:38 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 17:03:30 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void	copy_to_env(t_info *info, char **temp, char *new_var)
 	i = 0;
 	temp_len = ft_strstrlen(temp, NULL, 0);
 	info->env = malloc(sizeof(char **) * (temp_len + 2));
+	if (info->env == NULL)
+		ft_error(info, -1);
 	while (i < temp_len)
 	{
 		info->env[i] = ft_strdup(temp[i]);
@@ -99,6 +101,8 @@ void	add_env(t_info *info, char *new_var)
 		return (change_val(info, new_var));
 	env_len = ft_strstrlen(info->env, NULL, 0);
 	temp = malloc(sizeof(char **) * (env_len + 1));
+	if (temp == NULL)
+		ft_error(info, -1);
 	while (i < env_len)
 	{
 		temp[i] = ft_strdup(info->env[i]);

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:41:51 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/09 17:42:31 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	sort_export(t_info *info)
 	i[0] = 1;
 	info->export = malloc(sizeof(char **)
 			* (ft_strstrlen(info->env, NULL, 0) + 1));
+	if (info->export == NULL)
+		ft_error(info, -1);
 	info->export[0] = ft_strdup(info->env[0]);
 	while (info->env[i[0]])
 	{

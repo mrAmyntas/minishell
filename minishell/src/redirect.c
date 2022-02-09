@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 16:41:27 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 17:15:57 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ char	**trim_command(t_info *info, int start, int end)
 	while ((start + i) < end && info->token_state[start + i] != 1)
 		i++;
 	command = malloc(sizeof(char **) * (i + 1));
+	if (command == NULL)
+		ft_error(info, -1);
 	while (j < i)
 	{
 		command[j] = ft_strdup(info->tokens[start]);
@@ -111,7 +113,7 @@ char	*check_path(t_info *info, char *command)
 	loc = i + 1;
 	new = malloc(sizeof(char *) * (ft_strlen(command) - loc + 1));
 	if (!new)
-		return (NULL);
+		ft_error(info, -1);
 	i = 0;
 	while (command[loc + i])
 	{

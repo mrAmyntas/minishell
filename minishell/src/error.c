@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 16:31:18 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 17:23:40 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,6 @@ void	syntax_error(t_info *info, int token)
 		write(2, &c, 1);
 		write(2, "`\n", 2);
 	}
-//	ft_free(info);
-//	minishell(info);
-//	rl_clear_history();
-//	exit(1);
 	return ;
 }
 
@@ -85,10 +81,6 @@ void	ft_error2(t_info *info, int i)
 			write(2, "unclosed quote\n", 16);
 		else
 			write(2, "no process after pipe\n", 23);
-	//	ft_free(info);
-	//	minishell(info);
-	//	rl_clear_history();
-	//	exit(1);
 	}
 }
 

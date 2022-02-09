@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/04 20:54:46 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 17:24:00 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	find_syntax_error(t_info *info)
 				set_error(info, 258, NULL, 0);
 			else
 				set_error(info, 258, NULL, i + 1);
-			ft_free(info);
+			free_stuff(info);
 			minishell(info);
 			rl_clear_history();
 			exit(1);

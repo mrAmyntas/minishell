@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 15:28:59 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/09 17:27:26 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	exec_cd(t_info *info, char **command);
 int		exec_unset(t_info *info, char **command);
 int		exec_export(t_info *info, char **command);
 char	*make_dir(t_info *info, char *command);
-char	*get_path(char *cmd, char **env);
+char	*get_path(t_info *info, char *cmd, char **env);
 char	*get_val(t_info *info, char *var);
 int		ft_strstrlen(char **str, char *c, int i);
 int		ft_len_to_char(char *str, char c);
@@ -102,7 +102,7 @@ void	join_quoted_tokens(t_info *info, int i);
 int		check_name(t_info *info, int i, int j);
 void	expand(t_info *info);
 void	minishell(t_info *info);
-void	ft_free(t_info *info);
+void	free_stuff(t_info *info);
 void	check_redirect_v2(t_info *info, int start, int end, int inputfd);
 char	*expand_buf(t_info *info, char *buf, int i);
 void	check_dollar_in_quotes(t_info *info, int i);
