@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:26:27 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 14:27:27 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/10 19:37:11 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,11 @@ void	find_syntax_error(t_info *info)
 	{
 		if ((info->token_state[i] == 1 && check_char_token(info, i, 0)
 				!= C_PIPE && info->token_state[i + 1] == 1)
-			|| (check_char_token(info, i, 0)
-				== C_GREATER && info->tokens[i + 1] == NULL))
+			|| ((check_char_token(info, i, 0) == C_GREATER
+					|| (check_char_token(info, i, 0) == C_LESSER)
+					|| (check_char_token(info, i, 0) == C_DGREATER)
+					|| (check_char_token(info, i, 0) == C_DLESSER))
+				&& info->tokens[i + 1] == NULL))
 		{
 			if (info->tokens[i + 1] == NULL)
 				set_error(info, 258, NULL, 0);

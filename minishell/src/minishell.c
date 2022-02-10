@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 15:04:34 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/10 19:44:37 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	minishell(t_info *info)
 		}
 		if (!line_read || !line_read[0])
 			continue ;
-		lexer(info, line_read);
+		line_read = lexer(info, line_read);
 		parser(info);
 		if (info->tokens[0] == NULL)
 		{

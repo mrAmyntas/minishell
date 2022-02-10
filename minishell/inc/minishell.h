@@ -6,21 +6,18 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 14:33:26 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/10 19:41:14 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
+# include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <unistd.h>
-# include <stdlib.h>
 # include <fcntl.h>
 # include <signal.h>
-# include "../libft/libft.h"
 # include <dirent.h>
 
 typedef struct s_info
@@ -67,7 +64,7 @@ typedef struct s_sig
 t_sig	g_sig;
 void	ft_find_command(t_info *info, char **command, int oldfd);
 int		ft_find_redirect(t_info *info);
-void	lexer(t_info *info, char *line_read);
+char	*lexer(t_info *info, char *line_read);
 void	ft_init_struct(t_info *info, char **av);
 void	ft_error(t_info *info, int i);
 void	add_env(t_info *info, char *new_var);
@@ -75,7 +72,7 @@ void	sort_export(t_info *info);
 void	parser(t_info *info);
 int		check_char_token(t_info *info, int i, int j);
 void	get_env(t_info *info, char **env);
-void	exec_cd(t_info *info, char **command);
+void	exec_cd(t_info *info, char **command, int x);
 int		exec_unset(t_info *info, char **command);
 int		exec_export(t_info *info, char **command);
 char	*make_dir(t_info *info, char *command);
@@ -106,7 +103,7 @@ void	check_redirect_v2(t_info *info, int start, int end, int oldfd[2]);
 char	*expand_buf(t_info *info, char *buf, int i);
 void	check_dollar_in_quotes(t_info *info, int i);
 void	set_error(t_info *info, int error_type, char *str, int token);
-int		check_nosuchdir(t_info *info);
+int		check_nosuchdir(t_info *info, char **command);
 void	free_info(t_info *info);
 void	free_strstr(char **str);
 void	find_dgreater_dlesser(t_info *info);

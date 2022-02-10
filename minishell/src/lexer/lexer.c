@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 15:12:54 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/10 19:41:42 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static int	store_input(t_info *info, char *line_read)
 	return (0);
 }
 
-void	lexer(t_info *info, char *line_read)
+char	*lexer(t_info *info, char *line_read)
 {
 	int	i;
 
@@ -102,7 +102,7 @@ void	lexer(t_info *info, char *line_read)
 	{
 		info->tokens = (char **)malloc(sizeof(char *) * 1);
 		info->tokens[0] = NULL;
-		return ;
+		return (line_read);
 	}
 	i = ft_strlen(line_read);
 	info->tokens = (char **)malloc(sizeof(char *) * (i + 2));
@@ -118,4 +118,5 @@ void	lexer(t_info *info, char *line_read)
 		i--;
 	}
 	store_input(info, line_read);
+	return (line_read);
 }

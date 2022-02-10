@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 14:31:28 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/10 19:42:32 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void	unset_var(t_info *info, char *var)
 
 	loc = 0;
 	while (info->env[loc] && (ft_strncmp(info->env[loc], var, ft_strlen(var))
-			|| ft_len_to_char(info->env[loc], '=') != ft_strlen(var)))
+			|| (ft_len_to_char(info->env[loc], '=') != ft_strlen(var)
+				&& ft_len_to_char(info->env[loc], '=') > -1)))
 		loc++;
 	if (!info->env[loc])
 		return ;
@@ -98,21 +99,24 @@ int	exec_unset(t_info *info, char **command)
 	return (0);
 }
 
-int	check_nosuchdir(t_info *info)
+int	check_nosuchdir(t_info *info, char **command)
 {
 	int	i;
 	DIR	*ret;
 
 	i = 0;
-	while (info->tokens[i] != NULL)
+	while (command[i] != NULL)
 	{
-		if ((ft_strncmp(info->tokens[i], "cd", 2) == 0
-				&& ft_strlen(info->tokens[i]) == 2))
+		if ((ft_strncmp(command[i], "cd", 3) == 0
+				&& ft_strlen(command[i]) == 2))
 		{
-			ret = opendir(info->tokens[i + 1]);
+			if (!ft_strncmp(command[i + 1], "~", 2)
+				|| !ft_strncmp(command[i + 1], "-", 2))
+				return (0);
+			ret = opendir(command[i + 1]);
 			if (ret == NULL)
 			{
-				set_error(info, 1, info->tokens[i + 1], -4);
+				set_error(info, 1, command[i + 1], -4);
 				return (1);
 			}
 			else

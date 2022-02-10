@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 14:31:04 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/10 19:13:58 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ int	redirect(t_info *info, int type, int i)
 	{
 		if ((info->tokens[i + 1] == NULL || !(type % 2))
 			&& access(info->tokens[i + 1], F_OK) == -1)
-			set_error(info, 258, info->tokens[i + 1], 0);
+			set_error(info, 258, info->tokens[i + 1], 4);
 		else
-			set_error(info, 1, info->tokens[i + 1], 4);
+			set_error(info, 1, info->tokens[i + 1], -6);
 		return (fd);
 	}
 	if (type == 2 || type == 4)
@@ -74,7 +74,7 @@ void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 	pipe(pipefd);
 	id = fork();
 	if (id == -1)
-		set_error(info, 13, NULL, 4);
+		perror("in ft_pipe: ");
 	if (!id)
 	{
 		close(pipefd[0]);
@@ -109,8 +109,6 @@ int	find_redirect(t_info *info, int i, int fd[3], int end)
 			fd[1] = redirect(info, 4, i);
 		if (!ft_strncmp(info->tokens[i], "<<", 3) && info->token_state[i] == 1)
 			ft_heredoc(info, i);
-		if ((fd[0] < 0 || fd[1] < 0) && g_sig.exit_status == 1)
-			return (-1);
 		i++;
 	}
 	return (pipeloc);
@@ -124,10 +122,10 @@ void	check_redirect_v2(t_info *info, int start, int end, int oldfd[2])
 	fd[0] = 0;
 	fd[1] = 0;
 	fd[2] = find_redirect(info, start, fd, end);
-	if (fd[0] < 0 || fd[1] < 0)
-		return (ft_error(info, 0));
 	if (fd[2] >= 0)
 		return (ft_pipe(info, start, fd, oldfd));
+	if (fd[0] < 0 || fd[1] < 0)
+		return ;
 	command = trim_command(info, start, end);
 	command[0] = check_path(info, command[0]);
 	return (ft_find_command(info, command, oldfd[0]));

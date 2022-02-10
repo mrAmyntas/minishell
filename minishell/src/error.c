@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 14:27:13 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/10 19:23:54 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	syntax_error(t_info *info, int token)
 	int	c;
 
 	write(2, "minishell: syntax error near unexpected", 40);
-	if (token == 0)
+	if (token == 4 || token == 0)
 		write(2, " token `newline'\n", 18);
 	else
 	{
@@ -99,21 +99,22 @@ void	invalid_identifier(t_info *info)
 void	ft_error(t_info *info, int i)
 {
 	if (i <= -1 && i >= -3)
-		ft_error2(info, i);
-	else if (g_sig.exit_status == 1 || g_sig.exit_status == 126)
+		return (ft_error2(info, i));
+	write(2, "minishell: ", 12);
+	if (g_sig.exit_status == 1 || g_sig.exit_status == 126)
 	{
-		write(2, "minishell: ", 12);
 		if (g_sig.exit_status == 1 && i == -4)
 			write(2, "cd: ", 4);
 		write(2, info->exit_msg, ft_strlen(info->exit_msg));
-		if (i == -4 || i == 0)
+		if (i == -4)
 			perror(" ");
+		if (i == -6)
+			write(2, ": No such file or directory\n", 29);
 		if (i == -5)
 			write(2, ": Permission denied or is a directory\n", 39);
 	}
 	else if (g_sig.exit_status == 127)
 	{
-		write(2, "minishell: ", 12);
 		write(2, info->exit_msg, ft_strlen(info->exit_msg));
 		if (i == -4)
 			write(2, ": command not found\n", 20);

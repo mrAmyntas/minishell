@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 13:21:42 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 19:26:23 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	pwd_is_home(t_info *info, char *command)
 	while (info->env[i[1]] && ft_strncmp(info->env[i[1]], "HOME=", 5))
 		i[1]++;
 	free (info->pwd);
-	free (info->env[i[0]]);
 	if (!info->env[i[1]])
 	{
 		add_env(info, ft_strjoin("HOME=", info->home));
@@ -35,34 +34,27 @@ void	pwd_is_home(t_info *info, char *command)
 	else
 		info->pwd = ft_strdup(info->env[i[1]] + 5);
 	chdir(info->pwd);
-	info->env[i[0]] = ft_strjoin("PWD=", info->pwd);
+	add_env(info, ft_strjoin("PWD=", info->pwd));
 	free_strstr(info->export);
 	sort_export(info);
-	free (command);
+	free(command);
 }
 
 void	pwd_is_old(t_info *info, char *command)
 {
-	int	i;
-
-	i = 0;
 	if (!get_val(info, "OLDPWD"))
-		return ;
-	while (info->env[i] && ft_strncmp(info->env[i], "PWD=", 4))
-		i++;
-	if (info->env[i])
-		add_env(info, ft_strjoin("PWD=", info->pwd));
+	{
+		free(command);
+		return (set_error(info, 1, "cd: OLDPWD not set\n", -7));
+	}
 	add_env(info, ft_strjoin("PWD=", get_val(info, "OLDPWD")));
-	i = 0;
-	while (info->env[i] && ft_strncmp(info->env[i], "OLDPWD=", 7))
-		i++;
 	add_env(info, ft_strjoin("OLDPWD=", info->pwd));
-	free (info->pwd);
-	info->pwd = get_val(info, "PWD");
+	free(info->pwd);
+	info->pwd = ft_strdup(get_val(info, "PWD"));
 	chdir(info->pwd);
 	free_strstr(info->export);
 	sort_export(info);
-	free (command);
+	free(command);
 }
 
 void	trim_last_dir(t_info *info, char *command)
@@ -81,8 +73,7 @@ void	trim_last_dir(t_info *info, char *command)
 		len--;
 	info->pwd[len] = '\0';
 	chdir(info->pwd);
-	free(info->env[i]);
-	info->env[i] = ft_strjoin("PWD=", info->pwd);
+	add_env(info, ft_strjoin("PWD=", info->pwd));
 	free_strstr(info->export);
 	sort_export(info);
 	free (command);
@@ -107,20 +98,24 @@ void	exec_cd2(t_info *info, char *command, int i, int x)
 	free (command);
 }
 
-void	exec_cd(t_info *info, char **command)
+void	exec_cd(t_info *info, char **command, int x)
 {
 	char	**directions;
+	char	*temp;
 	int		i;
-	int		x;
 
-	x = 0;
-	if (command[1][0] == '/')
+	if (command[1] && command[1][0] == '/')
 		x = 1;
-	directions = ft_split(command[1], '/');
-	if (check_nosuchdir(info) == 1)
-	{
-		free_strstr(directions);
+	if (command[1] && check_nosuchdir(info, command) == 1)
 		return ;
+	directions = ft_split(command[1], '/');
+	if (!command[1])
+	{
+		temp = ft_strjoin("cd", " ..");
+		command = ft_split(temp, ' ');
+		free(temp);
+		directions = ft_split(command[1], '/');
+		free_strstr(command);
 	}
 	i = 0;
 	while (directions[i])
