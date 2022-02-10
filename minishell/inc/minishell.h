@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:23:58 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 13:43:57 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_info
 	char		**export;
 	char		*home;
 	char		*pwd;
-	int			fd_std[2];
+	int			fd_std[3];
 	int			*token_state;
 	char		*exit_msg;
 }				t_info;

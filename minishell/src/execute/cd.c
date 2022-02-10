@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:26:45 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 13:21:42 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,10 @@ void	exec_cd2(t_info *info, char *command, int i, int x)
 	else if (command && !ft_strncmp(command, "-", 2) && !i)
 		return (pwd_is_old(info, command));
 	if (!command || !ft_strncmp(command, ".", 2))
+	{
+		free (command);
 		return ;
+	}
 	if (i || (!x && !i))
 		command = make_dir(info, command);
 	change_pwd(info, command);

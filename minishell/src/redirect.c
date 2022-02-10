@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:48:06 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 13:33:19 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	redirect(t_info *info, int type, int i)
 		return (fd);
 	}
 	if (type == 2 || type == 4)
-		dup2(fd, STDOUT_FILENO);
+		dup2(fd, STDERR_FILENO);
 	else if (type == 1)
 		dup2(fd, STDIN_FILENO);
 	close(fd);
@@ -79,7 +79,7 @@ void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 	{
 		close(pipefd[0]);
 		if (!val[1])
-			dup2(pipefd[1], 1);
+			dup2(pipefd[1], 2);
 		command = trim_command(info, start, val[2]);
 		command[0] = check_path(info, command[0]);
 		if (command[0] == NULL)
