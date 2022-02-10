@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 13:16:41 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 14:31:28 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	check_var(char **command, int i, t_info *info)
 
 	j = 0;
 	if (command[i][j] == '\\' || command[i][j] == '|')
-			j++;
+		j++;
 	if (command[i][j] < 65 || (command[i][j] > 90 && command[i][j] < 95)
 		|| command[i][j] > 122 || command[i][j] == 96)
 		set_error(info, 2, command[i], -4);

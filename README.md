@@ -1,17 +1,9 @@
 # minishell
-
-BAS MOET DE INPUT VERWERKEN
-geef 1 line door naar de exec functie
-deze wordt vervolgend gesplit voor de execve
-check control d en c etc.
-
-
-
-
-
-
-
-
-
-MILAN MOET HET DAN GOED LATEN LOPEN
-
+This project is about creating a simple shell.
+It can use commands like echo (-n) / pwd / env / export / unset / cd. (More can be added without too much hassle)
+It can interpret some special characters: '<' '>' '<<' '>>' '|' '$' and the single and double quotes.
+It keeps the environment updated.
+It mimics bash in it's behavior.
+Control-C gives a new prompt.
+Control-D exits the shell.
+'exit' exits the shell.

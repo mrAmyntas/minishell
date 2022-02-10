@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 13:46:34 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 14:31:04 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	check_redirect_v2(t_info *info, int start, int end, int oldfd[2])
 	fd[1] = 0;
 	fd[2] = find_redirect(info, start, fd, end);
 	if (fd[0] < 0 || fd[1] < 0)
-		return (ft_error(info, -4));
+		return (ft_error(info, 0));
 	if (fd[2] >= 0)
 		return (ft_pipe(info, start, fd, oldfd));
 	command = trim_command(info, start, end);

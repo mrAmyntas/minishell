@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:15:36 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 14:27:13 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void	set_error(t_info *info, int error_type, char *str, int token)
 {
 	int		i;
 
-	if (g_sig.exit_status == 258)
-		return ;
 	i = ft_strlen(str);
 	if (info->exit_msg != NULL)
 	{
@@ -60,7 +58,10 @@ void	set_error(t_info *info, int error_type, char *str, int token)
 	if (error_type == 258)
 		syntax_error(info, token);
 	else if (token < 4)
+	{
+		dup2(info->fd_std[2], 2);
 		ft_error(info, token);
+	}
 }
 
 void	ft_error2(t_info *info, int i)
@@ -99,27 +100,26 @@ void	ft_error(t_info *info, int i)
 {
 	if (i <= -1 && i >= -3)
 		ft_error2(info, i);
-	else if (g_sig.exit_status == 258)
-		return ;
-	if (g_sig.exit_status == 2)
-		invalid_identifier(info);
-	write(2, "minishell: ", 12);
-	if (g_sig.exit_status == 1 || g_sig.exit_status == 126)
+	else if (g_sig.exit_status == 1 || g_sig.exit_status == 126)
 	{
-		if (g_sig.exit_status == 1)
+		write(2, "minishell: ", 12);
+		if (g_sig.exit_status == 1 && i == -4)
 			write(2, "cd: ", 4);
 		write(2, info->exit_msg, ft_strlen(info->exit_msg));
-		if (i == -4)
+		if (i == -4 || i == 0)
 			perror(" ");
 		if (i == -5)
 			write(2, ": Permission denied or is a directory\n", 39);
 	}
-	if (g_sig.exit_status == 127)
+	else if (g_sig.exit_status == 127)
 	{
+		write(2, "minishell: ", 12);
 		write(2, info->exit_msg, ft_strlen(info->exit_msg));
 		if (i == -4)
 			write(2, ": command not found\n", 20);
 		if (i == -5)
 			write(2, ": No such file or directory\n", 29);
 	}
+	else if (g_sig.exit_status == 2)
+		invalid_identifier(info);
 }

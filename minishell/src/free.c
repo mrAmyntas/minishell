@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 13:44:06 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 14:32:24 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ void	free_stuff(t_info *info)
 	free(info->token_state);
 	info->t_pos = 0;
 	info->p_pos = 0;
+	dup2(info->fd_std[0], 0);
+	dup2(info->fd_std[1], 1);
+	dup2(info->fd_std[2], 2);
 }
 
 void	free_info(t_info *info)
@@ -63,13 +66,12 @@ void	set_shlvl(t_info *info)
 	free(lvl);
 }
 
-void	ft_init_struct(t_info *info, char **av, char **env)
+void	ft_init_struct(t_info *info, char **av)
 {
 	size_t	len;
 
 	len = 10;
 	info->av = av;
-	get_env(info, env);
 	info->redirect = 0;
 	info->ret = 0;
 	info->t_pos = 0;

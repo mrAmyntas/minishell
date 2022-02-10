@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 13:43:57 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 14:33:26 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_sig	g_sig;
 void	ft_find_command(t_info *info, char **command, int oldfd);
 int		ft_find_redirect(t_info *info);
 void	lexer(t_info *info, char *line_read);
-void	ft_init_struct(t_info *info, char **av, char **env);
+void	ft_init_struct(t_info *info, char **av);
 void	ft_error(t_info *info, int i);
 void	add_env(t_info *info, char *new_var);
 void	sort_export(t_info *info);

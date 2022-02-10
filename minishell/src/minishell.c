@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 13:46:29 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 14:33:04 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,6 @@ void	minishell_cont(t_info *info)
 	set_fd[1] = 0;
 	g_sig.exit_status = 0;
 	check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), set_fd);
-	dup2(info->fd_std[0], 0);
-	dup2(info->fd_std[1], 1);
-	dup2(info->fd_std[2], 2);
 	free_stuff(info);
 }
 
@@ -95,7 +92,8 @@ int	main(int ac, char **av, char **env)
 	g_sig.sigint = 0;
 	g_sig.sigquit = 0;
 	g_sig.exit_status = 0;
-	ft_init_struct(&info, av, env);
+	get_env(&info, env);
+	ft_init_struct(&info, av);
 	write(2, "Welcome! You can exit by", 24);
 	write(2, " pressing Ctrl+D at any time...\n", 32);
 	minishell(&info);
