@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:16:15 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 15:06:08 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,19 +113,3 @@ void	parser(t_info *info)
 	remove_quotes(info);
 	find_syntax_error(info);
 }
-
-/*
-bash-3.2$ www
-bash: www: command not found
-bash-3.2$ echo $?
-127
-bash-3.2$ www
-bash: www: command not found
-bash-3.2$ echo $? > t1 | echo $? > t2 | www | echo $? > t3
-bash: www: command not found
-bash-3.2$ cat t1
-127
-bash-3.2$ cat t2
-0
-bash-3.2$ cat t3
-0 */

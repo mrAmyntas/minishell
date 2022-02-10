@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:57:55 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 15:04:06 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*check_path(t_info *info, char *command)
 	if (!command)
 		return (NULL);
 	i = ft_strlen(command) - 2;
-	while (command[i] != '/' && i > 0)
+	while (i > 0 && command[i] != '/')
 		i--;
 	if (i <= 0)
 		return (command);

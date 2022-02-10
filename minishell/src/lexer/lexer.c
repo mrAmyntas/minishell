@@ -6,24 +6,24 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:15:53 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/10 15:12:54 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static char	*ft_remove_spaces(t_info *info, char *line_read)
+static char	*ft_remove_spaces(t_info *info, char *line_read, int i)
 {
-	int		i;
 	int		j;
 	char	*buff;
 
-	i = 0;
 	while (line_read[i] == ' ')
 		i++;
 	if (i == 0)
 		return (line_read);
 	j = ft_strlen(line_read);
+	if (j == i)
+		return (NULL);
 	buff = (char *)malloc((sizeof(char) * j) - i + 1);
 	if (buff == NULL)
 		ft_error(info, -1);
@@ -97,7 +97,13 @@ void	lexer(t_info *info, char *line_read)
 {
 	int	i;
 
-	line_read = ft_remove_spaces(info, line_read);
+	line_read = ft_remove_spaces(info, line_read, 0);
+	if (!line_read)
+	{
+		info->tokens = (char **)malloc(sizeof(char *) * 1);
+		info->tokens[0] = NULL;
+		return ;
+	}
 	i = ft_strlen(line_read);
 	info->tokens = (char **)malloc(sizeof(char *) * (i + 2));
 	if (info->tokens == NULL)
