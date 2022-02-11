@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 19:26:23 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/11 12:34:24 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	exec_cd(t_info *info, char **command, int x)
 	directions = ft_split(command[1], '/');
 	if (!command[1])
 	{
-		temp = ft_strjoin("cd", " ..");
+		temp = ft_strjoin("cd", " ~");
 		command = ft_split(temp, ' ');
 		free(temp);
 		directions = ft_split(command[1], '/');

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 18:11:17 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/11 12:33:51 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	exec_pwd(t_info *info)
 void	ft_find_command(t_info *info, char **command, int oldfd)
 {
 	if (!ft_strncmp(command[0], "echo", 5))
-		exec(info, command);
+		write(2, "hier komt echo\n", 15);//exec(info, command);
 	else if (!ft_strncmp(command[0], "cd", 3))
 		exec_cd(info, command, 0);
 	else if (!ft_strncmp(command[0], "pwd", 4))
@@ -109,7 +109,7 @@ void	ft_find_command(t_info *info, char **command, int oldfd)
 		exit(0);
 	}
 	else if (command[0])
-		set_error(info, 127, command[0], -4);
+		exec(info, command);
 	if (oldfd)
 		close(oldfd);
 	free_strstr(command);
