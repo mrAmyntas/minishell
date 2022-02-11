@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/11 15:06:41 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 15:09:29 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/11 17:48:23 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,44 @@ void	exec_echo(char **command)
 	}
 	if (ft_strncmp(command[1], "-", 2))
 		write(2, "\n", 1);
+}
+/*
+void	check_redirect_v3(t_info *info, int start, int end, int oldfd[2])
+{
+	int		fd[3];
+	char	**command;
+
+	fd[0] = 0;
+	fd[1] = 0;
+	fd[2] = find_redirect(info, start, fd, end);
+	if (fd[2] >= 0)
+		return (ft_pipe(info, start, fd, oldfd));
+	if (fd[0] < 0 || fd[1] < 0)
+		return ;
+	command = trim_command(info, start, end);
+	command[0] = check_path(info, command[0]);
+	return (ft_find_command(info, command, oldfd[0]));
+}*/
+
+void	ft_find_command2(t_info *info, char **command, int oldfd)
+{
+	if (!ft_strncmp(command[0], "echo", 5))
+		exec_echo(command);
+	else if (!ft_strncmp(command[0], "cd", 3))
+		exec_cd(info, command, 0);
+	else if (!ft_strncmp(command[0], "pwd", 4))
+		exec_pwd(info);
+	else if (!ft_strncmp(command[0], "export", 7))
+		exec_export(info, command);
+	else if (!ft_strncmp(command[0], "unset", 6))
+		exec_unset(info, command);
+	else if (!ft_strncmp(command[0], "env", 4))
+		exec_env(info);
+	else if (!ft_strncmp(command[0], "exit", 5))
+		exec_exit(info, command);
+	else if (command[0] && g_sig.exit_status == 0)
+		exec(info, command);
+	if (oldfd)
+		close(oldfd);
+	free_strstr(command);
 }

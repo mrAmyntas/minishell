@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 15:09:56 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/11 17:43:32 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <dirent.h>
+# include <errno.h>
 
 typedef struct s_info
 {
@@ -118,5 +119,9 @@ void	change_pwd(t_info *info, char *command);
 void	parent_process(t_info *info, int pipefd[2], int loc_pipe);
 int		exec_exit(t_info *info, char **command);
 void	exec_echo(char **command);
+void	ft_find_command2(t_info *info, char **command, int oldfd);
+int		exec(t_info *info, char **command);
+int		exec_pwd(t_info *info);
+int		exec_env(t_info *info);
 
 #endif

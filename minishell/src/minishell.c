@@ -6,20 +6,52 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 15:05:23 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/11 18:31:05 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+// echo -n werkt nog niet
+// echo met geen arguments werkt nog niet
+// PWD= trimmen bij pwd
+
+// $? expansion fixen
+
+// '> aa cat | echo hoi' (in bash hangt ie, bij ons schijft hij echo hoi naar aa)
+// hij ging fout bij trim_command -> heb hem ook met '>' de startpositie laten aanpassen
+// maakt dat nog uit?
+// hij laat nog niet de echo hoi zien, alleen hangen met de cat.
+// dat is waar Maarten het over had lijkt me, met wachten op alle child processes
+// en niet 1 voor 1.
+
+
+
+// '< aaa cat | echo hoi' (bash voert uit eerst no such file or dir dan echo hoi2)
+//
+// bij ons: '< aaa cat | echo hoi' -> blijft hangen in de dup2 in exec
+// OPGELOST DOOR In PIPE NIET NAAR ft_find_command TE GAAN MAAR NAAR
+// ft_find_command2 DIE ALLEEN EXEC'D ALS ERROR STATUS 0 IS.
+// weet niet zeker of dit niks anders kapot maakt.
+
+
+// bij enkel cat of andere hangdingen dan gaat control-C helemaal los
+// de ˆC krijg ik niet meer weg. Ik heb hem aangepast zodat ie de buffer leegt
+// (met rl_replace_line("", 0)) -> Nu doet ie dat wel goed maar de control C is terug.
+
+// de exit statusen vang ik nu op met waitpids (bij de forks bij pipe / exec)
+// lijkt goed te werken maar wel weer grotere functies misschien kan dat nog kleiner
 #include "../inc/minishell.h"
 
 void	handle_sig(int signum)
 {
 	if (signum == SIGINT)
 	{
+		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		ft_putstr_fd("  \b\b\nminishell: ", 1);
+		write(2, "\nminishell: ", 13);
+		rl_replace_line("", 0);
 		g_sig.sigint = 1;
+		g_sig.exit_status = SIGINT + 128;
 	}
 	if (signum == SIGQUIT)
 	{
@@ -32,8 +64,6 @@ void	handle_sig(int signum)
 
 static char	*minishell_readline(char *line_read)
 {
-	signal(SIGINT, &handle_sig);
-	signal(SIGQUIT, &handle_sig);
 	g_sig.sigquit = 0;
 	g_sig.sigint = 0;
 	if (line_read)
@@ -76,12 +106,10 @@ void	minishell(t_info *info)
 			break ;
 		}
 		if (!line_read || !line_read[0])
-		{
-			free(line_read);
-			line_read = NULL;
 			continue ;
-		}
 		line_read = lexer(info, line_read);
+		if (!line_read)
+			continue ;
 		parser(info);
 		minishell_cont(info);
 	}
@@ -93,6 +121,8 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 1)
 		return (1);
+	signal(SIGINT, &handle_sig);
+	signal(SIGQUIT, &handle_sig);
 	g_sig.sigint = 0;
 	g_sig.sigquit = 0;
 	g_sig.exit_status = 0;

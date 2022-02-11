@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 13:04:59 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/11 15:22:43 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,7 @@ char	*lexer(t_info *info, char *line_read)
 
 	line_read = ft_remove_spaces(info, line_read, 0, ft_strlen(line_read));
 	if (!line_read)
-	{
-		info->tokens = (char **)malloc(sizeof(char *) * 1);
-		info->tokens[0] = NULL;
 		return (line_read);
-	}
 	i = ft_strlen(line_read);
 	info->tokens = (char **)malloc(sizeof(char *) * (i + 2));
 	if (info->tokens == NULL)
