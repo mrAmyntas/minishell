@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 18:31:05 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/11 19:13:11 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@
 // '> aa cat | echo hoi' (in bash hangt ie, bij ons schijft hij echo hoi naar aa)
 // hij ging fout bij trim_command -> heb hem ook met '>' de startpositie laten aanpassen
 // maakt dat nog uit?
-// hij laat nog niet de echo hoi zien, alleen hangen met de cat.
-// dat is waar Maarten het over had lijkt me, met wachten op alle child processes
-// en niet 1 voor 1.
-
+// heb parent_process voor de wait gezet, lijkt te werken
+// alleen het lijkt erop alsof de recursive versie van ons er voor zorgt dat de laatste
+// die wij uitvoeren de eerst is die returned (al komen de error messages wel op volgorde???)
 
 
 // '< aaa cat | echo hoi' (bash voert uit eerst no such file or dir dan echo hoi2)

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 18:18:56 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/11 19:14:25 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,9 @@ void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 		ft_find_command2(info, command, 0);
 		exit(g_sig.exit_status);
 	}
-	else if (waitpid(id, &status, 0) == -1)
+	parent_process(info, pipefd, val[2]);
+	printf("pid:%d\n", id);
+	if (id && waitpid(id, &status, 0) == -1)
 	{
         perror("waitpid() failed");
         exit(EXIT_FAILURE);
@@ -104,7 +106,6 @@ void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 	if (WIFEXITED(status))
         g_sig.exit_status = WEXITSTATUS(status);
 	close(oldfd[0]);
-	parent_process(info, pipefd, val[2]);
 }
 
 int	find_redirect(t_info *info, int i, int fd[3], int end)

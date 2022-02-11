@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 15:28:17 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/11 19:15:27 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	ft_error2(t_info *info, int i)
 
 void	invalid_identifier(t_info *info)
 {
-	write(2, "minishell: export: '", 20);
+	write(2, "export: '", 10);
 	write(2, info->exit_msg, ft_strlen(info->exit_msg));
 	write(2, "': not a valid identifier\n", 26);
 	g_sig.exit_status = 1;
