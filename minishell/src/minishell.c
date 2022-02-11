@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 19:44:37 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/11 15:05:23 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ void	minishell_cont(t_info *info)
 {
 	int	set_fd[2];
 
+	if (info->tokens[0] == NULL)
+	{
+		free_stuff(info);
+		return ;
+	}
 	set_fd[0] = 0;
 	set_fd[1] = 0;
 	g_sig.exit_status = 0;
@@ -71,14 +76,13 @@ void	minishell(t_info *info)
 			break ;
 		}
 		if (!line_read || !line_read[0])
-			continue ;
-		line_read = lexer(info, line_read);
-		parser(info);
-		if (info->tokens[0] == NULL)
 		{
-			free_stuff(info);
+			free(line_read);
+			line_read = NULL;
 			continue ;
 		}
+		line_read = lexer(info, line_read);
+		parser(info);
 		minishell_cont(info);
 	}
 }

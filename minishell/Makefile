@@ -33,13 +33,14 @@ SRC =	src/minishell.c\
 		src/expansion/exp_heredoc.c\
 		src/environment/manage_env.c\
 		src/environment/manage_env_utils.c\
-		src/execute/exec.c\
 		src/execute/cd.c\
+		src/execute/exec.c\
 		src/execute/exec_utils.c\
+		src/execute/exec_utils2.c
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
-CFLAGS = -Wall -Werror -Wextra #-fsanitize=address
+CFLAGS = #-Wall -Werror -Wextra #-fsanitize=address
 
 LDFLAGS = -L$(HOME)/.brew/opt/readline/lib
 CPPFLAGS= -I$(HOME)/.brew/opt/readline/include

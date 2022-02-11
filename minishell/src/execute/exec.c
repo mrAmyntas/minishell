@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 13:04:27 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/11 15:09:16 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,51 +89,6 @@ int	exec_pwd(t_info *info)
 	return (0);
 }
 
-int		exec_exit(char **command)
-{
-	int	ext;
-	
-	write(2, "exit\n", 5);
-	if (command[1] && command[2])
-	{
-		write(2, "exit: too many arguments\n", 25);
-		return (1);
-	}
-	if (command[1])
-	{
-		ext = ft_atoi(command[1]);
-		if (ext == -1)
-			write(1, "error\n", 6);
-	}
-	if (command[1] && ft_isdigit(ext))
-	{
-		write(2, "exit: ", 6);
-		write(2, command[1], ft_strlen(command[1]));
-		write(2, ": numeric argument required\n", 28);
-		exit(255);
-	}
-	if(command[1])
-		exit(ext);
-	exit(0);
-}
-
-void	exec_echo(char **command)
-{
-	int	i;
-
-	i = 1;
-	if (!command[1])
-		return ;
-	while (command[i])
-	{
-		if (i != 1 || (i == 1 && ft_strncmp(command[1], "-n", 3)))
-			write(2, command[i], ft_strlen(command[i]));	
-		i++;
-	}
-	if (ft_strncmp(command[1], "-", 2))
-		write(2, "\n", 1);
-}
-
 void	ft_find_command(t_info *info, char **command, int oldfd)
 {
 	if (!ft_strncmp(command[0], "echo", 5))
@@ -149,7 +104,7 @@ void	ft_find_command(t_info *info, char **command, int oldfd)
 	else if (!ft_strncmp(command[0], "env", 4))
 		exec_env(info);
 	else if (!ft_strncmp(command[0], "exit", 5))
-		exec_exit(command);
+		exec_exit(info, command);
 	else if (command[0])
 		exec(info, command);
 	if (oldfd)
