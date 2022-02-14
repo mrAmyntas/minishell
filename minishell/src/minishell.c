@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/14 17:03:15 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/14 19:07:02 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 // lijkt goed te werken maar wel weer grotere functies misschien kan dat nog kleiner
 #include "../inc/minishell.h"
 
-void	handle_sig(int signum, t_info *info)
+void	handle_sig(int signum)
 {
 	if (signum == SIGINT)
 	{
