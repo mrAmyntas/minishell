@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 19:14:25 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/14 15:44:30 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ char	**trim_command(t_info *info, int start, int end)
 
 	i = 0;
 	j = 0;
-	if (!ft_strncmp(info->tokens[start], "<", ft_strlen(info->tokens[start]))
+	if (!ft_strncmp(info->tokens[start], "<", 2)
 		&& info->token_state[start])
 		start += 2;
-	if (!ft_strncmp(info->tokens[start], ">", ft_strlen(info->tokens[start]))
+	if (!ft_strncmp(info->tokens[start], ">", 2)
 		&& info->token_state[start])
 		start += 2;
 	while ((start + i) < end && info->token_state[start + i] != 1)
@@ -78,7 +78,7 @@ void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 	pid_t	id;
 	int		pipefd[2];
 	char	**command;
-	int		status;
+	//int		status;
 
 	pipe(pipefd);
 	id = fork();
@@ -93,18 +93,18 @@ void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 		command[0] = check_path(info, command[0]);
 		if (command[0] == NULL)
 			exit(1);
-		ft_find_command2(info, command, 0);
+		ft_find_command(info, command, 0);
 		exit(g_sig.exit_status);
 	}
 	parent_process(info, pipefd, val[2]);
-	printf("pid:%d\n", id);
-	if (id && waitpid(id, &status, 0) == -1)
-	{
-        perror("waitpid() failed");
-        exit(EXIT_FAILURE);
-    }
-	if (WIFEXITED(status))
-        g_sig.exit_status = WEXITSTATUS(status);
+	//printf("pid:%d\n", id);
+	//if (waitpid(id, &status, 0) == -1)
+	//{
+    //    perror("waitpid() failed");
+    //    exit(EXIT_FAILURE);
+    //}
+	//if (WIFEXITED(status))
+    //    g_sig.exit_status = WEXITSTATUS(status);
 	close(oldfd[0]);
 }
 
@@ -137,6 +137,7 @@ void	check_redirect_v2(t_info *info, int start, int end, int oldfd[2])
 
 	fd[0] = 0;
 	fd[1] = 0;
+	dup2(info->fd_std[2], 2);
 	fd[2] = find_redirect(info, start, fd, end);
 //	printf("fd:%d %d %d  start:%d  end:%d\n", fd[0], fd[1], fd[2], start, end);
 	if (fd[2] >= 0)

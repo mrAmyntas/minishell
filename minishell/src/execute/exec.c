@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 18:11:46 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/14 15:53:24 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	exec(t_info *info, char **command)
 {
 	char	*path;
 	pid_t	id;
-	int		status;
+	//int		status;
 
 	id = fork();
 	if (id == -1)
@@ -70,29 +70,25 @@ int	exec(t_info *info, char **command)
 	if (id == 0)
 	{
 		path = get_path(command[0]);
-		dup2(2, 1);
+		dup2(STDERR_FILENO, STDOUT_FILENO);
 		execve(path, command, info->env);
 		set_error(info, 127, command[0], -4);
-		exit (127);
+		exit(127);
 	}
-	else if (waitpid(id, &status, 0) == -1)
-	{
-        perror("waitpid() failed");
-        exit(EXIT_FAILURE);
-    }
-	if (WIFEXITED(status))
-        g_sig.exit_status = WEXITSTATUS(status);
+	//else if (waitpid(id, &status, 0) == -1)
+	//{
+    //    perror("waitpid() failed");
+    //    exit(EXIT_FAILURE);
+    //}
+	//if (WIFEXITED(status))
+    //    g_sig.exit_status = WEXITSTATUS(status);
 	return (0);
 }
 
 int	exec_pwd(t_info *info)
 {
-	char	*pwd;
-
-	pwd = ft_strjoin("PWD=", info->pwd);
-	write(2, pwd, ft_strlen(pwd));
+	write(2, info->pwd, ft_strlen(info->pwd));
 	write(2, "\n", 1);
-	free (pwd);
 	return (0);
 }
 
@@ -111,7 +107,7 @@ void	ft_find_command(t_info *info, char **command, int oldfd)
 	else if (!ft_strncmp(command[0], "env", 4))
 		exec_env(info);
 	else if (!ft_strncmp(command[0], "exit", 5))
-		exec_exit(info, command);
+		exec_exit(command);
 	else if (command[0])
 		exec(info, command);
 	if (oldfd)

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 19:13:02 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/14 16:20:10 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_sig
 	int				exit_status2;
 	int				sigint;
 	int				sigquit;
+	int				id;
 }				t_sig;
 
 t_sig	g_sig;
@@ -117,11 +118,7 @@ void	update_expand_exit_status(t_info *info);
 char	*check_path(t_info *info, char *command);
 void	change_pwd(t_info *info, char *command);
 void	parent_process(t_info *info, int pipefd[2], int loc_pipe);
-int		exec_exit(t_info *info, char **command);
+int		exec_exit(char **command);
 void	exec_echo(char **command);
-void	ft_find_command2(t_info *info, char **command, int oldfd);
-int		exec(t_info *info, char **command);
-int		exec_pwd(t_info *info);
-int		exec_env(t_info *info);
 
 #endif
