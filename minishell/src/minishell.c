@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/14 19:07:02 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/16 16:06:40 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@
 
 // de exit statusen vang ik nu op met waitpids (bij de forks bij pipe / exec)
 // lijkt goed te werken maar wel weer grotere functies misschien kan dat nog kleiner
+
+// doet de \b iets?
 #include "../inc/minishell.h"
 
 void	handle_sig(int signum)
@@ -64,7 +66,7 @@ void	handle_sig(int signum)
 			ft_putstr_fd("\n", 2);
 			g_sig.exit_status = SIGINT + 128;
 		}
-		g_sig.sigint = 1;
+		g_sig.sig += 2;
 	}
 	if (signum == SIGQUIT)
 	{
@@ -82,15 +84,14 @@ void	handle_sig(int signum)
 			write(2, "\n", 1);
 			g_sig.exit_status = SIGINT + 128;
 		}
-		g_sig.sigquit = 1;
+		g_sig.sig += 1;
 	}
 	g_sig.id = 0;
 }
 
 static char	*minishell_readline(char *line_read)
 {
-	g_sig.sigquit = 0;
-	g_sig.sigint = 0;
+	g_sig.sig = 0;
 	if (line_read)
 	{
 		free(line_read);
@@ -114,6 +115,7 @@ void	minishell_cont(t_info *info)
 	g_sig.id = 1;
 	check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), set_fd);
 	while (waitpid(-1, NULL, 0) != -1);
+	g_sig.id = 0;
 	free_stuff(info);
 }
 
@@ -126,8 +128,8 @@ void	minishell(t_info *info)
 		line_read = minishell_readline(line_read);
 		if (line_read && *line_read)
 			add_history(line_read);
-		if ((!line_read && (!g_sig.sigint || !g_sig.sigquit))
-			|| (!line_read && g_sig.sigint && g_sig.sigquit))
+		if ((!line_read && (!g_sig.sig || g_sig.sig == 1 || g_sig.sig == 2))
+			|| (!line_read && g_sig.sig == 3))
 		{
 			write(0, "exit: thanks for using minishell\n", 33);
 			break ;
@@ -139,7 +141,6 @@ void	minishell(t_info *info)
 			continue ;
 		parser(info);
 		minishell_cont(info);
-		g_sig.id = 0;
 	}
 }
 
@@ -149,8 +150,7 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 1)
 		return (1);
-	g_sig.sigint = 0;
-	g_sig.sigquit = 0;
+	g_sig.sig = 0;
 	g_sig.exit_status = 0;
 	g_sig.id = 0;
 	get_env(&info, env);

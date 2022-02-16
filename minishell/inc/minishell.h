@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/14 16:20:10 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/16 11:18:34 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ typedef struct s_sig
 {
 	int				exit_status;
 	int				exit_status2;
-	int				sigint;
-	int				sigquit;
+	int				sig;
 	int				id;
 }				t_sig;
 

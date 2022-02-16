@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 20:37:17 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/16 11:21:23 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	ft_heredoc(t_info *info, int i)
 	buf = readline("> ");
 	while (buf
 		&& ft_strncmp(buf, info->tokens[i + 1]
-			, long_str(buf, info->tokens[i + 1])) && !g_sig.sigint)
+			, long_str(buf, info->tokens[i + 1])) && (!g_sig.sig || g_sig.sig == 1))
 	{
 		buf = expand_buf(info, buf, i);
 		write(fd, buf, ft_strlen(buf));
