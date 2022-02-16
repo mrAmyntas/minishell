@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 19:42:32 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/16 18:03:42 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ int	exec_unset(t_info *info, char **command)
 	i = 1;
 	while (command[i])
 	{
-		unset_var(info, command[i]);
+		if (!check_var(command, i, info))
+			unset_var(info, command[i]);
 		i++;
 	}
 	free_strstr(info->export);
