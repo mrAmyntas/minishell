@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/14 19:07:02 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/16 17:09:38 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ static char	*minishell_readline(char *line_read)
 void	minishell_cont(t_info *info)
 {
 	int	set_fd[2];
+	int	status;
+	int	ret;
 
 	if (info->tokens[0] == NULL)
 	{
@@ -113,7 +115,12 @@ void	minishell_cont(t_info *info)
 	g_sig.exit_status = 0;
 	g_sig.id = 1;
 	check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), set_fd);
-	while (waitpid(-1, NULL, 0) != -1);
+	while (1 == 1)
+	{
+		ret = waitpid(-1, &status, 0);
+		if (ret == -1)
+			break ;
+	}
 	free_stuff(info);
 }
 

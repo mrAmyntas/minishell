@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/14 15:53:24 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/16 16:55:13 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	exec(t_info *info, char **command)
 {
 	char	*path;
 	pid_t	id;
-	//int		status;
+	int		status;
 
 	id = fork();
 	if (id == -1)
@@ -71,17 +71,17 @@ int	exec(t_info *info, char **command)
 	{
 		path = get_path(command[0]);
 		dup2(STDERR_FILENO, STDOUT_FILENO);
-		execve(path, command, info->env);
+		if (g_sig.exit_status2 == 0)
+			execve(path, command, info->env);
+		else
+			exit(g_sig.exit_status);
 		set_error(info, 127, command[0], -4);
 		exit(127);
 	}
-	//else if (waitpid(id, &status, 0) == -1)
-	//{
-    //    perror("waitpid() failed");
-    //    exit(EXIT_FAILURE);
-    //}
-	//if (WIFEXITED(status))
-    //    g_sig.exit_status = WEXITSTATUS(status);
+	else
+		waitpid(id, &status, 0);
+	if (WIFEXITED(status))
+		g_sig.exit_status = WEXITSTATUS(status);
 	return (0);
 }
 
@@ -94,6 +94,7 @@ int	exec_pwd(t_info *info)
 
 void	ft_find_command(t_info *info, char **command, int oldfd)
 {
+	g_sig.exit_status2 = g_sig.exit_status;
 	if (!ft_strncmp(command[0], "echo", 5))
 		exec_echo(command);
 	else if (!ft_strncmp(command[0], "cd", 3))
