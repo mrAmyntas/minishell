@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/11 15:06:41 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 18:04:08 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/16 18:10:38 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int	exec_exit(char **command)
 	{
 		x = ft_atoi(command[1]);
 		if (ft_check_isdigit(command[1]) == -1
-			|| (ft_atoi(command[1]) != -2 && ft_atoi_llong_check(command[1]) == -2))
+			|| (ft_atoi(command[1]) != -2
+				&& ft_atoi_llong_check(command[1]) == -2))
 		{
 			write(2, "exit: ", 7);
 			write(2, command[1], ft_strlen(command[1]));
