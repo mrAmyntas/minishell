@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:21:32 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/16 17:49:49 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 	pid_t	id;
 	int		pipefd[2];
 	char	**command;
-	//int		status;
 
 	pipe(pipefd);
 	id = fork();
@@ -83,7 +82,7 @@ void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 	{
 		close(pipefd[0]);
 		if (!val[1])
-			dup2(pipefd[1], 2);
+			dup2(pipefd[1], STDERR_FILENO);
 		command = trim_command(info, start, val[2]);
 		command[0] = check_path(info, command[0]);
 		if (command[0] == NULL)
@@ -123,7 +122,8 @@ void	check_redirect_v2(t_info *info, int start, int end, int oldfd[2])
 	char	**command;
 
 	fd[0] = 0;
-	while (fd[0]++ < 1000000);
+	while (fd[0] < 1000000)
+		fd[0]++;
 	fd[0] = 0;
 	fd[1] = 0;
 	dup2(info->fd_std[2], 2);

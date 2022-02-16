@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/03 12:51:24 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/16 17:50:14 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ static void	remove_dollar_and_name(t_info *info, char *rest, int i)
 		info->tokens[i] = (char *)malloc(sizeof(char) * ft_strlen(rest) + 1);
 		if (info->tokens[i] == NULL)
 			ft_error(info, -1);
-		ft_strlcpy(info->tokens[i], rest, ft_strlen(rest) + 1);
+		ft_strlcpy(info->tokens[i],
+			rest, ft_strlen(rest) + 1);
 		free(rest);
 	}
 	else
