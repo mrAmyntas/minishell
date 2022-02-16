@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 16:55:13 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/16 17:14:16 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	exec(t_info *info, char **command)
 	{
 		path = get_path(command[0]);
 		dup2(STDERR_FILENO, STDOUT_FILENO);
-		if (g_sig.exit_status2 == 0)
+		if (g_sig.exit_status == 0)
 			execve(path, command, info->env);
 		else
 			exit(g_sig.exit_status);
@@ -94,7 +94,6 @@ int	exec_pwd(t_info *info)
 
 void	ft_find_command(t_info *info, char **command, int oldfd)
 {
-	g_sig.exit_status2 = g_sig.exit_status;
 	if (!ft_strncmp(command[0], "echo", 5))
 		exec_echo(command);
 	else if (!ft_strncmp(command[0], "cd", 3))
