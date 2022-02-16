@@ -6,7 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2022/02/16 16:06:40 by mgroen        ########   odam.nl         */
+=======
+/*   Updated: 2022/02/16 17:09:38 by bhoitzin      ########   odam.nl         */
+>>>>>>> 42e1fdb3a4101552f8067d7faa0ff3ba638f6a81
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +107,7 @@ static char	*minishell_readline(char *line_read)
 void	minishell_cont(t_info *info)
 {
 	int	set_fd[2];
+	int	status;
 
 	if (info->tokens[0] == NULL)
 	{

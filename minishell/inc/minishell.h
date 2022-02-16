@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 11:18:34 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/16 17:21:56 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <signal.h>
 # include <dirent.h>
 # include <errno.h>
+# include <sys/wait.h>
 
 typedef struct s_info
 {
@@ -37,6 +38,7 @@ typedef struct s_info
 	int			fd_std[3];
 	int			*token_state;
 	char		*exit_msg;
+	int			builtin;
 }				t_info;
 
 enum	e_tokentype

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 15:01:49 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/16 17:21:32 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ char	**trim_command(t_info *info, int start, int end)
 		start += 2;
 	while ((start + i) < end && info->token_state[start + i] != 1)
 		i++;
-//	printf("i:%d\n", i);
 	command = malloc(sizeof(char **) * (i + 1));
 	if (command == NULL)
 		ft_error(info, -1);
@@ -39,10 +38,6 @@ char	**trim_command(t_info *info, int start, int end)
 		start++;
 	}
 	command[j] = NULL;
-//	printf("command:%s\n", command[0]);
-//	printf("command:%s\n", command[1]);
-//	printf("command:%s\n", command[2]);
-//	printf("command:%s\n", command[3]);
 	return (command);
 }
 
@@ -97,14 +92,6 @@ void	ft_pipe(t_info *info, int start, int val[3], int oldfd[2])
 		exit(g_sig.exit_status);
 	}
 	parent_process(info, pipefd, val[2]);
-	//printf("pid:%d\n", id);
-	//if (waitpid(id, &status, 0) == -1)
-	//{
-    //    perror("waitpid() failed");
-    //    exit(EXIT_FAILURE);
-    //}
-	//if (WIFEXITED(status))
-    //    g_sig.exit_status = WEXITSTATUS(status);
 	close(oldfd[0]);
 }
 
@@ -136,10 +123,11 @@ void	check_redirect_v2(t_info *info, int start, int end, int oldfd[2])
 	char	**command;
 
 	fd[0] = 0;
+	while (fd[0]++ < 1000000);
+	fd[0] = 0;
 	fd[1] = 0;
 	dup2(info->fd_std[2], 2);
 	fd[2] = find_redirect(info, start, fd, end);
-//	printf("fd:%d %d %d  start:%d  end:%d\n", fd[0], fd[1], fd[2], start, end);
 	if (fd[2] >= 0)
 		return (ft_pipe(info, start, fd, oldfd));
 	if (fd[0] < 0 || fd[1] < 0)
