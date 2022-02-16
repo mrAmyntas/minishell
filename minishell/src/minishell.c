@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 18:02:22 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/16 18:18:11 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ void	handle_sigint(int signum)
 {
 	if (!g_sig.id)
 	{
+		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		write(2, "  \b\b", 5);
+		ft_putstr_fd("  \b\b\nminishell: ", 2);
+		rl_replace_line("", 0);
 		g_sig.exit_status = 0;
 	}
 	else
 	{
-		write(2, "Quit: ", 6);
-		ft_putnbr_fd(signum, 2);
 		write(2, "\n", 1);
 		g_sig.exit_status = SIGINT + 128;
 	}
@@ -46,7 +46,7 @@ void	handle_sigquit(int signum)
 		write(2, "Quit: ", 6);
 		ft_putnbr_fd(signum, 2);
 		write(2, "\n", 1);
-		g_sig.exit_status = SIGINT + 128;
+		g_sig.exit_status = SIGQUIT + 128;
 	}
 	g_sig.sig += 1;
 	g_sig.id = 0;
