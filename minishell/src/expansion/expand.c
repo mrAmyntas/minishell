@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 17:15:51 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/16 17:30:43 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,23 @@
 
 static void	expand_exitstatus(t_info *info, int i)
 {
+	int	j;
+
 	free(info->tokens[i]);
 	info->tokens[i] = NULL;
 	info->tokens[i] = ft_itoa(g_sig.exit_status);
 	info->token_state[i] = 2;
+	j = 0;
+	if (info->tokens[i + 1][j + 1] != '\0')
+	{
+		while (info->tokens[i + 1][j + 1] != '\0')
+		{
+			info->tokens[i + 1][j] = info->tokens[i + 1][j + 1];
+			j++;
+		}
+		info->tokens[i + 1][j] = '\0';
+		return ;
+	}
 	free(info->tokens[i + 1]);
 	info->tokens[i + 1] = NULL;
 	realloc_copy(info, i + 1, 1);
