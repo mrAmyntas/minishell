@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/11 15:06:41 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:44:45 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/16 18:10:38 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,11 @@ int	exec_exit(char **command)
 	long long unsigned int	x;
 
 	x = 0;
-	if (command[1] && command[2])
-	{
-		write(2, "exit: too many arguments\n", 25);
-		g_sig.exit_status = 1;
-		return (1);
-	}
 	if (command[1])
 	{
 		x = ft_atoi(command[1]);
 		if (ft_check_isdigit(command[1]) == -1
-			|| (x != (long long unsigned int)-2
+			|| (ft_atoi(command[1]) != -2
 				&& ft_atoi_llong_check(command[1]) == -2))
 		{
 			write(2, "exit: ", 7);
@@ -71,6 +65,12 @@ int	exec_exit(char **command)
 			write(2, ": numeric argument required\n", 29);
 			exit(255);
 		}
+	}
+	if (command[1] && command[2])
+	{
+		write(2, "exit: too many arguments\n", 25);
+		g_sig.exit_status = 1;
+		return (1);
 	}
 	write(2, "exit\n", 6);
 	exit(x);

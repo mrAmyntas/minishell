@@ -6,11 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 15:06:08 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/16 18:01:50 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-// to-do:
+// to-do: unset needs to check valid identifiers
 
 #include "../../inc/minishell.h"
 
@@ -110,6 +110,6 @@ void	parser(t_info *info)
 	join_quoted_tokens(info, 0);
 	remove_spaces(info);
 	set_token_state(info);
-	remove_quotes(info);
 	find_syntax_error(info);
+	remove_quotes(info);
 }
