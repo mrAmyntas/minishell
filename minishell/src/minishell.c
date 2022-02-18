@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/18 13:51:50 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 18:36:09 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,17 @@
 // maar niet naar out (als er iets in out staat, maakt hij dat wel leeg)
 //
 // control - C in heredoc doet het niet
-// control - backslash in heredoc print nu de Quit uit en delete alles wat er in stond
+// control - backslash in heredoc print nu de Quit 
+// uit en delete alles wat er in stond
 //
+// << END echo hoi
+// in bash doet dit nog gewoon echo hoi
+// denk niet dat het op eval sheet stond dus meh
+
+// 0x28
 void	handle_sigint(int signum)
 {
-	if (!g_sig.id)
+	if (!g_sig.id && g_sig.in_heredoc == 0)
 	{
 		rl_replace_line("", 0);
 		rl_on_new_line();
@@ -30,17 +36,25 @@ void	handle_sigint(int signum)
 		rl_replace_line("", 0);
 		g_sig.exit_status = 0;
 	}
-	else
+	else if (g_sig.in_heredoc == 0)
 	{
-		write(2, "\n", 1);
+		write(2, "\n", 2);
 		g_sig.exit_status = signum + 128;
 	}
 	g_sig.sig += 1;
 	g_sig.id = 0;
+	if (g_sig.in_heredoc == 1)
+	{
+		write(2, "\n", 2);
+		close(STDIN_FILENO);
+		g_sig.id = 2; // zodat execve de cat niet uitvoert en een error geeft, zie execve if statement
+		return ;
+	}
 }
 
-void	handle_sigquit(int signum)
+/*void	handle_sigquit(int signum)
 {
+	dprintf(0, "hoi\n");
 	if (!g_sig.id)
 	{
 		rl_on_new_line();
@@ -57,7 +71,7 @@ void	handle_sigquit(int signum)
 	}
 	g_sig.sig += 1;
 	g_sig.id = 0;
-}
+}*/
 
 void	minishell_cont(t_info *info, char *line_read)
 {
@@ -88,7 +102,6 @@ void	minishell(t_info *info)
 
 	while (1 == 1)
 	{
-//		system("leaks minishell");
 		info->first_process = 0;
 		g_sig.sig = 0;
 		if (line_read)
@@ -121,10 +134,13 @@ int	main(int ac, char **av, char **env)
 	g_sig.sig = 0;
 	g_sig.exit_status = 0;
 	g_sig.id = 0;
+	g_sig.in_heredoc = 0;
 	get_env(&info, env);
 	ft_init_struct(&info, av);
-	signal(SIGINT, &handle_sigint);
-	signal(SIGQUIT, &handle_sigquit);
+	g_sig.act.sa_handler = SIG_IGN;
+	g_sig.act2.sa_handler = handle_sigint;
+	sigaction(SIGQUIT, &g_sig.act, NULL);
+	sigaction(SIGINT, &g_sig.act2, NULL);
 	write(2, "Welcome! You can exit by", 24);
 	write(2, " pressing Ctrl+D at any time...\n", 32);
 	minishell(&info);

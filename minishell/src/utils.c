@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/18 13:51:52 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 18:35:58 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,6 @@ int	ft_len_to_char(char *str, char c)
 	return (i);
 }
 
-int	ft_strstrlen(char **str, char *c, int i)
-{
-	while (str[i] && ft_strncmp(str[i], c, long_str(str[i], c)))
-		i++;
-	return (i);
-}
-
 void	get_env(t_info *info, char **env)
 {
 	int	i;
@@ -60,11 +53,18 @@ void	get_env(t_info *info, char **env)
 	info->env[i] = NULL;
 }
 
-int	ft_heredoc(t_info *info, int i, char *buf, int fd)
+static int	open_temp_and_handle_sig(t_info *info)
 {
+	g_sig.id = 0;
+	g_sig.in_heredoc = 1;
 	if (info->first_process == -1)
 		g_sig.exit_status2 = 0;
-	fd = open("/tmp/minishell_heredoc", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	return (open("/tmp/minishell_heredoc", O_RDWR | O_TRUNC | O_CREAT, 0644));
+}
+
+int	ft_heredoc(t_info *info, int i, char *buf, int fd)
+{
+	fd = open_temp_and_handle_sig(info);
 	if (fd < 0)
 		return (0);
 	dup2(info->fd_std[0], 0);
@@ -72,13 +72,14 @@ int	ft_heredoc(t_info *info, int i, char *buf, int fd)
 	while (buf
 		&& ft_strncmp(buf, info->tokens[i + 1]
 			, long_str(buf, info->tokens[i + 1]))
-		&& (!g_sig.sig || g_sig.sig == 1))
+		&& g_sig.sig == 0)
 	{
 		buf = expand_buf(info, buf, i);
 		write(fd, buf, ft_strlen(buf));
 		write(fd, "\n", 1);
 		free(buf);
-		buf = readline("> ");
+		if (g_sig.sig == 0)
+			buf = readline("> ");
 	}
 	free(buf);
 	buf = NULL;
@@ -86,5 +87,6 @@ int	ft_heredoc(t_info *info, int i, char *buf, int fd)
 	fd = open("/tmp/minishell_heredoc", O_RDONLY);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+	g_sig.in_heredoc = 0;
 	return (1);
 }

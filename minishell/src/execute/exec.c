@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/18 12:45:34 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 18:19:52 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	exec(t_info *info, char **command)
 	{
 		path = get_path(command[0]);
 		dup2(STDERR_FILENO, STDOUT_FILENO);
-		if (g_sig.exit_status == 0)
+		if (g_sig.exit_status == 0 && g_sig.id != 2)
 			execve(path, command, info->env);
 		else
 			exit(g_sig.exit_status);

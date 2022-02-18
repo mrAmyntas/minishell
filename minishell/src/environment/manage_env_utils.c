@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/18 12:29:24 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 18:35:46 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,13 @@ void	free_strstr(char **str)
 	}
 	free(str);
 	str = NULL;
+}
+
+int	ft_strstrlen(char **str, char *c, int i)
+{
+	while (str[i] && ft_strncmp(str[i], c, long_str(str[i], c)))
+		i++;
+	return (i);
 }
 
 void	find_loc(t_info *info, int j, int i)

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/18 13:23:57 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 18:36:28 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,25 @@
 # include <dirent.h>
 # include <errno.h>
 # include <sys/wait.h>
+# include <wchar.h>
 
 typedef struct s_info
 {
-	int			ret;
-	int			redirect;
-	char		**tokens;
-	int			t_pos;
-	char		**av;
-	char		**env;
-	int			char_type;
-	int			p_pos;
-	char		**export;
-	char		*home;
-	char		*pwd;
-	int			fd_std[3];
-	int			*token_state;
-	char		*exit_msg;
-	int			first_process;
+	int					ret;
+	int					redirect;
+	char				**tokens;
+	int					t_pos;
+	char				**av;
+	char				**env;
+	int					char_type;
+	int					p_pos;
+	char				**export;
+	char				*home;
+	char				*pwd;
+	int					fd_std[3];
+	int					*token_state;
+	char				*exit_msg;
+	int					first_process;
 }				t_info;
 
 enum	e_tokentype
@@ -58,10 +59,13 @@ enum	e_tokentype
 
 typedef struct s_sig
 {
-	int	exit_status;
-	int	exit_status2;
-	int	sig;
-	int	id;
+	int					exit_status;
+	int					exit_status2;
+	int					sig;
+	int					id;
+	int					in_heredoc;
+	struct sigaction	act;
+	struct sigaction	act2;
 }		t_sig;
 
 t_sig	g_sig;
@@ -121,5 +125,6 @@ void	change_pwd(t_info *info, char *command);
 void	parent_process(t_info *info, int pipefd[2], int loc_pipe);
 int		exec_exit(char **command);
 void	exec_echo(char **command);
+int		long_str(char *str1, char *str2);
 
 #endif
