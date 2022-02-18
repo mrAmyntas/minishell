@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:22:57 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/18 11:15:40 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void	reset_token(t_info *info, int i)
 {
 	int	j;
 
+	g_sig.exit_status2 = 0;
 	free(info->tokens[i]);
 	info->tokens[i] = NULL;
 	info->tokens[i] = (char *)malloc(sizeof(char) * 3);

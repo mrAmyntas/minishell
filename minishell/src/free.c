@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:16:55 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 12:30:03 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ void	free_stuff(t_info *info)
 		i++;
 	}
 	free(info->tokens);
+	info->tokens = NULL;
 	free(info->token_state);
+	info->token_state = NULL;
 	info->t_pos = 0;
 	info->p_pos = 0;
 	dup2(info->fd_std[0], 0);
@@ -41,11 +43,15 @@ void	free_info(t_info *info)
 	while (info->env[i])
 	{
 		free (info->env[i]);
+		info->env[i] = NULL;
 		i++;
 	}
 	free (info->env);
+	info->env = NULL;
 	free (info->pwd);
+	info->pwd = NULL;
 	free (info->home);
+	info->home = NULL;
 }
 
 void	set_shlvl(t_info *info)

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:49:49 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/18 13:04:51 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,9 @@ char	**trim_command(t_info *info, int start, int end)
 
 	i = 0;
 	j = 0;
-	if (!ft_strncmp(info->tokens[start], "<", 2)
-		&& info->token_state[start])
-		start += 2;
-	if (!ft_strncmp(info->tokens[start], ">", 2)
+	if ((!ft_strncmp(info->tokens[start], "<", 2)
+			|| !ft_strncmp(info->tokens[start], ">", 2))
+		&& info->token_state[start] == 1
 		&& info->token_state[start])
 		start += 2;
 	while ((start + i) < end && info->token_state[start + i] != 1)

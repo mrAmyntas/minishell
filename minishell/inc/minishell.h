@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:21:56 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/18 11:41:17 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_info
 	int			fd_std[3];
 	int			*token_state;
 	char		*exit_msg;
-	int			builtin;
+	int			bu;
 }				t_info;
 
 enum	e_tokentype
@@ -58,11 +58,11 @@ enum	e_tokentype
 
 typedef struct s_sig
 {
-	int				exit_status;
-	int				exit_status2;
-	int				sig;
-	int				id;
-}				t_sig;
+	int	exit_status;
+	int	exit_status2;
+	int	sig;
+	int	id;
+}		t_sig;
 
 t_sig	g_sig;
 void	ft_find_command(t_info *info, char **command, int oldfd);

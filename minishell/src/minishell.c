@@ -6,12 +6,17 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 18:33:12 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 12:46:03 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+//to-do:
+// exit status in heredoc niet goed
+//
+// cat << END > out | cat << END > out2 schrijft wel naar out2 maar niet naar out
+//
 void	handle_sigint(int signum)
 {
 	if (!g_sig.id)
@@ -70,8 +75,7 @@ void	minishell_cont(t_info *info, char *line_read)
 	g_sig.id = 1;
 	check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), set_fd);
 	while (waitpid(-1, NULL, 0) != -1)
-	{
-	}
+		g_sig.exit_status2 = 0;
 	g_sig.id = 0;
 	free_stuff(info);
 }
