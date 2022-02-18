@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/18 12:56:21 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 13:24:18 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,10 @@ void	get_env(t_info *info, char **env)
 	info->env[i] = NULL;
 }
 
-int	ft_heredoc(t_info *info, int i)
+int	ft_heredoc(t_info *info, int i, char *buf, int fd)
 {
-	char	*buf;
-	int		fd;
-
+	if (info->first_process == -1)
+		g_sig.exit_status2 = 0;
 	fd = open("/tmp/minishell_heredoc", O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (fd < 0)
 		return (0);
@@ -82,6 +81,7 @@ int	ft_heredoc(t_info *info, int i)
 		buf = readline("> ");
 	}
 	free(buf);
+	buf = NULL;
 	close(fd);
 	fd = open("/tmp/minishell_heredoc", O_RDONLY);
 	dup2(fd, STDIN_FILENO);

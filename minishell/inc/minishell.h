@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/18 11:41:17 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 13:23:57 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_info
 	int			fd_std[3];
 	int			*token_state;
 	char		*exit_msg;
-	int			bu;
+	int			first_process;
 }				t_info;
 
 enum	e_tokentype
@@ -111,7 +111,7 @@ void	free_info(t_info *info);
 void	free_strstr(char **str);
 void	find_dgreater_dlesser(t_info *info);
 int		check_char(int i, char *line_read);
-int		ft_heredoc(t_info *info, int i);
+int		ft_heredoc(t_info *info, int i, char *buf, int fd);
 char	*realloc_token(t_info *info, int i, int len);
 size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start);
 void	find_syntax_error(t_info *info);

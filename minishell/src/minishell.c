@@ -6,17 +6,16 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/18 12:46:03 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 13:27:08 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 //to-do:
-// exit status in heredoc niet goed
-//
-// cat << END > out | cat << END > out2 schrijft wel naar out2 maar niet naar out
-//
+// cat << END > out | cat << END > out2 schrijft wel naar out2
+// maar niet naar out (als er iets in out staat, maakt hij dat wel leeg)
+
 void	handle_sigint(int signum)
 {
 	if (!g_sig.id)
@@ -86,6 +85,7 @@ void	minishell(t_info *info)
 
 	while (1 == 1)
 	{
+		info->first_process = 0;
 		g_sig.sig = 0;
 		if (line_read)
 		{
