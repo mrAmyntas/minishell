@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/18 13:27:08 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/18 13:51:50 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 //to-do:
 // cat << END > out | cat << END > out2 schrijft wel naar out2
 // maar niet naar out (als er iets in out staat, maakt hij dat wel leeg)
-
+//
+// control - C in heredoc doet het niet
+// control - backslash in heredoc print nu de Quit uit en delete alles wat er in stond
+//
 void	handle_sigint(int signum)
 {
 	if (!g_sig.id)
@@ -47,9 +50,9 @@ void	handle_sigquit(int signum)
 	}
 	else
 	{
-		write(2, "Quit: ", 6);
+		write(0, "Quit: ", 7);
 		ft_putnbr_fd(signum, 2);
-		write(2, "\n", 1);
+		write(0, "\n", 1);
 		g_sig.exit_status = SIGQUIT + 128;
 	}
 	g_sig.sig += 1;
@@ -85,6 +88,7 @@ void	minishell(t_info *info)
 
 	while (1 == 1)
 	{
+//		system("leaks minishell");
 		info->first_process = 0;
 		g_sig.sig = 0;
 		if (line_read)
