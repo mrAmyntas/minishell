@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 10:52:42 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 12:51:25 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	syntax_error(t_info *info, int token)
 // set correct exit status
 void	set_error(t_info *info, int error_type, char *str, int token)
 {
-	int		i;
+	int	i;
 
 	if (info->error_done != 0)
 		return ;
