@@ -6,11 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-<<<<<<< HEAD
-/*   Updated: 2022/02/25 13:59:29 by bhoitzin      ########   odam.nl         */
-=======
-/*   Updated: 2022/02/25 14:00:43 by mgroen        ########   odam.nl         */
->>>>>>> refs/remotes/origin/main
+/*   Updated: 2022/02/25 15:32:15 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +83,6 @@ void	exec(t_info *info, char **command)
 		waitpid(id, &status, 0);
 	if (WIFEXITED(status))
 		g_sig.exit_status = WEXITSTATUS(status);
-<<<<<<< HEAD
-	//	g_sig.exit_status2 = 0;
-	}
-=======
->>>>>>> refs/remotes/origin/main
 }
 
 int	exec_pwd(t_info *info)
