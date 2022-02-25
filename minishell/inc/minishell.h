@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 13:29:24 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/25 15:44:46 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,5 +136,6 @@ int		ft_strstrlen2(t_info *info, char *c, int i);
 char	**trim_command2(t_info *info, int start, int end);
 char	**exec_cd_noarg(char **command);
 void	print_export(t_info *info, char *command);
+char	*check_errors(t_info *info, DIR *ret, char *command, int i);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 15:29:36 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 15:58:37 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,75 +35,6 @@ void	change_pwd(t_info *info, char *command)
 	sort_export(info);
 }
 
-static char	*check_errors(t_info *info, DIR *ret, char *command)
-{
-	char	**commands;
-	int		i;
-	char	*tmp;
-
-	if (ret != NULL)
-	{
-		set_error(info, 126, command, -5);
-		closedir(ret);
-		free(command);
-		command = NULL;
-		return (NULL);
-	}
-	if (access(command, X_OK))
-	{
-		i = 0;
-		commands = ft_split(command, '/');
-		if (command[0] == '/')
-		{ 
-			tmp = ft_strdup(commands[0]);
-			free(commands[0]);
-			commands[0] = ft_strjoin("/", tmp);
-			free(tmp);
-		}
-		while (commands[i])
-		{
-			commands[i] = ft_strjoinbas(commands[i], "/");
-			i++;
-		}
-		i = 0;
-		while (commands[i])
-		{
-			ret = opendir(commands[i]);
-			if (ret == NULL)
-			{
-				tmp = ft_strdup(commands[i]);
-				tmp[ft_strlen(tmp) - 1] = '\0';
-				if (access(tmp, F_OK) == 0)
-				{
-					set_error(info, 126, command, -5);
-					i++;
-					free(tmp);
-					break ;
-				}
-				free(tmp);
-			}
-			else
-				closedir(ret);
-			i++;
-			if (commands[i])
-			{
-				tmp = ft_strdup(commands[i]);
-				free(commands[i]);
-				commands[i] = ft_strjoin(commands[i - 1], tmp);
-				free(tmp);
-			}
-		}
-		i--;
-		if (access(commands[i], F_OK) != 0)
-			set_error(info, 127, command, -5);
-		free(command);
-		command = NULL;
-		free_strstr(commands);
-		return (NULL);
-	}
-	return ("OK");
-}
-
 static char	*make_new(t_info *info, char *command, int loc, int i)
 {
 	char	*new;
@@ -123,19 +54,16 @@ static char	*make_new(t_info *info, char *command, int loc, int i)
 
 char	*check_path(t_info *info, char *command)
 {
-	int		loc;
 	int		i;
 	char	*new;
 	DIR		*ret;
-	char	*str;
 
 	if (!command)
 		return (NULL);
 	if (ft_strncmp(command, "/", 1) == 0)
 	{
 		ret = opendir(command);
-		str = check_errors(info, ret, command);
-		if (str == NULL)
+		if (check_errors(info, ret, command, 0) == NULL)
 			return (NULL);
 	}
 	i = ft_strlen(command) - 2;
@@ -144,11 +72,9 @@ char	*check_path(t_info *info, char *command)
 	if (i <= 0)
 		return (command);
 	ret = opendir(command);
-	str = check_errors(info, ret, command);
-	if (str == NULL)
+	if (check_errors(info, ret, command, 0) == NULL)
 		return (NULL);
-	loc = i + 1;
-	new = make_new(info, command, loc, i);
+	new = make_new(info, command, (i + 1), i);
 	free(command);
 	command = NULL;
 	return (new);

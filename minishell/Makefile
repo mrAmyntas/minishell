@@ -19,6 +19,7 @@ SRC =	src/minishell.c\
 		src/heredoc.c\
 		src/free.c\
 		src/check_path.c\
+		src/check_path_errors.c\
 		src/redirect.c\
 		src/trim_command.c\
 		src/lexer/lexer.c\
