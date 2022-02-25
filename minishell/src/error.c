@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 12:51:25 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 17:07:20 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,12 @@ void	ft_error2(t_info *info, int i)
 	}
 }
 
-void	invalid_identifier(t_info *info)
+static void	invalid_identifier(t_info *info, int i)
 {
-	write(2, "export: '", 10);
+	if (i == -4)
+		write(2, "export: '", 10);
+	else
+		write(2, "unset: '", 9);
 	write(2, info->exit_msg, ft_strlen(info->exit_msg));
 	write(2, "': not a valid identifier\n", 26);
 	g_sig.exit_status = 1;
@@ -125,5 +128,5 @@ void	ft_error(t_info *info, int i)
 			write(2, ": No such file or directory\n", 29);
 	}
 	else if (g_sig.exit_status == 2)
-		invalid_identifier(info);
+		invalid_identifier(info, i);
 }

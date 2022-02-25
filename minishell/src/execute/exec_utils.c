@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 16:53:02 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 17:08:47 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	check_var(char **command, int i, t_info *info)
+static int	check_var(char **command, int i, t_info *info, int ret)
 {
 	int	j;
 
@@ -21,7 +21,7 @@ int	check_var(char **command, int i, t_info *info)
 		j++;
 	if (command[i][j] < 65 || (command[i][j] > 90 && command[i][j] < 95)
 		|| command[i][j] > 122 || command[i][j] == 96)
-		set_error(info, 2, command[i], -4);
+		set_error(info, 2, command[i], ret);
 	else
 	{
 		while (command[i][j] && command[i][j] != '=')
@@ -31,7 +31,7 @@ int	check_var(char **command, int i, t_info *info)
 					|| (command[i][j] > 90 && command[i][j] < 95)
 						|| command[i][j] > 122 || command[i][j] == 96)
 			{
-				set_error(info, 2, command[i], -4);
+				set_error(info, 2, command[i], ret);
 				return (1);
 			}
 			j++;
@@ -70,7 +70,7 @@ int	exec_export(t_info *info, char **command)
 	i = 1;
 	while (command[i])
 	{
-		if (!check_var(command, i, info))
+		if (!check_var(command, i, info, -4))
 		{
 			temp = ft_strdup(command[i]);
 			if (!get_val(info, command[i]))
@@ -90,12 +90,25 @@ int	exec_export(t_info *info, char **command)
 
 int	exec_unset(t_info *info, char **command)
 {
-	int		i;
+	int	i;
+	int	j;
 
 	i = 1;
 	while (command[i])
 	{
-		if (!check_var(command, i, info))
+		j = 0;
+		while (command[i][j] != '\0')
+		{
+			if (command[i][j] == '=')
+			{
+				set_error(info, 2, command[i], -5);
+				free_strstr(info->export);
+				sort_export(info);
+				return (0);
+			}	
+			j++;
+		}
+		if (!check_var(command, i, info, -5))
 			unset_var(info, command[i]);
 		i++;
 	}
