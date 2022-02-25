@@ -44,7 +44,7 @@ SRC =	ft_isalnum.c\
 		ft_lstiter.c\
 		ft_lstmap.c
 OBJECTS = $(SRC:.c=.o)
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra #-fsanitize=address
 CC = gcc
 
 all: $(NAME)
