@@ -6,7 +6,7 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/15 16:30:31 by basz          #+#    #+#                 */
-/*   Updated: 2022/02/02 19:07:55 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/24 11:13:29 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ static void	*ft_free(t_list *startlist)
 		to_free = startlist;
 		startlist = startlist->next;
 		free(to_free->content);
+		to_free->content = NULL;
 		free(to_free);
+		to_free = NULL;
 	}
 	return (NULL);
 }
@@ -36,6 +38,7 @@ static t_list	*ft_lstnewelem(void *content)
 	if (new == NULL)
 	{
 		free(new->content);
+		new->content = NULL;
 		return (NULL);
 	}
 	new->content = content;

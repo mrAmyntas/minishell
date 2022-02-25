@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 16:30:54 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/24 17:03:02 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ char	*make_dir(t_info *info, char *command)
 	if (!get_val(info, "PWD"))
 		add_env(info, ft_strjoin("PWD=", info->pwd));
 	temp = ft_strjoin("/", command);
-	free (command);
+	free(command);
 	command = ft_strjoin(get_val(info, "PWD"), temp);
 	free(temp);
+	temp = NULL;
 	return (command);
 }
 
@@ -35,9 +36,14 @@ void	free_strstr(char **str)
 	while (str[i])
 	{
 		free(str[i]);
+		str[i] = NULL;
 		i++;
 	}
-	free(str);
+	if (str)
+	{
+		free(str);
+		str = NULL;
+	}
 }
 
 void	find_loc(t_info *info, int j, int i)
@@ -75,4 +81,18 @@ void	sort_export(t_info *info)
 		i++;
 	}
 	info->export[i] = NULL;
+}
+
+void	print_export(t_info *info, char *command)
+{
+	int	i;
+
+	i = 0;
+	while (info->export[i] && !command)
+	{
+		write(2, "declare -x ", 11);
+		write(2, info->export[i], ft_strlen(info->export[i]));
+		write(2, "\n", 1);
+		i++;
+	}
 }

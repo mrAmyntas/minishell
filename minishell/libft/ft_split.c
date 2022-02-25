@@ -6,7 +6,7 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/09 17:43:42 by basz          #+#    #+#                 */
-/*   Updated: 2022/02/09 17:34:32 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/24 11:14:13 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ static void	ft_freebuff(int j, char **buff)
 	while (j >= i)
 	{
 		free(buff[j]);
+		buff[j] = NULL;
 		j--;
 	}
 	free(buff);
+	buff = NULL;
 	ft_error(NULL, -1);
 }
 

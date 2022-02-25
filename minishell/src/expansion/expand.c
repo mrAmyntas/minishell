@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/21 11:21:03 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:30:43 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/24 11:23:04 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	expand_exitstatus(t_info *info, int i)
 	int	j;
 
 	free(info->tokens[i]);
-	info->tokens[i] = NULL;
 	info->tokens[i] = ft_itoa(g_sig.exit_status);
 	info->token_state[i] = 2;
 	j = 0;

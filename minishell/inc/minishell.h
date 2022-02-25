@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:21:56 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/24 19:00:18 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,18 @@ typedef struct s_info
 	int			fd_std[3];
 	int			*token_state;
 	char		*exit_msg;
-	int			builtin;
+	int			first_process;
+	int			error_done;
 }				t_info;
+
+typedef struct s_cmd
+{
+	int		j;
+	int		start;
+	int		end;
+	char	**command;
+	int		*arr;
+}				t_cmd;
 
 enum	e_tokentype
 {
@@ -58,10 +68,12 @@ enum	e_tokentype
 
 typedef struct s_sig
 {
-	int				exit_status;
-	int				exit_status2;
-	int				sig;
-	int				id;
+	int					exit_status;
+	int					exit_status2;
+	int					sig;
+	int					id;
+	struct sigaction	act;
+	struct sigaction	act2;
 }				t_sig;
 
 t_sig	g_sig;
@@ -79,13 +91,12 @@ void	exec_cd(t_info *info, char **command, int x);
 int		exec_unset(t_info *info, char **command);
 int		exec_export(t_info *info, char **command);
 char	*make_dir(t_info *info, char *command);
-char	*get_val(t_info *info, char *var);
 int		ft_strstrlen(char **str, char *c, int i);
 int		ft_len_to_char(char *str, char c);
 void	put_str(char *env, char **export, int j);
 void	realloc_copy(t_info *info, int start, int incr);
 int		parse_quotes(t_info *info, int i);
-char	*ft_strjoinbas(t_info *info, char *s1, char const *s2);
+char	*ft_strjoinbas(char *s1, char const *s2);
 int		cut_quotes(t_info *info, int pos, char c, int first);
 void	check_dollar_token(t_info *info);
 void	expand_dollar(t_info *info, int i);
@@ -111,7 +122,7 @@ void	free_info(t_info *info);
 void	free_strstr(char **str);
 void	find_dgreater_dlesser(t_info *info);
 int		check_char(int i, char *line_read);
-int		ft_heredoc(t_info *info, int i);
+void	ft_heredoc(t_info *info, int i);
 char	*realloc_token(t_info *info, int i, int len);
 size_t	ft_strlcpy2(char *dest, const char *src, size_t dstsize, int start);
 void	find_syntax_error(t_info *info);
@@ -121,5 +132,9 @@ void	change_pwd(t_info *info, char *command);
 void	parent_process(t_info *info, int pipefd[2], int loc_pipe);
 int		exec_exit(char **command);
 void	exec_echo(char **command);
+int		ft_strstrlen2(t_info *info, char *c, int i);
+char	**trim_command2(t_info *info, int start, int end);
+char	**exec_cd_noarg(char **command);
+void	print_export(t_info *info, char *command);
 
 #endif

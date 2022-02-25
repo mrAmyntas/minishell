@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:50:14 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/24 11:32:22 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ char	*get_rest(t_info *info, int i, int j)
 
 static void	remove_dollar_and_name(t_info *info, char *rest, int i)
 {
-	free (info->tokens[i]);
+	free(info->tokens[i]);
 	info->tokens[i] = NULL;
 	realloc_copy(info, i, 1);
-	free (info->tokens[i]);
+	free(info->tokens[i]);
 	info->tokens[i] = NULL;
 	if (rest != NULL)
 	{
@@ -66,6 +66,7 @@ static void	remove_dollar_and_name(t_info *info, char *rest, int i)
 		ft_strlcpy(info->tokens[i],
 			rest, ft_strlen(rest) + 1);
 		free(rest);
+		rest = NULL;
 	}
 	else
 		realloc_copy(info, i, 1);
@@ -80,8 +81,9 @@ static void	expand_and_merge(t_info *info, char *name, char *rest, int i)
 	ft_strlcpy(info->tokens[i], name, ft_strlen(name) + 1);
 	if (rest != NULL)
 	{
-		info->tokens[i] = ft_strjoinbas(info, info->tokens[i], rest);
+		info->tokens[i] = ft_strjoinbas(info->tokens[i], rest);
 		free(rest);
+		rest = NULL;
 	}
 	free(info->tokens[i + 1]);
 	info->tokens[i + 1] = NULL;
@@ -98,7 +100,7 @@ void	expand_token_dollar(t_info *info, int i)
 	pos = check_name(info, i + 1, 0);
 	if (pos == 0)
 	{
-		free (info->tokens[i]);
+		free(info->tokens[i]);
 		info->tokens[i] = NULL;
 		realloc_copy(info, i, 1);
 		cut_dollar(info, i, 0, 0);
@@ -108,6 +110,7 @@ void	expand_token_dollar(t_info *info, int i)
 	rest = get_rest(info, i + 1, 0);
 	name = get_val(info, temp);
 	free(temp);
+	temp = NULL;
 	if (name == NULL)
 		remove_dollar_and_name(info, rest, i);
 	else

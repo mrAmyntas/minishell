@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:38 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:21:42 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/24 11:22:00 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*realloc_token(t_info *info, int i, int len)
 	if (temp == NULL)
 		ft_error(info, -1);
 	ft_strlcpy(temp, info->tokens[i], ft_strlen(info->tokens[i]) + 1);
-	free (info->tokens[i]);
+	free(info->tokens[i]);
 	info->tokens[i] = (char *)malloc(sizeof(char) * len);
 	if (info->tokens[i] == NULL)
 		ft_error(info, -1);
@@ -71,6 +71,7 @@ void	expand_str_dollar3(t_info *info, int i, char *name, int end)
 	}
 	info->tokens[i][start] = '\0';
 	free(temp);
+	temp = NULL;
 }
 
 //cut_dollar: cut the $+normal chars i.e. token[i] = rest
@@ -83,6 +84,7 @@ void	expand_str_dollar2(t_info *info, int i, int start, int pos)
 	temp = get_name(info, i, start);
 	name = get_val(info, temp);
 	free(temp);
+	temp = NULL;
 	if (name == NULL)
 		cut_dollar(info, i, start - 1, pos - 1);
 	else

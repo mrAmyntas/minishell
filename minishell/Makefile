@@ -16,9 +16,11 @@ OBJ_DIR =	obj/
 SRC =	src/minishell.c\
 		src/error.c\
 		src/utils.c\
+		src/utils2.c\
 		src/free.c\
 		src/check_path.c\
 		src/redirect.c\
+		src/trim_command.c\
 		src/lexer/lexer.c\
 		src/lexer/lexer_utils.c\
 		src/parser/parsing.c\

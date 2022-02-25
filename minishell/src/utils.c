@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.c                                            :+:    :+:            */
+/*   utils2.c                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:49:05 by mgroen        ########   odam.nl         */
+/*   Created: 2022/02/24 17:04:11 by bhoitzin      #+#    #+#                 */
+/*   Updated: 2022/02/24 17:09:30 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,6 @@ int	long_str(char *str1, char *str2)
 	return (len[1]);
 }
 
-int	ft_len_to_char(char *str, char c)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != c && str[i])
-		i++;
-	if (!str[i])
-		return (-1);
-	return (i);
-}
-
 int	ft_strstrlen(char **str, char *c, int i)
 {
 	while (str[i] && ft_strncmp(str[i], c, long_str(str[i], c)))
@@ -42,32 +30,29 @@ int	ft_strstrlen(char **str, char *c, int i)
 	return (i);
 }
 
-void	get_env(t_info *info, char **env)
+int	ft_strstrlen2(t_info *info, char *c, int i)
 {
-	int	i;
-	int	env_len;
-
-	i = 0;
-	env_len = ft_strstrlen(env, NULL, 0);
-	info->env = malloc(sizeof(char **) * (env_len + 1));
-	if (info->env == NULL)
-		ft_error(info, -1);
-	while (env[i])
-	{
-		info->env[i] = ft_strdup(env[i]);
+	while (info->tokens[i] && (ft_strncmp(info->tokens[i], c,
+				long_str(info->tokens[i], c)) || info->token_state[i] == 3))
 		i++;
-	}
-	info->env[i] = NULL;
+	return (i);
 }
 
-int	ft_heredoc(t_info *info, int i)
+static void	ft_set_global(t_info *info)
+{
+	if (info->first_process == 1)
+		g_sig.exit_status2 = 0;
+	g_sig.sig = 0;
+	g_sig.id = 2;
+}
+
+void	ft_heredoc(t_info *info, int i)
 {
 	char	*buf;
-	int		fd;
+	int		pipefd[2];
 
-	fd = open("/tmp/minishell_heredoc", O_RDWR | O_TRUNC | O_CREAT, 0644);
-	if (fd < 0)
-		return (0);
+	ft_set_global(info);
+	pipe(pipefd);
 	dup2(info->fd_std[0], 0);
 	buf = readline("> ");
 	while (buf
@@ -76,15 +61,15 @@ int	ft_heredoc(t_info *info, int i)
 		&& (!g_sig.sig || g_sig.sig == 1))
 	{
 		buf = expand_buf(info, buf, i);
-		write(fd, buf, ft_strlen(buf));
-		write(fd, "\n", 1);
+		write(pipefd[1], buf, ft_strlen(buf));
+		write(pipefd[1], "\n", 1);
 		free(buf);
 		buf = readline("> ");
 	}
 	free(buf);
-	close(fd);
-	fd = open("/tmp/minishell_heredoc", O_RDONLY);
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-	return (1);
+	buf = NULL;
+	close(pipefd[1]);
+	dup2(pipefd[0], STDIN_FILENO);
+	close(pipefd[0]);
+	g_sig.id = 1;
 }

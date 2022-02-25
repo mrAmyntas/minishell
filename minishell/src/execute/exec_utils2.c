@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/11 15:06:41 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 18:10:38 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/24 20:07:25 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,18 @@ void	exec_echo(char **command)
 	}
 	if (ft_strncmp(command[1], "-n", 3))
 		write(2, "\n", 1);
+}
+
+char	**exec_cd_noarg(char **command)
+{
+	char	*temp;
+	char	**directions;
+
+	temp = ft_strjoin("cd", " ~");
+	command = ft_split(temp, ' ');
+	free(temp);
+	temp = NULL;
+	directions = ft_split(command[1], '/');
+	free_strstr(command);
+	return (directions);
 }

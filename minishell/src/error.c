@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 15:05:11 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 15:11:41 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 10:52:42 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ void	set_error(t_info *info, int error_type, char *str, int token)
 {
 	int		i;
 
+	if (info->error_done != 0)
+		return ;
+	info->error_done = 1;
 	i = ft_strlen(str);
 	if (info->exit_msg != NULL)
 	{
@@ -111,7 +114,7 @@ void	ft_error(t_info *info, int i)
 		if (i == -6)
 			write(2, ": No such file or directory\n", 29);
 		if (i == -5)
-			write(2, ": Permission denied or is a directory\n", 39);
+			write(2, ": Permission denied or is (not) a directory\n", 45);
 	}
 	else if (g_sig.exit_status == 127)
 	{

@@ -6,12 +6,15 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 18:33:12 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/24 19:10:12 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+//_=/Users/bhoitzin/minishellmilan/minishell/./minishell in env?
+// schrijf weer naar STOUD omdat ie anders
+// error messages naar redirected files schrijft ipv terminal
 void	handle_sigint(int signum)
 {
 	if (!g_sig.id)
@@ -26,30 +29,39 @@ void	handle_sigint(int signum)
 	else
 	{
 		write(2, "\n", 1);
-		g_sig.exit_status = signum + 128;
+		if (g_sig.id == 1)
+			g_sig.exit_status = signum + 128;
+		if (g_sig.id == 2)
+		{
+			g_sig.exit_status = 1;
+			close(STDIN_FILENO);
+			g_sig.sig = 4;
+		}
 	}
-	g_sig.sig += 1;
+	if (!g_sig.sig || g_sig.sig == 1)
+		g_sig.sig += 2;
 	g_sig.id = 0;
 }
 
 void	handle_sigquit(int signum)
 {
-	if (!g_sig.id)
+	if (g_sig.id == 1)
+	{
+		write(2, "Quit: ", 6);
+		ft_putnbr_fd(signum, 2);
+		write(2, "\n", 1);
+		g_sig.exit_status = SIGQUIT + 128;
+		g_sig.id = 0;
+	}
+	else
 	{
 		rl_on_new_line();
 		rl_redisplay();
 		write(2, "  \b\b", 5);
 		g_sig.exit_status = 0;
 	}
-	else
-	{
-		write(2, "Quit: ", 6);
-		ft_putnbr_fd(signum, 2);
-		write(2, "\n", 1);
-		g_sig.exit_status = SIGQUIT + 128;
-	}
-	g_sig.sig += 1;
-	g_sig.id = 0;
+	if (!g_sig.sig || g_sig.sig == 2)
+		g_sig.sig += 1;
 }
 
 void	minishell_cont(t_info *info, char *line_read)
@@ -68,7 +80,7 @@ void	minishell_cont(t_info *info, char *line_read)
 	set_fd[1] = 0;
 	g_sig.exit_status = 0;
 	g_sig.id = 1;
-	check_redirect_v2(info, 0, ft_strstrlen(info->tokens, "|", 0), set_fd);
+	check_redirect_v2(info, 0, ft_strstrlen2(info, "|", 0), set_fd);
 	while (waitpid(-1, NULL, 0) != -1)
 	{
 	}
@@ -82,6 +94,7 @@ void	minishell(t_info *info)
 
 	while (1 == 1)
 	{
+		info->first_process = 0;
 		g_sig.sig = 0;
 		if (line_read)
 		{
@@ -89,16 +102,14 @@ void	minishell(t_info *info)
 			line_read = (char *) NULL;
 		}
 		line_read = readline("minishell: ");
-		if (line_read && *line_read)
-			add_history(line_read);
-		if ((!line_read && (!g_sig.sig || g_sig.sig == 1 || g_sig.sig == 2))
-			|| (!line_read && g_sig.sig == 3))
+		if (!line_read)
 		{
 			write(0, "exit: thanks for using minishell\n", 33);
 			break ;
 		}
-		if (!line_read || !line_read[0])
+		if (!line_read[0])
 			continue ;
+		add_history(line_read);
 		line_read = lexer(info, line_read);
 		minishell_cont(info, line_read);
 	}
@@ -115,8 +126,10 @@ int	main(int ac, char **av, char **env)
 	g_sig.id = 0;
 	get_env(&info, env);
 	ft_init_struct(&info, av);
-	signal(SIGINT, &handle_sigint);
-	signal(SIGQUIT, &handle_sigquit);
+	g_sig.act.sa_handler = handle_sigquit;
+	g_sig.act2.sa_handler = handle_sigint;
+	sigaction(SIGQUIT, &g_sig.act, NULL);
+	sigaction(SIGINT, &g_sig.act2, NULL);
 	write(2, "Welcome! You can exit by", 24);
 	write(2, " pressing Ctrl+D at any time...\n", 32);
 	minishell(&info);

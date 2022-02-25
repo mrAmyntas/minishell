@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 14:51:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:22:57 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/24 11:21:42 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void	reset_token(t_info *info, int i)
 {
 	int	j;
 
+	g_sig.exit_status2 = 0;
 	free(info->tokens[i]);
 	info->tokens[i] = NULL;
 	info->tokens[i] = (char *)malloc(sizeof(char) * 3);
@@ -110,7 +111,6 @@ char	*expand_buf(t_info *info, char *buf, int i)
 		g_sig.exit_status = g_sig.exit_status2;
 		check_dollar_in_quote(info, i);
 		free(buf);
-		buf = NULL;
 		buf = (char *)malloc(sizeof(char) * (ft_strlen(info->tokens[i]) - 1));
 		if (buf == NULL)
 			ft_error(info, -1);

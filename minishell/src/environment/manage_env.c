@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 18:50:15 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/24 16:40:21 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ void	put_str(char *env, char **export, int j)
 	i = ft_strstrlen(export, NULL, 0);
 	while (i > j)
 	{
-		free (export[i]);
+		free(export[i]);
 		export[i] = ft_strdup(export[i - 1]);
 		i--;
 	}
-	free (export[j]);
+	free(export[j]);
 	export[j] = ft_strdup(env);
 }
 
@@ -67,9 +67,11 @@ void	copy_to_env(t_info *info, char **temp, char *new_var)
 	{
 		info->env[i] = ft_strdup(temp[i]);
 		free(temp[i]);
+		temp[i] = NULL;
 		i++;
 	}
-	free (temp);
+	free(temp);
+	temp = NULL;
 	info->env[i] = ft_strdup(new_var);
 	info->env[i + 1] = NULL;
 }
@@ -85,7 +87,11 @@ void	change_val(t_info *info, char *new_var)
 		i++;
 	free(info->env[i]);
 	info->env[i] = ft_strdup(new_var);
-	free(new_var);
+	if (new_var != NULL)
+	{
+		free(new_var);
+		new_var = NULL;
+	}
 	free_strstr(info->export);
 	sort_export(info);
 }
@@ -107,10 +113,12 @@ void	add_env(t_info *info, char *new_var)
 	{
 		temp[i] = ft_strdup(info->env[i]);
 		free(info->env[i]);
+		info->env[i] = NULL;
 		i++;
 	}
 	temp[i] = NULL;
-	free (info->env);
+	free(info->env);
+	info->env = NULL;
 	copy_to_env(info, temp, new_var);
 	free_strstr(info->export);
 	sort_export(info);

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:20:54 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:16:55 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/24 12:43:01 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ void	free_stuff(t_info *info)
 		i++;
 	}
 	free(info->tokens);
+	info->tokens = NULL;
 	free(info->token_state);
+	info->token_state = NULL;
 	info->t_pos = 0;
 	info->p_pos = 0;
 	dup2(info->fd_std[0], 0);
@@ -40,12 +42,16 @@ void	free_info(t_info *info)
 	free_strstr(info->export);
 	while (info->env[i])
 	{
-		free (info->env[i]);
+		free(info->env[i]);
+		info->env[i] = NULL;
 		i++;
 	}
-	free (info->env);
-	free (info->pwd);
-	free (info->home);
+	free(info->env);
+	info->env = NULL;
+	free(info->pwd);
+	info->pwd = NULL;
+	free(info->home);
+	info->home = NULL;
 }
 
 void	set_shlvl(t_info *info)
@@ -64,6 +70,7 @@ void	set_shlvl(t_info *info)
 		add_env(info, ft_strjoin("SHLVL=", lvl));
 	}
 	free(lvl);
+	lvl = NULL;
 }
 
 void	ft_init_struct(t_info *info, char **av)
@@ -86,7 +93,7 @@ void	ft_init_struct(t_info *info, char **av)
 	while (!getcwd(info->pwd, len))
 	{
 		len += 10;
-		free (info->pwd);
+		free(info->pwd);
 		info->pwd = malloc(sizeof(char *) * len);
 		if (info->pwd == NULL)
 			ft_error(info, -1);
@@ -100,6 +107,7 @@ void	parent_process(t_info *info, int pipefd[2], int loc_pipe)
 	close(pipefd[1]);
 	dup2(pipefd[0], 0);
 	update_expand_exit_status(info);
+	info->first_process = 1;
 	check_redirect_v2(info, loc_pipe + 1,
 		ft_strstrlen(info->tokens, "|", loc_pipe + 1), pipefd);
 }

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 13:57:56 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 21:20:19 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/24 11:32:26 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void	merge_quotes(t_info *info, int q_1, int q_2, int n)
 	i = q_1;
 	while (i < q_2)
 	{
-		info->tokens[q_1] = ft_strjoinbas(info, info->tokens[q_1],
+		info->tokens[q_1] = ft_strjoinbas(info->tokens[q_1],
 				info->tokens[q_1 + 1]);
 		free(info->tokens[q_1 + 1]);
 		info->tokens[q_1 + 1] = NULL;

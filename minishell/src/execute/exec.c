@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:27:54 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/25 10:22:38 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static char	*get_path(char *cmd)
+/*static char	*get_path(char *cmd)
 {
 	char	*path;
 	char	**dirs;
@@ -35,9 +35,40 @@ static char	*get_path(char *cmd)
 	if (dirs[i])
 	{
 		free(dirs);
+		dirs = NULL;
 		return (cmdfile);
 	}
 	free(dirs);
+	dirs = NULL;
+	return (cmd);
+}*/
+
+static char	*get_path(char *cmd)
+{
+	char	*path;
+	char	**dirs;
+	char	*cmdfile;
+	int		i;
+
+	i = 0;
+	path = getenv("PATH");
+	dirs = ft_split(path, ':');
+	while (dirs[i])
+	{
+		cmdfile = ft_strjoin(dirs[i], "/");
+		cmdfile = ft_strjoinbas(cmdfile, cmd);
+		free(dirs[i]);
+		dirs[i] = NULL;
+		if (access(cmdfile, F_OK) == 0)
+			break ;
+		free(cmdfile);
+		cmdfile = NULL;
+		i++;
+	}
+	free(dirs);
+	dirs = NULL;
+	if (cmdfile)
+		return (cmdfile);
 	return (cmd);
 }
 
@@ -81,7 +112,10 @@ void	exec(t_info *info, char **command)
 	else
 		waitpid(id, &status, 0);
 	if (WIFEXITED(status))
+	{
 		g_sig.exit_status = WEXITSTATUS(status);
+		g_sig.exit_status2 = 0;
+	}
 }
 
 int	exec_pwd(t_info *info)

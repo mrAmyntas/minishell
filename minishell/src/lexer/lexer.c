@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 19:03:32 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/11 15:22:43 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/24 16:38:23 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ static char	*ft_remove_spaces(t_info *info, char *line_read, int i, int j)
 	if (i == j)
 	{
 		free(line_read);
+		line_read = NULL;
 		return (NULL);
 	}
 	buff = (char *)malloc((sizeof(char) * j) - i + 1);
 	if (buff == NULL)
 		ft_error(info, -1);
 	j = 0;
-	while (line_read[i] != '\0')
+	while (line_read[i + j] != '\0')
 	{
-		buff[j] = line_read[i];
-		i++;
+		buff[j] = line_read[i + j];
 		j++;
 	}
 	buff[j] = '\0';

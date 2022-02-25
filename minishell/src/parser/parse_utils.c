@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 11:17:21 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/09 14:41:46 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/24 11:32:41 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	*ft_strjoinbas(t_info *info, char *s1, char const *s2)
+char	*ft_strjoinbas(char *s1, char const *s2)
 {
 	char	*buff;
 	int		j;
@@ -22,7 +22,7 @@ char	*ft_strjoinbas(t_info *info, char *s1, char const *s2)
 		return (NULL);
 	buff = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (buff == NULL)
-		ft_error(info, -1);
+		ft_error(NULL, -1);
 	j = 0;
 	while (s1[j] != '\0')
 	{
@@ -47,9 +47,9 @@ void	joinwithbefore(t_info *info, int first_q)
 	{
 		if (info->tokens[first_q] != NULL)
 		{
-			info->tokens[first_q - 1] = ft_strjoinbas(info,
+			info->tokens[first_q - 1] = ft_strjoinbas(
 					info->tokens[first_q - 1], info->tokens[first_q]);
-			free (info->tokens[first_q]);
+			free(info->tokens[first_q]);
 			info->tokens[first_q] = NULL;
 			realloc_copy(info, first_q, 1);
 		}
@@ -88,9 +88,9 @@ void	joinwithnormalbefore(t_info *info, int first_q)
 			if (check_char_token(info, first_q, 0) == C_NORMAL
 				&& check_char_token(info, first_q - 1, 0) == C_NORMAL)
 			{
-				info->tokens[first_q - 1] = ft_strjoinbas(info,
+				info->tokens[first_q - 1] = ft_strjoinbas(
 						info->tokens[first_q - 1], info->tokens[first_q]);
-				free (info->tokens[first_q]);
+				free(info->tokens[first_q]);
 				info->tokens[first_q] = NULL;
 				realloc_copy(info, first_q, 1);
 			}
@@ -109,9 +109,8 @@ void	realloc_copy(t_info *info, int start, int incr)
 		ft_strlcpy(info->tokens[start], info->tokens[start + incr],
 			1 + ft_strlen(info->tokens[start + incr]));
 		info->token_state[start] = info->token_state[start + incr];
-		free(info->tokens[start + incr]);
-		info->token_state[start] = info->token_state[start + incr];
 		info->token_state[start + incr] = 0;
+		free(info->tokens[start + incr]);
 		info->tokens[start + incr] = NULL;
 		start = start + incr;
 	}

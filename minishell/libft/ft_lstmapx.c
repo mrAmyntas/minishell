@@ -6,7 +6,7 @@
 /*   By: basz <basz@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/15 16:30:31 by basz          #+#    #+#                 */
-/*   Updated: 2022/02/02 19:07:38 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/24 11:13:51 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 static void	*ft_free(void *ptr, void *ptr2)
 {
 	if (ptr != NULL)
+	{
 		free(ptr);
+		ptr = NULL;
+	}
 	if (ptr2 != NULL)
+	{
 		free(ptr2);
+		ptr2 = NULL;
+	}
 	return (NULL);
 }
 

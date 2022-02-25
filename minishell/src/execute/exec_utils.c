@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/16 18:03:42 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/24 17:02:39 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,26 @@ void	unset_var(t_info *info, char *var)
 int	exec_export(t_info *info, char **command)
 {
 	int		i;
+	char	*temp;
 
 	i = 1;
 	while (command[i])
 	{
 		if (!check_var(command, i, info))
-			add_env(info, command[i]);
+		{
+			temp = ft_strdup(command[i]);
+			if (get_val(info, command[i]) == NULL)
+			{
+				add_env(info, temp);
+				free(temp);
+				temp = NULL;
+			}
+			else
+				add_env(info, temp);
+		}
 		i++;
 	}
-	i = 0;
-	while (info->export[i] && !command[1])
-	{
-		write(2, "declare -x ", 11);
-		write(2, info->export[i], ft_strlen(info->export[i]));
-		write(2, "\n", 1);
-		i++;
-	}
+	print_export(info, command[1]);
 	return (0);
 }
 
@@ -128,3 +132,35 @@ int	check_nosuchdir(t_info *info, char **command)
 	}
 	return (1);
 }
+/*int	exec_export(t_info *info, char **command)
+{
+	int		i;
+	char	*temp;
+
+	i = 1;
+	while (command[i])
+	{
+		if (!check_var(command, i, info))
+		{
+			temp = ft_strdup(command[i]);
+			if (get_val(info, command[i]) == NULL)
+			{
+				add_env(info, temp);
+				free(temp);
+				temp = NULL;
+			}
+			else
+				add_env(info, temp);
+		}
+		i++;
+	}
+	i = 0;
+	while (info->export[i] && !command[1])
+	{
+		write(2, "declare -x ", 11);
+		write(2, info->export[i], ft_strlen(info->export[i]));
+		write(2, "\n", 1);
+		i++;
+	}
+	return (0);
+}*/

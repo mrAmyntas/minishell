@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/10 15:04:06 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 12:28:03 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void	change_pwd(t_info *info, char *command)
 		i++;
 	if (!info->env[i])
 		return (add_env(info, ft_strjoin("PWD=", command)));
-	free (info->env[i]);
+	free(info->env[i]);
 	info->env[i] = ft_strjoin("PWD=", command);
-	free (info->pwd);
+	free(info->pwd);
 	info->pwd = ft_strdup(command);
 	chdir(info->pwd);
 	free_strstr(info->export);
@@ -37,20 +37,62 @@ void	change_pwd(t_info *info, char *command)
 
 static char	*check_errors(t_info *info, DIR *ret, char *command)
 {
+	char	**commands;
+	int		i;
+	char	*tmp;
+
 	if (ret != NULL)
 	{
 		set_error(info, 126, command, -5);
 		closedir(ret);
 		free(command);
+		command = NULL;
 		return (NULL);
 	}
 	if (access(command, X_OK))
 	{
-		if (access(command, F_OK) == 0)
-			set_error(info, 126, command, -5);
-		else
+		i = 0;
+		commands = ft_split(command, '/');
+		tmp = ft_strdup(commands[0]);
+		free(commands[0]);
+		commands[0] = ft_strjoin("/", tmp);
+		free(tmp);
+		while (commands[i])
+		{
+			commands[i] = ft_strjoinbas(commands[i], "/");
+			i++;
+		}
+		//if (access(command, F_OK) == 0)
+		//	set_error(info, 126, command, -5);
+		i = 0;
+		while (commands[i] && access(commands[i], F_OK) == 0)
+		{
+			int e = access(commands[i], F_OK);
+			printf("access:%d cmd:%s\n", e, commands[i]);
+			i++;
+			if (commands[i])
+			{
+				tmp = ft_strdup(commands[i]);
+				free(commands[i]);
+				commands[i] = ft_strjoin(commands[i - 1], tmp);
+				free(tmp);
+			}
+		}
+		printf("i:%d   ft:%d cmd:%s\n", i, ft_strstrlen(commands, NULL, 0), commands[i]);
+		//if (i != ft_strstrlen(commands, NULL, 0) - 1)
+		//	set_error(info, 126, command, -5);
+		//else
+		set_error(info, 127, command, -5);
+		/*{
+			printf("len:%d\n", ft_strlen(commands[i]));
+			if (command[ft_strlen(command) - 1] == '/')
+				set_error(info, 126, command, -5);
+			else
 			set_error(info, 127, command, -5);
+		}*/
 		free(command);
+		command = NULL;
+		free_strstr(commands);
 		return (NULL);
 	}
 	return ("OK");
@@ -83,6 +125,13 @@ char	*check_path(t_info *info, char *command)
 
 	if (!command)
 		return (NULL);
+	if (ft_strncmp(command, "/", 1) == 0)
+	{
+		ret = opendir(command);
+		str = check_errors(info, ret, command);
+		if (str == NULL)
+			return (NULL);
+	}
 	i = ft_strlen(command) - 2;
 	while (i > 0 && command[i] != '/')
 		i--;
@@ -95,5 +144,6 @@ char	*check_path(t_info *info, char *command)
 	loc = i + 1;
 	new = make_new(info, command, loc, i);
 	free(command);
+	command = NULL;
 	return (new);
 }
