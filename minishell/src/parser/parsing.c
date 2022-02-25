@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 13:48:01 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:50:07 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,4 @@ void	parser(t_info *info)
 	set_token_state(info);
 	find_syntax_error(info);
 	remove_quotes(info);
-	int i = 0;
-	printf("tko\n");
-	while (info->tokens[i])
-	{
-		printf("%s\n", info->tokens[i]);
-		i++;
-	}
 }
