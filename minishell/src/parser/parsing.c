@@ -6,11 +6,9 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 13:42:27 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/25 13:50:49 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
-// to-do: unset needs to check valid identifiers
 
 #include "../../inc/minishell.h"
 
@@ -77,7 +75,6 @@ static void	unclosed_pipe(t_info *info)
 	}
 }
 
-// 3 = quoted | 1 = special char | 0 = normal chars
 static void	set_token_state(t_info *info)
 {
 	int	i;

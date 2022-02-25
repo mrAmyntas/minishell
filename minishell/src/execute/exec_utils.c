@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 13:17:54 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/25 13:50:36 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,35 +132,3 @@ int	check_nosuchdir(t_info *info, char **command)
 	}
 	return (1);
 }
-/*int	exec_export(t_info *info, char **command)
-{
-	int		i;
-	char	*temp;
-
-	i = 1;
-	while (command[i])
-	{
-		if (!check_var(command, i, info))
-		{
-			temp = ft_strdup(command[i]);
-			if (get_val(info, command[i]) == NULL)
-			{
-				add_env(info, temp);
-				free(temp);
-				temp = NULL;
-			}
-			else
-				add_env(info, temp);
-		}
-		i++;
-	}
-	i = 0;
-	while (info->export[i] && !command[1])
-	{
-		write(2, "declare -x ", 11);
-		write(2, info->export[i], ft_strlen(info->export[i]));
-		write(2, "\n", 1);
-		i++;
-	}
-	return (0);
-}*/

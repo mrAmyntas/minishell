@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 12:28:03 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 14:08:05 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ static char	*check_errors(t_info *info, DIR *ret, char *command)
 			commands[i] = ft_strjoinbas(commands[i], "/");
 			i++;
 		}
-		//if (access(command, F_OK) == 0)
-		//	set_error(info, 126, command, -5);
 		i = 0;
 		while (commands[i] && access(commands[i], F_OK) == 0)
 		{
@@ -79,17 +77,7 @@ static char	*check_errors(t_info *info, DIR *ret, char *command)
 			}
 		}
 		printf("i:%d   ft:%d cmd:%s\n", i, ft_strstrlen(commands, NULL, 0), commands[i]);
-		//if (i != ft_strstrlen(commands, NULL, 0) - 1)
-		//	set_error(info, 126, command, -5);
-		//else
 		set_error(info, 127, command, -5);
-		/*{
-			printf("len:%d\n", ft_strlen(commands[i]));
-			if (command[ft_strlen(command) - 1] == '/')
-				set_error(info, 126, command, -5);
-			else
-			set_error(info, 127, command, -5);
-		}*/
 		free(command);
 		command = NULL;
 		free_strstr(commands);

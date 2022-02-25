@@ -6,42 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 13:31:07 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/25 14:00:43 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-/*static char	*get_path(char *cmd)
-{
-	char	*path;
-	char	**dirs;
-	char	*cmdfile;
-	int		i;
-
-	i = 0;
-	path = getenv("PATH");
-	dirs = ft_split(path, ':');
-	while (dirs[i])
-	{
-		cmdfile = ft_strjoin(dirs[i], "/");
-		cmdfile = ft_strjoin(cmdfile, cmd);
-		free(dirs[i]);
-		if (access(cmdfile, F_OK) == 0)
-			break ;
-		free(cmdfile);
-		i++;
-	}
-	if (dirs[i])
-	{
-		free(dirs);
-		dirs = NULL;
-		return (cmdfile);
-	}
-	free(dirs);
-	dirs = NULL;
-	return (cmd);
-}*/
 
 static char	*get_path(char *cmd)
 {
@@ -113,10 +82,7 @@ void	exec(t_info *info, char **command)
 	else
 		waitpid(id, &status, 0);
 	if (WIFEXITED(status))
-	{
 		g_sig.exit_status = WEXITSTATUS(status);
-		g_sig.exit_status2 = 0;
-	}
 }
 
 int	exec_pwd(t_info *info)

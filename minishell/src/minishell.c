@@ -6,15 +6,12 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/24 19:10:12 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:48:27 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//_=/Users/bhoitzin/minishellmilan/minishell/./minishell in env?
-// schrijf weer naar STOUD omdat ie anders
-// error messages naar redirected files schrijft ipv terminal
 void	handle_sigint(int signum)
 {
 	if (!g_sig.id)

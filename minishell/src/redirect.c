@@ -6,49 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 10:03:40 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:51:00 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-/*char	**trim_command(t_info *info, int start, int end)
-{
-	char	**command;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	command = malloc(sizeof(char **) * (end + 1));
-	if (command == NULL)
-		ft_error(info, -1);
-	if ((!ft_strncmp(info->tokens[start], "<", 2)
-			|| !ft_strncmp(info->tokens[start], "<<", 3)
-			|| !ft_strncmp(info->tokens[start], ">>", 3)
-			|| !ft_strncmp(info->tokens[start], ">", 2)
-			|| !ft_strncmp(info->tokens[start], "|", 2))
-		&& info->token_state[start] == 1)
-		start += 2;
-	else if (!ft_strncmp(info->tokens[start + 1], "<<", 3)
-		&& info->token_state[start + 1])
-	{
-		command[j] = ft_strdup(info->tokens[start]);
-		start += 3;
-		j++;
-		end++;
-	}
-	while ((start + i) < end && info->token_state[start + i] != 1)
-		i++;
-	while (j < i)
-	{
-		command[j] = ft_strdup(info->tokens[start]);
-		j++;
-		start++;
-	}
-	command[j] = NULL;
-	return (command);
-}*/
 
 int	redirect(t_info *info, int type, int i)
 {
@@ -138,7 +100,6 @@ void	check_redirect_v2(t_info *info, int start, int end, int oldfd[2])
 		fd[0]++;
 	fd[0] = 0;
 	fd[1] = 0;
-//	dup2(info->fd_std[1], 1);
 	dup2(info->fd_std[2], 2);
 	fd[2] = find_redirect(info, start, fd, end);
 	if (fd[2] >= 0)
