@@ -6,13 +6,12 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 13:23:35 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 12:59:20 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 14:05:31 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//_=/Users/bhoitzin/minishellmilan/minishell/./minishell in env?
 void	handle_sigint(int signum)
 {
 	if (!g_sig.id)

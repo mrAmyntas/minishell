@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 13:31:07 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/25 13:59:29 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	exec(t_info *info, char **command)
 	if (WIFEXITED(status))
 	{
 		g_sig.exit_status = WEXITSTATUS(status);
-		g_sig.exit_status2 = 0;
+	//	g_sig.exit_status2 = 0;
 	}
 }
 

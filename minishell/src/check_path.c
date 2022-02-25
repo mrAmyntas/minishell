@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 13:39:42 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 15:24:15 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,42 +65,37 @@ static char	*check_errors(t_info *info, DIR *ret, char *command)
 			commands[i] = ft_strjoinbas(commands[i], "/");
 			i++;
 		}
-		//if (access(command, F_OK) == 0)
-		//	set_error(info, 126, command, -5);
 		i = 0;
-		while (commands[i] && access(commands[i], F_OK) == 0)
+		while (commands[i])
 		{
-			int e = access(commands[i], F_OK);
-			printf("access:%d cmd:%s\n", e, commands[i]);
+			ret = opendir(commands[i]);
+			if (ret == NULL)
+			{
+				tmp = ft_strdup(commands[i]);
+				tmp[ft_strlen(tmp) - 1] = '\0';
+				if (access(tmp, F_OK) == 0)
+				{
+					set_error(info, 126, command, -5);
+					i++;
+					free(tmp);
+					break ;
+				}
+				free(tmp);
+			}
+			else
+				closedir(ret);
 			i++;
-			if (commands[i] && commands[i + 1])
+			if (commands[i])
 			{
 				tmp = ft_strdup(commands[i]);
 				free(commands[i]);
 				commands[i] = ft_strjoin(commands[i - 1], tmp);
 				free(tmp);
 			}
-		}	
-		printf("i:%d   ft:%d cmd:%s\n", i, ft_strstrlen(commands, NULL, 0), commands[i]);
-		if (command[ft_strlen(command) - 1] == '/' && i != ft_strstrlen(commands, NULL, 0) - 1)
-			set_error(info, 126, command, -5);
-		else
-		{
-			ret = opendir(commands[i]);
-			if (ret == NULL)
-				set_error(info, 126, command, -5);
-			else
-				set_error(info, 127, command, -5);
 		}
-		//if (i != ft_strstrlen(commands, NULL, 0) - 1)
-		//	set_error(info, 126, command, -5);
-		/*{
-			printf("len:%d\n", ft_strlen(commands[i]));
-			if (command[ft_strlen(command) - 1] == '/')
-				set_error(info, 126, command, -5);
-			else
+		i--;
+		if (access(commands[i], F_OK) != 0)
 			set_error(info, 127, command, -5);
-		}*/
 		free(command);
 		command = NULL;
 		free_strstr(commands);
@@ -148,10 +143,10 @@ char	*check_path(t_info *info, char *command)
 		i--;
 	if (i <= 0)
 		return (command);
-	ret = opendir(command);
-	str = check_errors(info, ret, command);
-	if (str == NULL)
-		return (NULL);
+	//ret = opendir(command);
+	//str = check_errors(info, ret, command);
+	//if (str == NULL)
+	//	return (NULL);
 	loc = i + 1;
 	new = make_new(info, command, loc, i);
 	free(command);

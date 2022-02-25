@@ -16,7 +16,7 @@ OBJ_DIR =	obj/
 SRC =	src/minishell.c\
 		src/error.c\
 		src/utils.c\
-		src/utils2.c\
+		src/heredoc.c\
 		src/free.c\
 		src/check_path.c\
 		src/redirect.c\
@@ -42,7 +42,7 @@ SRC =	src/minishell.c\
 
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
-CFLAGS = -Wall -Werror -Wextra #-fsanitize=address
+CFLAGS = #-Wall -Werror -Wextra #-fsanitize=address
 
 LDFLAGS = -L$(HOME)/.brew/opt/readline/lib
 CPPFLAGS= -I$(HOME)/.brew/opt/readline/include
