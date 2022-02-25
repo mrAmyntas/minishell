@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/24 15:11:14 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/24 19:08:31 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:48:50 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,19 +93,3 @@ char	**trim_command2(t_info *info, int start, int end)
 	cmd.arr = NULL;
 	return (cmd.command);
 }
-/*
-	int h = 0;
-	//printf("arr:\n");
-	while (h < cmd.end)
-	{
-		//printf("arr[%d]:%d\n", h, cmd.arr[h]);
-		h++;
-	}
-		//printf("command:\n");
-	h = 0;
-	while (cmd.command[h])
-	{
-		//printf("%s\n", cmd.command[h]);
-		h++;
-	}
-	*/

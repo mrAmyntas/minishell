@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/24 17:07:41 by bhoitzin      ########   odam.nl         */
+/*   Created: 2022/02/24 17:04:11 by bhoitzin      #+#    #+#                 */
+/*   Updated: 2022/02/25 15:30:27 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,61 +41,3 @@ void	get_env(t_info *info, char **env)
 	}
 	info->env[i] = NULL;
 }
-//void	ft_heredoc(t_info *info, int i)
-//{
-//	char	*buf;
-//	int		fd;
-//
-//	g_sig.id = 0;
-//	fd = open("/tmp/minishell_heredoc", O_RDWR | O_TRUNC | O_CREAT, 0644);
-//	if (fd < 0)
-//		return ;
-//	dup2(info->fd_std[0], 0);
-//	buf = readline("> ");
-//	while (buf
-//		&& ft_strncmp(buf, info->tokens[i + 1]
-//			, long_str(buf, info->tokens[i + 1]))
-//		&& (!g_sig.sig || g_sig.sig == 1))
-//	{
-//		buf = expand_buf(info, buf, i);
-//		write(fd, buf, ft_strlen(buf));
-//		write(fd, "\n", 1);
-//		free(buf);
-//		buf = readline("> ");
-//	}
-//	free(buf);
-//	close(fd);
-//	fd = open("/tmp/minishell_heredoc", O_RDONLY);
-//	dup2(fd, STDIN_FILENO);
-//	close(fd);
-//	g_sig.id = 1;
-//}
-
-/*void	ft_heredoc(t_info *info, int i)
-{
-	char	*buf;
-	int		pipefd[2];
-
-	if (g_sig.sig == 3 || g_sig.sig == 2)
-		return ;
-	g_sig.id = 2;
-	pipe(pipefd);
-	dup2(info->fd_std[0], 0);
-	buf = readline("> ");
-	while (buf
-		&& ft_strncmp(buf, info->tokens[i + 1]
-			, long_str(buf, info->tokens[i + 1]))
-		&& (!g_sig.sig || g_sig.sig == 1))
-	{
-		buf = expand_buf(info, buf, i);
-		write(pipefd[1], buf, ft_strlen(buf));
-		write(pipefd[1], "\n", 1);
-		free(buf);
-		buf = readline("> ");
-	}
-	free(buf);
-	close(pipefd[1]);
-	dup2(pipefd[0], STDIN_FILENO);
-	close(pipefd[0]);
-	g_sig.id = 1;
-}*/

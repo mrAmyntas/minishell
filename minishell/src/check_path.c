@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 15:24:15 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 15:29:36 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,10 +143,10 @@ char	*check_path(t_info *info, char *command)
 		i--;
 	if (i <= 0)
 		return (command);
-	//ret = opendir(command);
-	//str = check_errors(info, ret, command);
-	//if (str == NULL)
-	//	return (NULL);
+	ret = opendir(command);
+	str = check_errors(info, ret, command);
+	if (str == NULL)
+		return (NULL);
 	loc = i + 1;
 	new = make_new(info, command, loc, i);
 	free(command);
