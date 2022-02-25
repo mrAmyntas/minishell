@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 10:22:38 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:31:07 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	exec(t_info *info, char **command)
 	{
 		path = get_path(command[0]);
 		dup2(STDERR_FILENO, STDOUT_FILENO);
+		dup2(info->fd_std[2], STDERR_FILENO);
 		if (g_sig.exit_status == 0)
 			execve(path, command, info->env);
 		else
@@ -127,8 +128,10 @@ int	exec_pwd(t_info *info)
 
 void	ft_find_command(t_info *info, char **command, int oldfd)
 {
+	if (ft_strncmp(command[0], "echo", 5))
+		add_env(info, ft_strjoin("_=", command[0]));
 	if (!ft_strncmp(command[0], "echo", 5))
-		exec_echo(command);
+		exec_echo(info, command);
 	else if (!ft_strncmp(command[0], "cd", 3))
 		exec_cd(info, command, 0);
 	else if (!ft_strncmp(command[0], "pwd", 4))

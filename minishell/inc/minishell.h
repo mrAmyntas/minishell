@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/02 18:54:43 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/24 19:00:18 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:29:24 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ char	*check_path(t_info *info, char *command);
 void	change_pwd(t_info *info, char *command);
 void	parent_process(t_info *info, int pipefd[2], int loc_pipe);
 int		exec_exit(char **command);
-void	exec_echo(char **command);
+void	exec_echo(t_info *info, char **command);
 int		ft_strstrlen2(t_info *info, char *c, int i);
 char	**trim_command2(t_info *info, int start, int end);
 char	**exec_cd_noarg(char **command);

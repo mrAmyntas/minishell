@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:31 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/24 14:11:16 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:42:27 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ static void	remove_spaces(t_info *info)
 	{
 		if (info->tokens[i][0] == ' ' && info->tokens[i][1] == '\0')
 		{
+			free(info->tokens[i]);
+			info->tokens[i] = NULL;
 			if (info->tokens[i + 1] != NULL)
 			{
-				free(info->tokens[i]);
-				info->tokens[i] = NULL;
 				realloc_copy(info, i, 1);
 				continue ;
 			}

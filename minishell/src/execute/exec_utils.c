@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/24 17:02:39 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:17:54 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	exec_export(t_info *info, char **command)
 		if (!check_var(command, i, info))
 		{
 			temp = ft_strdup(command[i]);
-			if (get_val(info, command[i]) == NULL)
+			if (!get_val(info, command[i]))
 			{
 				add_env(info, temp);
 				free(temp);
