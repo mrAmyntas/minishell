@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/24 16:40:21 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:21:59 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,11 @@ void	change_val(t_info *info, char *new_var)
 	i = 0;
 	if (ft_len_to_char(new_var, '=') == -1)
 		return ;
-	while (ft_strncmp(info->env[i], new_var, ft_len_to_char(new_var, '=')))
+	while (ft_strncmp(info->env[i], new_var, ft_len_to_char(new_var, '=') + 1))
 		i++;
 	free(info->env[i]);
 	info->env[i] = ft_strdup(new_var);
-	if (new_var != NULL)
+	if (new_var)
 	{
 		free(new_var);
 		new_var = NULL;

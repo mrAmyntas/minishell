@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/24 17:03:02 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:24:36 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,12 @@ void	print_export(t_info *info, char *command)
 	i = 0;
 	while (info->export[i] && !command)
 	{
-		write(2, "declare -x ", 11);
-		write(2, info->export[i], ft_strlen(info->export[i]));
-		write(2, "\n", 1);
+		if (ft_strncmp(info->export[i], "_=", 2))
+		{
+			write(2, "declare -x ", 11);
+			write(2, info->export[i], ft_strlen(info->export[i]));
+			write(2, "\n", 1);
+		}
 		i++;
 	}
 }

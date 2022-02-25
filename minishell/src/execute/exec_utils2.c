@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/11 15:06:41 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/24 20:07:25 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/25 13:28:44 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	exec_exit(char **command)
 	exit(x);
 }
 
-void	exec_echo(char **command)
+void	exec_echo(t_info *info, char **command)
 {
 	int	i;
 
@@ -93,6 +93,10 @@ void	exec_echo(char **command)
 	}
 	if (ft_strncmp(command[1], "-n", 3))
 		write(2, "\n", 1);
+	if (command[1])
+		add_env(info, ft_strjoin("_=", command[1]));
+	else
+		add_env(info, ft_strjoin("_=", command[0]));
 }
 
 char	**exec_cd_noarg(char **command)
