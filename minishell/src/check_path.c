@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 14:08:05 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/25 14:09:33 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,13 @@ static char	*check_errors(t_info *info, DIR *ret, char *command)
 	{
 		i = 0;
 		commands = ft_split(command, '/');
-		tmp = ft_strdup(commands[0]);
-		free(commands[0]);
-		commands[0] = ft_strjoin("/", tmp);
-		free(tmp);
+		if (command[0] == '/')
+		{ 
+			tmp = ft_strdup(commands[0]);
+			free(commands[0]);
+			commands[0] = ft_strjoin("/", tmp);
+			free(tmp);
+		}
 		while (commands[i])
 		{
 			commands[i] = ft_strjoinbas(commands[i], "/");
@@ -68,16 +71,34 @@ static char	*check_errors(t_info *info, DIR *ret, char *command)
 			int e = access(commands[i], F_OK);
 			printf("access:%d cmd:%s\n", e, commands[i]);
 			i++;
-			if (commands[i])
+			if (commands[i] && commands[i + 1])
 			{
 				tmp = ft_strdup(commands[i]);
 				free(commands[i]);
 				commands[i] = ft_strjoin(commands[i - 1], tmp);
 				free(tmp);
 			}
-		}
+		}	
 		printf("i:%d   ft:%d cmd:%s\n", i, ft_strstrlen(commands, NULL, 0), commands[i]);
-		set_error(info, 127, command, -5);
+		if (command[ft_strlen(command) - 1] == '/' && i != ft_strstrlen(commands, NULL, 0) - 1)
+			set_error(info, 126, command, -5);
+		else
+		{
+			ret = opendir(commands[i]);
+			if (ret == NULL)
+				set_error(info, 126, command, -5);
+			else
+				set_error(info, 127, command, -5);
+		}
+		//if (i != ft_strstrlen(commands, NULL, 0) - 1)
+		//	set_error(info, 126, command, -5);
+		/*{
+			printf("len:%d\n", ft_strlen(commands[i]));
+			if (command[ft_strlen(command) - 1] == '/')
+				set_error(info, 126, command, -5);
+			else
+			set_error(info, 127, command, -5);
+		}*/
 		free(command);
 		command = NULL;
 		free_strstr(commands);
