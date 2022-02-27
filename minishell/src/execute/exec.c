@@ -6,32 +6,11 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/27 14:49:12 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/27 14:52:49 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-char		*find_path(char **dirs, char *cmd)
-{
-	int		i;
-	char	*cmdfile;
-	
-	i = 0;
-	while (dirs[i])
-	{
-		cmdfile = ft_strjoin(dirs[i], "/");
-		cmdfile = ft_strjoinbas(cmdfile, cmd);
-		free(dirs[i]);
-		dirs[i] = NULL;
-		if (access(cmdfile, F_OK) == 0)
-			break ;
-		free(cmdfile);
-		cmdfile = NULL;
-		i++;
-	}
-	return (cmdfile);
-}
 
 static char	*get_path(t_info *info, char *cmd)
 {

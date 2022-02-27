@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/27 13:34:16 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/27 14:52:55 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,27 @@
 // checks whether it is a directory (when it shouldnt)
 // whether it has permissions
 // and whether it exists at all
+
+char	*find_path(char **dirs, char *cmd)
+{
+	int		i;
+	char	*cmdfile;
+
+	i = 0;
+	while (dirs[i])
+	{
+		cmdfile = ft_strjoin(dirs[i], "/");
+		cmdfile = ft_strjoinbas(cmdfile, cmd);
+		free(dirs[i]);
+		dirs[i] = NULL;
+		if (access(cmdfile, F_OK) == 0)
+			break ;
+		free(cmdfile);
+		cmdfile = NULL;
+		i++;
+	}
+	return (cmdfile);
+}
 
 void	change_pwd(t_info *info, char *command)
 {
