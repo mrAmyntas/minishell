@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 18:40:34 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 15:58:37 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/27 13:34:16 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ void	change_pwd(t_info *info, char *command)
 	if (!info->env[i])
 		return (add_env(info, ft_strjoin("PWD=", command)));
 	free(info->env[i]);
-	info->env[i] = ft_strjoin("PWD=", command);
+	info->env[i] = ft_strjoin("PWD=/", command);
 	free(info->pwd);
-	info->pwd = ft_strdup(command);
+	info->pwd = ft_strjoin("/", command);
 	chdir(info->pwd);
 	free_strstr(info->export);
 	sort_export(info);

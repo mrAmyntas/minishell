@@ -6,13 +6,13 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 15:32:15 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/27 14:00:13 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static char	*get_path(char *cmd)
+static char	*get_path(t_info *info, char *cmd)
 {
 	char	*path;
 	char	**dirs;
@@ -20,8 +20,10 @@ static char	*get_path(char *cmd)
 	int		i;
 
 	i = 0;
-	path = getenv("PATH");
-	dirs = ft_split(path, ':');
+	path = get_val(info, "PATH");
+	if (!path)
+		return(cmd);
+	dirs = ft_split(path, ':'); // free path?
 	while (dirs[i])
 	{
 		cmdfile = ft_strjoin(dirs[i], "/");
@@ -69,7 +71,7 @@ void	exec(t_info *info, char **command)
 		perror("fork error");
 	if (id == 0)
 	{
-		path = get_path(command[0]);
+		path = get_path(info, command[0]);
 		dup2(STDERR_FILENO, STDOUT_FILENO);
 		dup2(info->fd_std[2], STDERR_FILENO);
 		if (g_sig.exit_status == 0)
@@ -94,8 +96,6 @@ int	exec_pwd(t_info *info)
 
 void	ft_find_command(t_info *info, char **command, int oldfd)
 {
-	if (ft_strncmp(command[0], "echo", 5))
-		add_env(info, ft_strjoin("_=", command[0]));
 	if (!ft_strncmp(command[0], "echo", 5))
 		exec_echo(info, command);
 	else if (!ft_strncmp(command[0], "cd", 3))

@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 16:44:35 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/27 13:59:42 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ void	check_redirect_v2(t_info *info, int start, int end, int oldfd[2])
 	if (fd[0] < 0 || fd[1] < 0 || g_sig.sig == 4)
 		return ;
 	command = trim_command2(info, start, end);
+	if (ft_strncmp(command[0], "echo", 5))
+		add_env(info, ft_strjoin("_=", command[0]));
 	command[0] = check_path(info, command[0]);
 	return (ft_find_command(info, command, oldfd[0]));
 }
