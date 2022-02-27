@@ -6,24 +6,18 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/27 14:00:13 by mgroen        ########   odam.nl         */
+/*   Updated: 2022/02/27 14:49:12 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static char	*get_path(t_info *info, char *cmd)
+char		*find_path(char **dirs, char *cmd)
 {
-	char	*path;
-	char	**dirs;
-	char	*cmdfile;
 	int		i;
-
+	char	*cmdfile;
+	
 	i = 0;
-	path = get_val(info, "PATH");
-	if (!path)
-		return(cmd);
-	dirs = ft_split(path, ':'); // free path?
 	while (dirs[i])
 	{
 		cmdfile = ft_strjoin(dirs[i], "/");
@@ -36,6 +30,20 @@ static char	*get_path(t_info *info, char *cmd)
 		cmdfile = NULL;
 		i++;
 	}
+	return (cmdfile);
+}
+
+static char	*get_path(t_info *info, char *cmd)
+{
+	char	*path;
+	char	**dirs;
+	char	*cmdfile;
+
+	path = get_val(info, "PATH");
+	if (!path)
+		return (cmd);
+	dirs = ft_split(path, ':');
+	cmdfile = find_path(dirs, cmd);
 	free(dirs);
 	dirs = NULL;
 	if (cmdfile)

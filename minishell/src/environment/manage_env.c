@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 16:53:53 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/02/27 14:40:24 by mgroen        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,21 @@ void	copy_to_env(t_info *info, char **temp, char *new_var)
 void	change_val(t_info *info, char *new_var)
 {
 	int	i;
+	int	x;
 
 	i = 0;
 	if (ft_len_to_char(new_var, '=') == -1)
 		return ;
-	while (ft_strncmp(info->env[i], new_var, ft_len_to_char(new_var, '=') + 1))
+	while (info->env[i])
+	{
+		x = 0;
+		if (ft_len_to_char(info->env[i], '=') != -1)
+			x = 1;
+		if (!ft_strncmp(info->env[i]
+				, new_var, ft_len_to_char(new_var, '=') + x))
+			break ;
 		i++;
+	}
 	free(info->env[i]);
 	info->env[i] = ft_strdup(new_var);
 	if (new_var)
