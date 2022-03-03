@@ -6,7 +6,7 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/10 11:34:40 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/24 16:56:55 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/03/03 14:56:13 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	trim_last_dir(t_info *info, char *command)
 	if (!info->env[i])
 		add_env(info, ft_strjoin("PWD=", info->pwd));
 	len = ft_strlen(info->pwd);
-	while (info->pwd[len] != '/' && len != 5)
+	while (info->pwd[len] != '/' && len != 1)
 		len--;
 	info->pwd[len] = '\0';
 	chdir(info->pwd);
@@ -127,34 +127,3 @@ void	exec_cd(t_info *info, char **command, int x)
 	free(directions);
 	directions = NULL;
 }
-/*void	exec_cd(t_info *info, char **command, int x)
-{
-	char	**directions;
-	char	*temp;
-	int		i;
-
-	if (command[1] && command[1][0] == '/')
-		x = 1;
-	if (command[1] && check_nosuchdir(info, command) == 1)
-		return ;
-	directions = ft_split(command[1], '/');
-	if (!command[1])
-	{
-		temp = ft_strjoin("cd", " ~");
-		command = ft_split(temp, ' ');
-		free(temp);
-		temp = NULL;
-		directions = ft_split(command[1], '/');
-		free_strstr(command);
-	}
-	i = 0;
-	while (directions[i])
-	{
-		exec_cd2(info, ft_strdup(directions[i]), i, x);
-		free(directions[i]);
-		directions[i] = NULL;
-		i++;
-	}
-	free(directions);
-	directions = NULL;
-}*/

@@ -6,14 +6,10 @@
 /*   By: bhoitzin <bhoitzin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 15:32:24 by bhoitzin      #+#    #+#                 */
-/*   Updated: 2022/02/25 16:23:17 by bhoitzin      ########   odam.nl         */
+/*   Updated: 2022/03/03 14:57:55 by bhoitzin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-// als 'a' niet bestaat
-// export a
-// export a=3
-// heap-buffer-overflow!
 #include "../inc/minishell.h"
 
 void	handle_sigint(int signum)
